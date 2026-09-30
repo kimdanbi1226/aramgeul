@@ -36,10 +36,124 @@ main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center
 <p class="notice">현재는 서비스 화면과 입력 기능을 먼저 구축했습니다. 실제 검사 결과를 제공하려면 다음 단계에서 검사용 엔진/API를 연결합니다.</p>
 </main><footer>© 아람글 · 한국어를 더 정확하고 자연스럽게</footer>
 <script>
-const text=document.getElementById('text'),count=document.getElementById('count'),result=document.getElementById('result'),resultBox=document.getElementById('resultBox');
-text.addEventListener('input',()=>count.textContent=text.value.length.toLocaleString('ko-KR'));
-document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active')}));
-document.getElementById('check').addEventListener('click',()=>{const value=text.value.trim();result.classList.add('show');if(!value){resultBox.textContent='검사할 문장을 먼저 입력해 주세요.';return;}resultBox.innerHTML='현재 입력한 문장이 정상적으로 접수되었습니다.<br><br><strong>다음 단계:</strong> 실제 한국어 맞춤법·띄어쓰기 검사 엔진을 연결하면 이 영역에 교정 결과와 수정 제안이 표시됩니다.'});
+const text = document.getElementById('text');
+const count = document.getElementById('count');
+const result = document.getElementById('result');
+const resultBox = document.getElementById('resultBox');
+
+text.addEventListener('input', () => {
+  count.textContent = text.value.length.toLocaleString('ko-KR');
+});
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+document.getElementById('check').addEventListener('click', async () => {
+  const value = text.value.trim();
+
+  result.classList.add('show');
+
+  if (!value) {
+    resultBox.textContent = '검사할 문장을 먼저 입력해 주세요.';
+    return;
+  }
+
+  resultBox.textContent = '검사 중입니다...';
+
+  try {
+    const response = await fetch(
+      'https://api.languagetool.org/v2/check',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          text: value,
+          language: 'ko'
+        })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('API 요청 실패');
+    }
+
+    const data = await response.json();
+
+    if (!data.matches || data.matches.length === 0) {
+      resultBox.innerHTML = `
+        <div style="font-weight:700;margin-bottom:10px;">
+          검사 결과
+        </div>
+        <div>맞춤법 및 문법상 발견된 오류가 없습니다.</div>
+      `;
+      return;
+    }
+
+    let html = `
+      <div style="font-weight:700;margin-bottom:14px;">
+        ${data.matches.length}개의 확인 사항이 있습니다.
+      </div>
+    `;
+
+    data.matches.forEach((match, index) => {
+      const wrong = value.substring(
+        match.offset,
+        match.offset + match.length
+      );
+
+      const suggestions = match.replacements
+        .slice(0, 3)
+        .map(item => item.value)
+        .join(', ');
+
+      html += `
+        <div style="
+          padding:14px;
+          margin-bottom:10px;
+          border:1px solid #dfe5ef;
+          border-radius:12px;
+          background:#fff;
+        ">
+          <div style="font-weight:700;margin-bottom:6px;">
+            ${index + 1}. ${wrong}
+          </div>
+
+          <div style="font-size:14px;margin-bottom:5px;">
+            ${match.message}
+          </div>
+
+          ${
+            suggestions
+              ? `<div style="font-size:14px;">
+                   <strong>추천:</strong> ${suggestions}
+                 </div>`
+              : ''
+          }
+        </div>
+      `;
+    });
+
+    resultBox.innerHTML = html;
+
+  } catch (error) {
+    console.error(error);
+
+    resultBox.innerHTML = `
+      <div style="font-weight:700;margin-bottom:8px;">
+        검사에 실패했습니다.
+      </div>
+      <div>
+        잠시 후 다시 시도해 주세요.
+      </div>
+    `;
+  }
+});
 </script>
 </body>
 </html>
