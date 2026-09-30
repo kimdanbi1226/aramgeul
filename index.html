@@ -3,90 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>아람글 | 한국어 지식·표현 서비스</title>
-<meta name="description" content="정확한 한국어를 이해하고 바르게 쓰도록 돕는 한국어 지식·표현 서비스, 아람글">
+<title>아람글 | 한국어 맞춤법·띄어쓰기·표현 검사</title>
+<meta name="description" content="아람글은 한국어 맞춤법, 띄어쓰기, 표현을 확인하고 더 정확하고 자연스럽게 쓰도록 돕는 서비스입니다.">
 <style>
-:root{--navy:#173b68;--sky:#eaf4ff;--ink:#20252b;--muted:#697586;--line:#dfe6ee;--bg:#f7faff}
+:root{--primary:#2457c5;--primary-dark:#173f98;--soft:#eef4ff;--ink:#172033;--muted:#687386;--line:#dfe5ef;--bg:#f7f9fc;--white:#fff;--success:#16845b}
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--ink);background:linear-gradient(180deg,#eef6ff 0%,var(--bg) 42%,#fff 100%)}
-header{max-width:1120px;margin:auto;padding:28px 24px 18px}
-.brand{display:flex;align-items:center;gap:12px}
-.mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:var(--navy);color:#fff;font-weight:800;font-size:20px}
-.brand-name{font-size:25px;font-weight:800;letter-spacing:-.04em}
-.tag{color:var(--muted);font-size:13px}
-main{max-width:1120px;margin:auto;padding:58px 24px 90px}
-.hero{text-align:center;margin-bottom:34px}
-.hero h1{margin:0 0 14px;font-size:clamp(34px,5vw,54px);letter-spacing:-.055em;line-height:1.15}
-.hero p{margin:0;color:var(--muted);font-size:17px;line-height:1.7}
-.card{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 50px rgba(31,58,91,.09);overflow:hidden}
-.toolbar{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;gap:9px;flex-wrap:wrap}
-.mode{border:1px solid #cdd8e5;background:#fff;color:#425466;border-radius:999px;padding:9px 14px;font-size:14px;cursor:pointer}
-.mode.active{background:var(--sky);border-color:#b9d8f7;color:var(--navy);font-weight:700}
-.editor{padding:24px}
-textarea{width:100%;min-height:250px;resize:vertical;border:1px solid #cfd9e5;border-radius:16px;padding:20px;font:inherit;font-size:18px;line-height:1.8;color:var(--ink);outline:none;background:#fbfdff}
-textarea:focus{border-color:#78a9d9;box-shadow:0 0 0 4px rgba(47,111,186,.10)}
-.bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:14px}
-.count{color:var(--muted);font-size:13px}
-button.check{border:0;border-radius:12px;padding:13px 22px;background:var(--navy);color:#fff;font:inherit;font-weight:700;cursor:pointer}
-button.check:hover{background:#102f54}
-.result{display:none;border-top:1px solid var(--line);padding:24px;background:#fbfdff}
-.result.show{display:block}
-.result-title{font-size:18px;font-weight:800;margin-bottom:14px}
-.result-box{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff;line-height:1.85}
-.notice{margin-top:28px;color:var(--muted);font-size:13px;line-height:1.7;text-align:center}
-footer{text-align:center;color:#8994a3;font-size:12px;padding:0 24px 35px}
-@media(max-width:640px){main{padding:38px 16px 65px}.editor,.result{padding:18px}.bottom{align-items:stretch;flex-direction:column}button.check{width:100%}}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--ink);background:linear-gradient(180deg,#edf4ff 0,#f7f9fc 45%,#fff 100%)}
+header{border-bottom:1px solid rgba(36,87,197,.10);background:rgba(255,255,255,.86);backdrop-filter:blur(12px)}
+.header-inner{max-width:1080px;margin:auto;padding:20px 24px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:11px}.mark{width:40px;height:40px;border-radius:12px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:800;font-size:18px}.brand-name{font-size:22px;font-weight:800;letter-spacing:-.04em}.brand-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.badge{font-size:12px;color:var(--primary);background:var(--soft);border:1px solid #d7e4ff;border-radius:999px;padding:7px 10px}
+main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center;margin-bottom:34px}.hero .eyebrow{display:inline-block;color:var(--primary);font-size:13px;font-weight:800;margin-bottom:13px}.hero h1{margin:0;font-size:clamp(36px,6vw,58px);letter-spacing:-.065em;line-height:1.12}.hero p{margin:16px auto 0;max-width:650px;color:var(--muted);font-size:17px;line-height:1.75;letter-spacing:-.02em}
+.card{background:var(--white);border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 55px rgba(27,56,100,.10);overflow:hidden}.tabs{display:flex;gap:8px;padding:16px 20px;border-bottom:1px solid var(--line);background:#fcfdff}.tab{border:1px solid #d5dce7;background:#fff;color:#526073;border-radius:10px;padding:10px 15px;font:inherit;font-size:14px;cursor:pointer}.tab.active{background:var(--soft);border-color:#c9dbff;color:var(--primary);font-weight:800}
+.editor{padding:24px}textarea{display:block;width:100%;min-height:260px;resize:vertical;border:1px solid #cfd8e6;border-radius:16px;padding:20px;font:inherit;font-size:18px;line-height:1.85;color:var(--ink);background:#fbfcfe;outline:none}textarea:focus{border-color:#6d9be8;box-shadow:0 0 0 4px rgba(36,87,197,.09)}textarea::placeholder{color:#9aa5b5}.editor-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}.count{font-size:13px;color:var(--muted)}.check{border:0;border-radius:12px;padding:13px 23px;background:var(--primary);color:#fff;font:inherit;font-weight:800;cursor:pointer}.check:hover{background:var(--primary-dark)}
+.result{display:none;border-top:1px solid var(--line);padding:24px;background:#fafcff}.result.show{display:block}.result-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.result-title{font-size:17px;font-weight:800}.status{font-size:12px;color:var(--success);background:#eaf8f2;border-radius:999px;padding:6px 9px}.result-box{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff;line-height:1.8;color:#475467}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.info{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.info strong{display:block;margin-bottom:6px;font-size:14px}.info span{font-size:13px;color:var(--muted);line-height:1.6}
+.notice{margin:20px 0 0;color:#8994a4;font-size:12px;line-height:1.7;text-align:center}footer{text-align:center;color:#929bab;font-size:12px;padding:0 24px 34px}
+@media(max-width:700px){.header-inner{padding:16px}.badge{display:none}main{padding:42px 16px 65px}.editor,.result{padding:18px}.editor-bottom{align-items:stretch;flex-direction:column}.check{width:100%}.info-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header>
-  <div class="brand">
-    <div class="mark">글</div>
-    <div><div class="brand-name">아람글</div><div class="tag">한국어 지식 · 표현 서비스</div></div>
-  </div>
-</header>
+<header><div class="header-inner"><div class="brand"><div class="mark">글</div><div><div class="brand-name">아람글</div><div class="brand-sub">한국어 맞춤법 · 띄어쓰기 · 표현 검사</div></div></div><div class="badge">서비스 준비 중</div></div></header>
 <main>
-  <section class="hero">
-    <h1>더 정확하게, 더 자연스럽게</h1>
-    <p>한국어 문장을 입력하면 맞춤법·띄어쓰기·표현을 확인할 수 있어요.</p>
-  </section>
-  <section class="card">
-    <div class="toolbar">
-      <button class="mode active" type="button">맞춤법</button>
-      <button class="mode" type="button">띄어쓰기</button>
-      <button class="mode" type="button">표현</button>
-    </div>
-    <div class="editor">
-      <textarea id="text" maxlength="5000" placeholder="검사할 문장을 입력해 주세요."></textarea>
-      <div class="bottom">
-        <span class="count"><span id="count">0</span> / 5,000자</span>
-        <button class="check" id="check" type="button">검사하기</button>
-      </div>
-    </div>
-    <div class="result" id="result">
-      <div class="result-title">검사 결과</div>
-      <div class="result-box" id="resultBox"></div>
-    </div>
-  </section>
-  <p class="notice">현재는 아람글의 기본 화면을 구현한 단계입니다. 실제 맞춤법·띄어쓰기 검사 엔진은 다음 단계에서 연결합니다.</p>
-</main>
-<footer>© 아람글. 한국어를 더 정확하고 자연스럽게.</footer>
+<section class="hero"><div class="eyebrow">ARAMGEUL</div><h1>더 정확하게,<br>더 자연스럽게.</h1><p>한국어 문장을 입력하면 맞춤법·띄어쓰기·표현을 확인할 수 있도록 돕는 서비스입니다.</p></section>
+<section class="card">
+<div class="tabs"><button class="tab active" type="button">맞춤법</button><button class="tab" type="button">띄어쓰기</button><button class="tab" type="button">표현</button></div>
+<div class="editor"><textarea id="text" maxlength="5000" placeholder="검사할 문장을 입력해 주세요.
+예: 오늘은 날씨가 좋아서 산책을 하러 갔어요."></textarea><div class="editor-bottom"><span class="count"><span id="count">0</span> / 5,000자</span><button class="check" id="check" type="button">검사하기</button></div></div>
+<div class="result" id="result"><div class="result-head"><div class="result-title">검사 결과</div><span class="status">입력 확인</span></div><div class="result-box" id="resultBox"></div></div>
+</section>
+<div class="info-grid"><div class="info"><strong>맞춤법</strong><span>문장에 사용된 맞춤법을 확인합니다.</span></div><div class="info"><strong>띄어쓰기</strong><span>단어와 문장 사이의 띄어쓰기를 확인합니다.</span></div><div class="info"><strong>표현</strong><span>더 자연스러운 한국어 표현을 확인합니다.</span></div></div>
+<p class="notice">현재는 서비스 화면과 입력 기능을 먼저 구축했습니다. 실제 검사 결과를 제공하려면 다음 단계에서 검사용 엔진/API를 연결합니다.</p>
+</main><footer>© 아람글 · 한국어를 더 정확하고 자연스럽게</footer>
 <script>
-const text=document.getElementById('text');
-const count=document.getElementById('count');
-const result=document.getElementById('result');
-const resultBox=document.getElementById('resultBox');
+const text=document.getElementById('text'),count=document.getElementById('count'),result=document.getElementById('result'),resultBox=document.getElementById('resultBox');
 text.addEventListener('input',()=>count.textContent=text.value.length.toLocaleString('ko-KR'));
-document.querySelectorAll('.mode').forEach(btn=>btn.addEventListener('click',()=>{
-  document.querySelectorAll('.mode').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-}));
-document.getElementById('check').addEventListener('click',()=>{
-  const value=text.value.trim();
-  result.classList.add('show');
-  if(!value){resultBox.textContent='검사할 문장을 먼저 입력해 주세요.';return;}
-  resultBox.innerHTML='<span style="color:#16794c;font-weight:700;">입력 완료</span><br>실제 맞춤법·띄어쓰기 검사 기능은 검사 엔진을 연결한 뒤 이곳에 결과가 표시됩니다.';
-});
+document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active')}));
+document.getElementById('check').addEventListener('click',()=>{const value=text.value.trim();result.classList.add('show');if(!value){resultBox.textContent='검사할 문장을 먼저 입력해 주세요.';return;}resultBox.innerHTML='현재 입력한 문장이 정상적으로 접수되었습니다.<br><br><strong>다음 단계:</strong> 실제 한국어 맞춤법·띄어쓰기 검사 엔진을 연결하면 이 영역에 교정 결과와 수정 제안이 표시됩니다.'});
 </script>
 </body>
 </html>
