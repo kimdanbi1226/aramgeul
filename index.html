@@ -65,72 +65,38 @@ document.getElementById('check').addEventListener('click', async () => {
   resultBox.textContent = '검사 중입니다...';
 
   try {
-    const response = await fetch('https://speller.town', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        text: value
-      })
-    });
+    const response = await fetch(
+      'https://api.bareun.ai/bareun.RevisionService/CorrectError',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': 'koba-OTXQGUQ-JYJUVCI-WCW3XEA-EKC55NA'
+        },
+        body: JSON.stringify({
+          document: {
+            content: value,
+            language: 'ko-KR'
+          },
+          encoding_type: 'UTF8'
+        })
+      }
+    );
 
     if (!response.ok) {
-      throw new Error(`API 요청 실패: ${response.status}`);
+      throw new Error('API 요청 실패');
     }
 
     const data = await response.json();
 
-    if (!data.suggestions || data.suggestions.length === 0) {
-      resultBox.innerHTML = `
-        <div style="font-weight:700;margin-bottom:10px;">
-          검사 결과
-        </div>
-        <div>맞춤법 및 문법 오류가 발견되지 않았습니다.</div>
-      `;
-      return;
-    }
-
-    let html = `
-      <div style="font-weight:700;margin-bottom:14px;">
-        ${data.suggestions.length}개의 확인 사항이 있습니다.
+    resultBox.innerHTML = `
+      <div style="font-weight:700;margin-bottom:10px;">
+        검사 결과
+      </div>
+      <div style="margin-bottom:10px;">
+        ${escapeHtml(data.revised || value)}
       </div>
     `;
-
-    data.suggestions.forEach((item, index) => {
-      const suggestions = (item.candidates || [])
-        .slice(0, 3)
-        .join(', ');
-
-      html += `
-        <div style="
-          padding:14px;
-          margin-bottom:10px;
-          border:1px solid #dfe5ef;
-          border-radius:12px;
-          background:#fff;
-        ">
-          <div style="font-weight:700;margin-bottom:6px;">
-            ${index + 1}. ${escapeHtml(item.text || '')}
-          </div>
-
-          <div style="font-size:14px;margin-bottom:5px;">
-            ${escapeHtml(item.description || '수정이 필요한 부분입니다.')}
-          </div>
-
-          ${
-            suggestions
-              ? `<div style="font-size:14px;">
-                   <strong>추천:</strong> ${escapeHtml(suggestions)}
-                 </div>`
-              : ''
-          }
-        </div>
-      `;
-    });
-
-    resultBox.innerHTML = html;
-
   } catch (error) {
     console.error(error);
 
