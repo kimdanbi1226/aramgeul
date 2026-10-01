@@ -23,5 +23,11 @@ jobs:
           node-version: 20
       - name: Install dependencies
         run: npm install
+      - name: Prepare MeCab-Ko dictionary
+        run: |
+          curl -L https://github.com/jeongukjae/mecab-ko-dic-prebuilt/releases/download/2.1.1-20180720/mecab-ko-dic.zip -o /tmp/mecab-ko-dic.zip
+          unzip -q /tmp/mecab-ko-dic.zip -d $GITHUB_WORKSPACE/mecab-ko-dic
+          echo "MECAB_DICDIR=$GITHUB_WORKSPACE/mecab-ko-dic/mecab-ko-dic" >> $GITHUB_ENV
+
       - name: Run Golden Test
         run: node --experimental-wasm-modules tests/run-morphology-golden.js
