@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { REQUIRED_MODEL_FILES, validateModelFiles, validateWasmPath } from '../lib/morphology/kiwi-runtime.js';
 
-assert.equal(REQUIRED_MODEL_FILES.length, 5);
+assert.equal(REQUIRED_MODEL_FILES.length, 9);
 
 const fakeFiles = Object.fromEntries(
   REQUIRED_MODEL_FILES.map(name => [name, new Uint8Array([1])])
