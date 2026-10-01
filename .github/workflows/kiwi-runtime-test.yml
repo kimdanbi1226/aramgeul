@@ -1,0 +1,36 @@
+name: Kiwi Runtime Test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'lib/morphology/kiwi-runtime.js'
+      - 'lib/morphology/kiwi.js'
+      - 'tests/kiwi-runtime.test.js'
+      - 'tests/kiwi-adapter.test.js'
+      - 'package.json'
+      - '.github/workflows/kiwi-runtime-test.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Verify kiwi-nlp exports
+        run: node --input-type=module -e "import('kiwi-nlp').then(m => { if (!m.KiwiBuilder || !m.Kiwi) throw new Error('Kiwi JS/WASM exports are missing'); console.log('kiwi-nlp exports: PASS'); })"
+
+      - name: Run Kiwi runtime configuration test
+        run: node tests/kiwi-runtime.test.js
+
+      - name: Run Kiwi adapter fixture test
+        run: node tests/kiwi-adapter.test.js
