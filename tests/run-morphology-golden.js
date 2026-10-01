@@ -9,7 +9,7 @@ let failed = 0;
 
 for (const testCase of suite.cases) {
   const result = await analyze(testCase.input);
-  const pos = result.tokens.map(token => token.features.grammar_function).filter(Boolean);
+  const pos = result.tokens.flatMap(token => token.features.grammar_functions ?? []).filter(Boolean);
   const surfaces = result.tokens.map(token => token.text);
 
   const missingPos = (testCase.required_pos ?? []).filter(tag => !pos.includes(tag));
