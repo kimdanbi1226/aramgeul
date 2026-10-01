@@ -1,0 +1,28 @@
+name: Morphology Golden Test
+
+on:
+  push:
+    paths:
+      - 'lib/morphology/**'
+      - 'tests/golden/morphology.v0.1.json'
+      - 'tests/run-morphology-golden.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/morphology-test.yml'
+  workflow_dispatch:
+
+jobs:
+  morphology:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm install
+      - name: Run Golden Test
+        run: npm run test:morphology
