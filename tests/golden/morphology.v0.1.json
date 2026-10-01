@@ -7,107 +7,324 @@
     {
       "id": "G-MOR-001",
       "input": "나만큼 잘한다.",
-      "expected_features": ["체언+만큼/조사"],
-      "required_pos": ["JOSA"],
-      "rule_context": "만큼"
+      "expected_features": [
+        "체언+만큼/조사"
+      ],
+      "required_pos": [
+        "JOSA"
+      ],
+      "rule_context": "만큼",
+      "expected_targets": [
+        {
+          "surface": "만큼",
+          "required_functions": [
+            "JOSA",
+            "JX"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-002",
       "input": "할 만큼 했다.",
-      "expected_features": ["관형사형+만큼/의존명사"],
-      "required_pos": ["DEPENDENT_NOUN"],
-      "rule_context": "만큼"
+      "expected_features": [
+        "관형사형+만큼/의존명사"
+      ],
+      "required_pos": [
+        "DEPENDENT_NOUN"
+      ],
+      "rule_context": "만큼",
+      "expected_targets": [
+        {
+          "surface": "만큼",
+          "required_functions": [
+            "DEPENDENT_NOUN",
+            "NNB"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-003",
       "input": "내 거야.",
-      "expected_features": ["거/의존명사", "이야/서술격 활용"],
-      "required_pos": ["DEPENDENT_NOUN"],
-      "rule_context": "거"
+      "expected_features": [
+        "거/의존명사",
+        "이야/서술격 활용"
+      ],
+      "required_pos": [
+        "DEPENDENT_NOUN"
+      ],
+      "rule_context": "거",
+      "expected_targets": [
+        {
+          "surface": "거",
+          "required_functions": [
+            "DEPENDENT_NOUN",
+            "NNB"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-004",
       "input": "할 수 있다.",
-      "expected_features": ["수/의존명사", "있다/용언"],
-      "required_pos": ["DEPENDENT_NOUN"],
-      "rule_context": "수"
+      "expected_features": [
+        "수/의존명사",
+        "있다/용언"
+      ],
+      "required_pos": [
+        "DEPENDENT_NOUN"
+      ],
+      "rule_context": "수",
+      "expected_targets": [
+        {
+          "surface": "수",
+          "required_functions": [
+            "DEPENDENT_NOUN",
+            "NNB"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-005",
       "input": "이것뿐이다.",
-      "expected_features": ["체언+뿐/조사"],
-      "required_pos": ["JOSA"],
-      "rule_context": "뿐"
+      "expected_features": [
+        "체언+뿐/조사"
+      ],
+      "required_pos": [
+        "JOSA"
+      ],
+      "rule_context": "뿐",
+      "expected_targets": [
+        {
+          "surface": "뿐",
+          "required_functions": [
+            "JOSA",
+            "JX"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-006",
       "input": "보냈을 뿐이다.",
-      "expected_features": ["관형사형+뿐/의존명사"],
-      "required_pos": ["DEPENDENT_NOUN"],
-      "rule_context": "뿐"
+      "expected_features": [
+        "관형사형+뿐/의존명사"
+      ],
+      "required_pos": [
+        "DEPENDENT_NOUN"
+      ],
+      "rule_context": "뿐",
+      "expected_targets": [
+        {
+          "surface": "뿐",
+          "required_functions": [
+            "DEPENDENT_NOUN",
+            "NNB"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-007",
       "input": "정도밖에 없다.",
-      "expected_features": ["체언+밖에/보조사"],
-      "required_pos": ["JX"],
-      "rule_context": "밖에"
+      "expected_features": [
+        "체언+밖에/보조사"
+      ],
+      "required_pos": [
+        "JX"
+      ],
+      "rule_context": "밖에",
+      "expected_targets": [
+        {
+          "surface": "밖에",
+          "required_functions": [
+            "JOSA",
+            "JX"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-008",
       "input": "생각해 보자.",
-      "expected_features": ["생각하다/본용언", "보다/보조용언"],
-      "required_pos": ["AUXILIARY_VERB"],
-      "rule_context": "보조 용언"
+      "expected_features": [
+        "생각하다/본용언",
+        "보다/보조용언"
+      ],
+      "required_pos": [
+        "AUXILIARY_VERB"
+      ],
+      "rule_context": "보조 용언",
+      "expected_targets": [
+        {
+          "surface": "보",
+          "required_functions": [
+            "AUXILIARY_VERB",
+            "VX"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-009",
       "input": "살아 있는 데도.",
-      "expected_features": ["살다/본용언", "있다/보조용언", "데/의존명사"],
-      "required_pos": ["AUXILIARY_VERB", "DEPENDENT_NOUN"],
-      "rule_context": "보조 용언 + 데"
+      "expected_features": [
+        "살다/본용언",
+        "있다/보조용언",
+        "데/의존명사"
+      ],
+      "required_pos": [
+        "AUXILIARY_VERB",
+        "DEPENDENT_NOUN"
+      ],
+      "rule_context": "보조 용언 + 데",
+      "expected_targets": [
+        {
+          "surface": "있",
+          "required_functions": [
+            "AUXILIARY_VERB",
+            "VX"
+          ]
+        },
+        {
+          "surface": "데",
+          "required_functions": [
+            "DEPENDENT_NOUN",
+            "NNB"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-010",
       "input": "전환 시 신청한다.",
-      "expected_features": ["시/의존명사"],
-      "required_pos": ["DEPENDENT_NOUN"],
-      "rule_context": "시"
+      "expected_features": [
+        "시/의존명사"
+      ],
+      "required_pos": [
+        "DEPENDENT_NOUN"
+      ],
+      "rule_context": "시",
+      "expected_targets": [
+        {
+          "surface": "시",
+          "required_functions": [
+            "DEPENDENT_NOUN",
+            "NNB"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-011",
       "input": "십 년 동안.",
-      "expected_features": ["년/의존명사"],
-      "required_pos": ["DEPENDENT_NOUN"],
-      "rule_context": "년"
+      "expected_features": [
+        "년/의존명사"
+      ],
+      "required_pos": [
+        "DEPENDENT_NOUN"
+      ],
+      "rule_context": "년",
+      "expected_targets": [
+        {
+          "surface": "년",
+          "required_functions": [
+            "DEPENDENT_NOUN",
+            "NNB"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-012",
       "input": "안 돼요.",
-      "expected_features": ["안/부정 부사", "되다/용언", "어요/어미"],
-      "required_pos": ["NEGATIVE_ADVERB", "LEXICAL_VERB", "ENDING"],
-      "rule_context": "안 + 되다"
+      "expected_features": [
+        "안/부정 부사",
+        "되다/용언",
+        "어요/어미"
+      ],
+      "required_pos": [
+        "NEGATIVE_ADVERB",
+        "LEXICAL_VERB",
+        "ENDING"
+      ],
+      "rule_context": "안 + 되다",
+      "expected_targets": [
+        {
+          "surface": "안",
+          "required_functions": [
+            "NEGATIVE_ADVERB"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-013",
       "input": "공부가 잘 안돼요.",
-      "expected_features": ["안되다/한 단어 용언 가능성"],
-      "required_pos": ["LEXICAL_VERB"],
-      "rule_context": "안되다"
+      "expected_features": [
+        "안되다/한 단어 용언 가능성"
+      ],
+      "required_pos": [
+        "LEXICAL_VERB"
+      ],
+      "rule_context": "안되다",
+      "expected_targets": [
+        {
+          "surface": "안",
+          "required_functions": [
+            "LEXICAL_VERB"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-014",
       "input": "안 되나요?",
-      "expected_features": ["안/부정 부사", "되다/용언", "나/어미"],
-      "required_pos": ["NEGATIVE_ADVERB", "LEXICAL_VERB", "ENDING"],
-      "rule_context": "되다 활용"
+      "expected_features": [
+        "안/부정 부사",
+        "되다/용언",
+        "나/어미"
+      ],
+      "required_pos": [
+        "NEGATIVE_ADVERB",
+        "LEXICAL_VERB",
+        "ENDING"
+      ],
+      "rule_context": "되다 활용",
+      "expected_targets": [
+        {
+          "surface": "안",
+          "required_functions": [
+            "NEGATIVE_ADVERB"
+          ]
+        }
+      ]
     },
     {
       "id": "G-MOR-015",
       "input": "해야 돼요.",
-      "expected_features": ["하다/용언", "되다/용언", "어요/어미"],
-      "required_pos": ["LEXICAL_VERB", "ENDING"],
-      "rule_context": "되다 활용"
+      "expected_features": [
+        "하다/용언",
+        "되다/용언",
+        "어요/어미"
+      ],
+      "required_pos": [
+        "LEXICAL_VERB",
+        "ENDING"
+      ],
+      "rule_context": "되다 활용",
+      "expected_targets": [
+        {
+          "surface": "돼요",
+          "required_functions": [
+            "LEXICAL_VERB",
+            "VV",
+            "VA"
+          ]
+        }
+      ]
     }
   ]
 }
