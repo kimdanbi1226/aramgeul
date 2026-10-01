@@ -5,7 +5,9 @@ on:
   push:
     paths:
       - 'lib/rules/**'
+      - 'lib/pipeline/integrate.js'
       - 'tests/rule-engine-spacing.test.js'
+      - 'tests/result-integration.test.js'
       - 'package.json'
       - '.github/workflows/rule-engine-test.yml'
 
@@ -15,11 +17,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-
       - name: Run rule engine tests
         run: node tests/rule-engine-spacing.test.js
+      - name: Run result integration tests
+        run: node tests/result-integration.test.js
