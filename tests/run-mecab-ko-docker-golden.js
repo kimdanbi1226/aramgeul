@@ -58,18 +58,21 @@ suite.cases.forEach((testCase, index) => {
     return { surface, pos };
   });
 
-  const surfaces = tokens.map(token => token.surface);
-  const functions = tokens.flatMap(token => grammarFunctions(token.pos, token.surface));
+  const missingTargets = (testCase.expected_targets ?? []).filter(target => {
+    const token = tokens.find(candidate => candidate.surface === target.surface);
+    if (!token) return true;
+    const tokenFunctions = grammarFunctions(token.pos, token.surface);
+    return !(target.required_functions ?? []).some(required => tokenFunctions.includes(required));
+  });
 
-  const missingPos = (testCase.required_pos ?? []).filter(tag => !functions.includes(tag));
-  if (missingPos.length === 0) {
+  if (missingTargets.length === 0) {
     passed += 1;
     console.log('MATCH ' + testCase.id + ' ' + testCase.input);
   } else {
     failed += 1;
     console.error('MISMATCH ' + testCase.id + ' ' + testCase.input);
     console.error('  tokens: ' + JSON.stringify(tokens));
-    if (missingTargets.length) console.error('  missing targets: ' + JSON.stringify(missingTargets));
+    console.error('  missing targets: ' + JSON.stringify(missingTargets));
   }
 });
 
