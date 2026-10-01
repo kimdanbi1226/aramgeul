@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { REQUIRED_MODEL_FILES, createKiwiRuntime } from '../lib/morphology/kiwi-runtime.js';
 
 const modelDir = process.env.KIWI_MODEL_DIR;
-const wasmUrl = process.env.KIWI_WASM_URL;
+const wasmPath = process.env.KIWI_WASM_PATH;
 
 assert.ok(modelDir, 'KIWI_MODEL_DIR가 필요합니다.');
 assert.ok(wasmUrl, 'KIWI_WASM_URL이 필요합니다.');
@@ -18,7 +18,7 @@ const modelFiles = Object.fromEntries(
 );
 
 const { kiwi, version, match } = await createKiwiRuntime({
-  wasmPath: wasmUrl,
+  wasmPath,
   modelFiles
 });
 
