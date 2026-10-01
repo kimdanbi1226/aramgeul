@@ -33,7 +33,7 @@ main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center
 <div class="result" id="result"><div class="result-head"><div class="result-title">검사 결과</div><span class="status">입력 확인</span></div><div class="result-box" id="resultBox"></div></div>
 </section>
 <div class="info-grid"><div class="info"><strong>맞춤법</strong><span>문장에 사용된 맞춤법을 확인합니다.</span></div><div class="info"><strong>띄어쓰기</strong><span>단어와 문장 사이의 띄어쓰기를 확인합니다.</span></div><div class="info"><strong>표현</strong><span>더 자연스러운 한국어 표현을 확인합니다.</span></div></div>
-<p class="notice">현재는 서비스 화면과 입력 기능을 먼저 구축했습니다. 실제 검사 결과를 제공하려면 다음 단계에서 검사용 엔진/API를 연결합니다.</p>
+<p class="notice">검사 요청은 보안 서버를 거쳐 검사용 API로 전달됩니다. API 인증 정보는 이 화면의 코드에 노출하지 않습니다.</p>
 </main><footer>© 아람글 · 한국어를 더 정확하고 자연스럽게</footer>
 <script>
 const text = document.getElementById('text');
@@ -65,23 +65,13 @@ document.getElementById('check').addEventListener('click', async () => {
   resultBox.textContent = '검사 중입니다...';
 
   try {
-    const response = await fetch(
-      'https://api.bareun.ai/bareun.RevisionService/CorrectError',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'api-key': 'koba-OTXQGUQ-JYJUVCI-WCW3XEA-EKC55NA'
-        },
-        body: JSON.stringify({
-          document: {
-            content: value,
-            language: 'ko-KR'
-          },
-          encoding_type: 'UTF8'
-        })
-      }
-    );
+    const response = await fetch('/api/check', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text: value })
+    });
 
     if (!response.ok) {
       throw new Error('API 요청 실패');
