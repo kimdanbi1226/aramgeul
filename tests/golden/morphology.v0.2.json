@@ -1,0 +1,434 @@
+{
+  "name": "아람글 Golden Test Set - morphology v0.2",
+  "version": "0.2.0",
+  "checked_at": "2026-10-01",
+  "purpose": "형태소 분석기의 문맥·형태소 구조 처리 능력을 비교하기 위한 확장 기준 데이터. 단일 표면형 일치가 아니라 허용 가능한 분석 구조를 검사한다.",
+  "notes": [
+    "형태소 분석 결과의 품사 표기는 분석기마다 다를 수 있으므로 아람글 내부 기능 태그로 정규화한다.",
+    "안 되다/안되다, 되다 활용 등은 하나의 분석만 정답으로 고정하지 않고 문맥상 허용 가능한 분석 구조를 정의한다.",
+    "이 테스트의 점수는 일반적인 형태소 분석 정확도가 아니라 아람글 규칙 엔진에 필요한 문맥·형태소 정보 보존 여부를 측정한다."
+  ],
+  "cases": [
+    {
+      "id": "G-MOR2-001",
+      "input": "나만큼 잘한다.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "만큼",
+            "required_functions": [
+              "JOSA"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-002",
+      "input": "할 만큼 했다.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "만큼",
+            "required_functions": [
+              "DEPENDENT_NOUN"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-003",
+      "input": "내 거야.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface_options": [
+              "거",
+              "것"
+            ],
+            "required_functions": [
+              "DEPENDENT_NOUN"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-004",
+      "input": "할 수 있다.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "수",
+            "required_functions": [
+              "DEPENDENT_NOUN"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-005",
+      "input": "이것뿐이다.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "뿐",
+            "required_functions": [
+              "JOSA"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-006",
+      "input": "보냈을 뿐이다.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "뿐",
+            "required_functions": [
+              "DEPENDENT_NOUN"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-007",
+      "input": "정도밖에 없다.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface_options": [
+              "밖에"
+            ],
+            "required_functions": [
+              "JOSA"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-008",
+      "input": "생각해 보자.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "보",
+            "required_functions": [
+              "AUXILIARY_VERB"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-009",
+      "input": "살아 있는 데도.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "있",
+            "required_functions": [
+              "AUXILIARY_VERB"
+            ]
+          },
+          {
+            "surface": "데",
+            "required_functions": [
+              "DEPENDENT_NOUN"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-010",
+      "input": "전환 시 신청한다.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "시",
+            "required_functions": [
+              "DEPENDENT_NOUN"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-011",
+      "input": "십 년 동안.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "년",
+            "required_functions": [
+              "DEPENDENT_NOUN"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-012",
+      "input": "안 돼요.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "안",
+            "required_functions": [
+              "NEGATIVE_ADVERB"
+            ]
+          },
+          {
+            "surface_options": [
+              "되",
+              "돼요"
+            ],
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ],
+        [
+          {
+            "surface": "돼요",
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-013",
+      "input": "안 되나요?",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "안",
+            "required_functions": [
+              "NEGATIVE_ADVERB"
+            ]
+          },
+          {
+            "surface": "되",
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-014",
+      "input": "해야 돼요.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "되",
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ],
+        [
+          {
+            "surface": "돼요",
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-015",
+      "input": "안 되는 일이 없다.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "안",
+            "required_functions": [
+              "NEGATIVE_ADVERB"
+            ]
+          },
+          {
+            "surface": "되",
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-016",
+      "input": "공부가 잘 안돼요.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "안",
+            "required_functions": [
+              "NEGATIVE_ADVERB"
+            ]
+          },
+          {
+            "surface_options": [
+              "되",
+              "돼요"
+            ],
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ],
+        [
+          {
+            "surface": "안되",
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-017",
+      "input": "공부가 잘 안 되어요.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "안",
+            "required_functions": [
+              "NEGATIVE_ADVERB"
+            ]
+          },
+          {
+            "surface_options": [
+              "되",
+              "돼요"
+            ],
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-018",
+      "input": "잘된다.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface_options": [
+              "잘되",
+              "되"
+            ],
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-019",
+      "input": "잘 돼요.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "돼요",
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ],
+        [
+          {
+            "surface": "되",
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-020",
+      "input": "해 볼게.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "보",
+            "required_functions": [
+              "AUXILIARY_VERB"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-021",
+      "input": "먹어 보았다.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "보",
+            "required_functions": [
+              "AUXILIARY_VERB"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-022",
+      "input": "할 데가 없다.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "데",
+            "required_functions": [
+              "DEPENDENT_NOUN"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-023",
+      "input": "할 시에는 미리 알려 주세요.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "시",
+            "required_functions": [
+              "DEPENDENT_NOUN"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "id": "G-MOR2-024",
+      "input": "이것만 하면 된다.",
+      "acceptable_target_sets": [
+        [
+          {
+            "surface": "되",
+            "required_functions": [
+              "LEXICAL_VERB"
+            ]
+          }
+        ]
+      ]
+    }
+  ]
+}
