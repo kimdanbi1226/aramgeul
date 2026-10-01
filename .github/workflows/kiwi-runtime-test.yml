@@ -23,5 +23,14 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Runtime workflow smoke test
-        run: node --version
+      - name: Install dependencies
+        run: npm install
+
+      - name: Verify kiwi-nlp package
+        run: node -e "import('kiwi-nlp').then(m => { if (!m.KiwiBuilder || !m.Kiwi) throw new Error('Kiwi exports are missing'); console.log('kiwi-nlp exports: PASS'); })"
+
+      - name: Run Kiwi runtime configuration test
+        run: node tests/kiwi-runtime.test.js
+
+      - name: Run Kiwi adapter fixture test
+        run: node tests/kiwi-adapter.test.js
