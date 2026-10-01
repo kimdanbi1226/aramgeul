@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { REQUIRED_MODEL_FILES, createKiwiRuntime } from '../lib/morphology/kiwi-runtime.js';
+import { createKiwiAdapter } from '../lib/morphology/kiwi.js';
+import { checkText } from '../lib/pipeline/check.js';
 
 const modelDir = process.env.KIWI_MODEL_DIR;
 const wasmPath = process.env.KIWI_WASM_PATH;
@@ -61,5 +63,37 @@ assert.equal(hasTag('할 수 있다.', '수', 'NNB'), true);
 assert.equal(hasTag('생각해 보자.', '보', 'VX'), true);
 assert.equal(hasTag('안 돼요.', '안', 'MAG'), true);
 
-console.log(`Kiwi real runtime test: PASS (version=${version})`);
+const adapter = createKiwiAdapter(kiwi, {
+  version,
+  runtime: 'kiwi-nlp-wasm'
+});
+
+const pipelineCases = [
+  ['할수있다', '할 수 있다'],
+  ['생각해보자', '생각해 보자'],
+  ['안돼요', '안 돼요'],
+  ['나만큼', '나만큼']
+];
+
+for (const [input, expected] of pipelineCases) {
+  const pipelineResult = await checkText(input, adapter);
+
+  assert.equal(
+    pipelineResult.result.revised,
+    expected,
+    `규칙 엔진 결과가 예상과 다릅니다: ${input}`
+  );
+
+  console.log(
+    JSON.stringify({
+      pipeline: true,
+      input,
+      revised: pipelineResult.result.revised,
+      decision: pipelineResult.result.decision,
+      editCount: pipelineResult.result.edits.length
+    })
+  );
+}
+
+console.log(`Kiwi real runtime + rule pipeline test: PASS (version=${version})`);
 
