@@ -1,0 +1,25 @@
+name: Rule Engine Test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'lib/rules/**'
+      - 'tests/rule-engine-spacing.test.js'
+      - 'package.json'
+      - '.github/workflows/rule-engine-test.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run rule engine tests
+        run: node tests/rule-engine-spacing.test.js
