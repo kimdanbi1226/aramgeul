@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "test:morphology": "node tests/run-morphology-golden.js",
-    "test:rules": "node tests/rule-engine-spacing.test.js"
+    "test:rules": "node tests/rule-engine-spacing.test.js",
+    "test:check": "node tests/check-pipeline.test.js"
   },
   "dependencies": {
     "mecab-ko-wasm": "0.7.0",
