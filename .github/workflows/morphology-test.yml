@@ -5,9 +5,7 @@ on:
     paths:
       - 'lib/morphology/**'
       - 'tests/golden/morphology.v0.1.json'
-      - 'tests/run-morphology-golden.js'
-      - 'package.json'
-      - 'package-lock.json'
+      - 'tests/run-mecab-ko-docker-golden.js'
       - '.github/workflows/morphology-test.yml'
   workflow_dispatch:
 
@@ -17,19 +15,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install dependencies
-        run: npm install
-      - name: Prepare MeCab-Ko dictionary
-        run: |
-          curl -L https://github.com/jeongukjae/mecab-ko-dic-prebuilt/releases/download/2.1.1-20180720/mecab-ko-dic.zip -o /tmp/mecab-ko-dic.zip
-          unzip -q /tmp/mecab-ko-dic.zip -d $GITHUB_WORKSPACE/mecab-ko-dic
-          DICT_DIR=$(find $GITHUB_WORKSPACE/mecab-ko-dic -name dicrc -type f -print -quit | xargs -r dirname)
-          test -n "$DICT_DIR"
-          echo "MECAB_DICDIR=$DICT_DIR" >> $GITHUB_ENV
+
+      - name: Pull MeCab-Ko image
+        run: docker pull ghcr.io/hephaex/mecab-ko:latest
 
       - name: Run Golden Test
-        run: node --experimental-wasm-modules tests/run-morphology-golden.js
+        run: node tests/run-mecab-ko-docker-golden.js
