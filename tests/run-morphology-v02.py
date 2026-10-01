@@ -13,7 +13,7 @@ def map_tag(tag, surface):
         return {"DEPENDENT_NOUN"}
     if base == "VX":
         return {"AUXILIARY_VERB"}
-    if base in {"VV", "VA", "VCP", "VCN"}:
+    if base in {"VV", "VA", "VCP", "VCN", "XSV"}:
         return {"LEXICAL_VERB"}
     if base in {"EF", "EC", "EP"}:
         return {"ENDING"}
