@@ -7,7 +7,7 @@ SUITE = json.loads(Path("tests/golden/morphology.v0.2.json").read_text())["cases
 
 def map_tag(tag, surface):
     base = tag.split("-")[0]
-    if base == "JX":
+    if base in {"JKS", "JKC", "JKG", "JKO", "JKB", "JKV", "JKQ", "JX", "JC"}:
         return {"JOSA"}
     if base == "NNB":
         return {"DEPENDENT_NOUN"}
@@ -85,7 +85,7 @@ komoran_score = run_candidate("KOMORAN", komoran_cases)
 
 
 # MeCab-Ko Docker
-text = "\\n".join(case["input"] for case in SUITE) + "\\n"
+text = "\n".join(case["input"] for case in SUITE) + "\n"
 result = subprocess.run(
     ["docker", "run", "--rm", "-i", "ghcr.io/hephaex/mecab-ko:latest", "parse"],
     input=text,
@@ -99,16 +99,16 @@ for block in blocks[:len(SUITE)]:
     tokens = []
     for line in block.splitlines():
         line = line.strip()
-        if not line or "\\t" not in line:
+        if not line or "\t" not in line:
             continue
-        surface, feature = line.split("\\t", 1)
+        surface, feature = line.split("\t", 1)
         pos = feature.split(",", 1)[0]
         tokens.append((surface, pos))
     mecab_cases.append(tokens)
 mecab_score = run_candidate("MeCab-Ko", mecab_cases)
 
 
-print("\\n===== SUMMARY =====")
+print("\n===== SUMMARY =====")
 print(f"Kiwi: {kiwi_score}/{len(SUITE)}")
 print(f"KOMORAN: {komoran_score}/{len(SUITE)}")
 print(f"MeCab-Ko: {mecab_score}/{len(SUITE)}")
