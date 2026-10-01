@@ -6,7 +6,7 @@ const modelDir = process.env.KIWI_MODEL_DIR;
 const wasmPath = process.env.KIWI_WASM_PATH;
 
 assert.ok(modelDir, 'KIWI_MODEL_DIR가 필요합니다.');
-assert.ok(wasmUrl, 'KIWI_WASM_URL이 필요합니다.');
+assert.ok(wasmPath, 'KIWI_WASM_PATH가 필요합니다.');
 
 const modelFiles = Object.fromEntries(
   await Promise.all(
