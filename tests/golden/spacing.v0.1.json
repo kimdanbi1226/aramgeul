@@ -1,0 +1,154 @@
+{
+  "name": "아람글 Golden Test Set - spacing v0.1",
+  "version": "0.1.0",
+  "checked_at": "2026-10-01",
+  "purpose": "초기 띄어쓰기 규칙의 회귀 테스트용 기준 데이터",
+  "cases": [
+    {
+      "id": "G-SP-001",
+      "input": "나만큼 잘한다.",
+      "expected": "나만큼 잘한다.",
+      "decision": "VALID",
+      "rule_id": "SPACING-041-042-MANKEUM",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제41항·제42항 및 온라인가나다",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&pageIndex=1&qna_seq=306003",
+      "note": "체언 뒤의 '만큼'은 조사이므로 붙여 쓴다."
+    },
+    {
+      "id": "G-SP-002",
+      "input": "할만큼 했다.",
+      "expected": "할 만큼 했다.",
+      "decision": "CORRECTION",
+      "rule_id": "SPACING-041-042-MANKEUM",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제42항 및 온라인가나다",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&pageIndex=1&qna_seq=306003",
+      "note": "용언의 관형사형 뒤의 '만큼'은 의존 명사이므로 띄어 쓴다."
+    },
+    {
+      "id": "G-SP-003",
+      "input": "내거야.",
+      "expected": "내 거야.",
+      "decision": "CORRECTION",
+      "rule_id": "SPACING-042-DEPENDENT-NOUN",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제42항 및 온라인가나다",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&pageIndex=1&qna_seq=306172",
+      "note": "'거'는 '것'을 구어적으로 이르는 의존 명사이므로 앞말과 띄어 쓴다."
+    },
+    {
+      "id": "G-SP-004",
+      "input": "잘될거야.",
+      "expected": "잘될 거야.",
+      "decision": "CORRECTION",
+      "rule_id": "SPACING-042-DEPENDENT-NOUN",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제42항 및 온라인가나다",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&pageIndex=1&qna_seq=314860",
+      "note": "'거'는 의존 명사이므로 앞말과 띄어 쓴다."
+    },
+    {
+      "id": "G-SP-005",
+      "input": "할수있다.",
+      "expected": "할 수 있다.",
+      "decision": "CORRECTION",
+      "rule_id": "SPACING-042-DEPENDENT-NOUN",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제42항 및 온라인가나다",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&pageIndex=1&qna_seq=306081",
+      "note": "'수'는 의존 명사이고 '있다'도 별도 단어이므로 띄어 쓴다."
+    },
+    {
+      "id": "G-SP-006",
+      "input": "서울에서 부터 대전까지 걸어갔다.",
+      "expected": "서울에서부터 대전까지 걸어갔다.",
+      "decision": "CORRECTION",
+      "rule_id": "SPACING-041-POSTPOSITION",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제41항",
+      "source_url": "https://www.korean.go.kr/",
+      "note": "'부터'는 조사이므로 앞말에 붙여 쓴다."
+    },
+    {
+      "id": "G-SP-007",
+      "input": "이것 뿐이다.",
+      "expected": "이것뿐이다.",
+      "decision": "CORRECTION",
+      "rule_id": "SPACING-041-POSTPOSITION",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제41항 및 온라인가나다",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&qna_seq=306301",
+      "note": "체언 뒤의 '뿐'이 조사로 쓰인 경우 붙여 쓴다."
+    },
+    {
+      "id": "G-SP-008",
+      "input": "시간을 보냈을뿐이다.",
+      "expected": "시간을 보냈을 뿐이다.",
+      "decision": "CORRECTION",
+      "rule_id": "SPACING-042-DEPENDENT-NOUN",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제42항 및 온라인가나다",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&qna_seq=306301",
+      "note": "관형사형 뒤의 '뿐'은 의존 명사이므로 띄어 쓴다."
+    },
+    {
+      "id": "G-SP-009",
+      "input": "생각해보자.",
+      "expected": "생각해 보자.",
+      "decision": "CORRECTION",
+      "rule_id": "SPACING-047-AUXILIARY",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제47항 및 2026-08-10 온라인가나다",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=201&pageIndex=1&qna_seq=334645",
+      "note": "보조 용언은 띄어 씀을 원칙으로 하며, 해당 문맥에서는 '생각해 보자'로 쓴다."
+    },
+    {
+      "id": "G-SP-010",
+      "input": "살아있는 데도.",
+      "expected": "살아 있는 데도.",
+      "allowed": [
+        "살아있는 데도."
+      ],
+      "decision": "CORRECTION_WITH_ALLOWED_VARIANT",
+      "rule_id": "SPACING-047-AUXILIARY",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제47항 및 2026-08-10 온라인가나다",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=201&pageIndex=1&qna_seq=334645",
+      "note": "'살아 있는'이 원칙이며 '살아있는'도 허용된다. Golden Test에서는 허용 표기를 오류로 처리하지 않아야 한다."
+    },
+    {
+      "id": "G-SP-011",
+      "input": "정도 밖에 없다.",
+      "expected": "정도밖에 없다.",
+      "decision": "CORRECTION",
+      "rule_id": "SPACING-041-POSTPOSITION",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제41항 및 2026-08-10 온라인가나다",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=201&pageIndex=1&qna_seq=334645",
+      "note": "'밖에'가 보조사로 쓰인 경우 앞말에 붙여 쓴다."
+    },
+    {
+      "id": "G-SP-012",
+      "input": "전환시 신청한다.",
+      "expected": "전환 시 신청한다.",
+      "decision": "CORRECTION",
+      "rule_id": "SPACING-042-DEPENDENT-NOUN",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제42항 및 2026-06-30 온라인가나다",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=90&pageIndex=1&qna_seq=333044",
+      "note": "'시'가 의존 명사로 쓰인 경우 앞말과 띄어 쓴다."
+    },
+    {
+      "id": "G-SP-013",
+      "input": "십년 동안.",
+      "expected": "십 년 동안.",
+      "decision": "CORRECTION",
+      "rule_id": "SPACING-042-DEPENDENT-NOUN",
+      "source": "국립국어원",
+      "source_reference": "한글 맞춤법 제42항 및 온라인가나다",
+      "source_url": "https://korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&pageIndex=1&qna_seq=323001",
+      "note": "'년'이 의존 명사로 쓰인 경우 앞말과 띄어 쓴다."
+    }
+  ]
+}
