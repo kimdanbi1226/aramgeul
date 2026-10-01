@@ -49,7 +49,7 @@ GitHub Actions의 Ubuntu 24.04 + Node.js 22 환경에서 다음 항목을 실제
 - 9개 모델 파일 로딩
 - `kiwi-wasm.wasm` 실제 로딩
 - Kiwi 버전 `0.23.0` 확인
-- 실제 문장 형태소 분석
+- 실제 문장 형태소 분석 및 아람글 규칙 파이프라인 연결
 
 검증 문장:
 
@@ -62,7 +62,14 @@ GitHub Actions의 Ubuntu 24.04 + Node.js 22 환경에서 다음 항목을 실제
 
 실제 결과에서 `수/NNB`, `보/VX`, `안/MAG` 등의 형태소·품사가 확인되었으며, 테스트 마지막에 `Kiwi real runtime test: PASS (version=0.23.0)`가 출력되었다.
 
-검증 Workflow run: `36887055378`
+검증 Workflow run: `36887478151`
+
+통합 파이프라인 결과:
+
+- `할수있다` → `할 수 있다` (`CORRECTION`)
+- `생각해보자` → `생각해 보자` (`CORRECTION`)
+- `안돼요` → `안 돼요` (`CORRECTION`)
+- `나만큼` → `나만큼` (`VALID`)
 
 ## 모델 운영 원칙
 
