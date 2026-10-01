@@ -6,6 +6,9 @@ on:
     paths:
       - 'tests/golden/morphology.v0.2.json'
       - 'tests/run-morphology-v02.py'
+      - 'lib/morphology/kiwi-runtime.js'
+      - 'tests/kiwi-runtime.test.js'
+      - 'package.json'
       - '.github/workflows/morphology-candidate-test.yml'
 
 jobs:
@@ -40,6 +43,9 @@ jobs:
 
       - name: Verify Kiwi adapter
         run: node tests/kiwi-adapter.test.js
+
+      - name: Verify Kiwi runtime configuration
+        run: node tests/kiwi-runtime.test.js
 
       - name: Verify kiwi-nlp exports
         run: node --input-type=module -e "import('kiwi-nlp').then(m => { if (!m.KiwiBuilder || !m.Kiwi) throw new Error('Kiwi JS/WASM exports are missing'); console.log('kiwi-nlp exports: PASS'); })"
