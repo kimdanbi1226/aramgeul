@@ -9,7 +9,7 @@ const input = suite.cases.map(testCase => testCase.input).join('\n') + '\n';
 
 const result = spawnSync(
   'docker',
-  ['run', '--rm', '-i', 'ghcr.io/hephaex/mecab-ko:latest'],
+  ['run', '--rm', '-i', 'ghcr.io/hephaex/mecab-ko:latest', 'parse'],
   {
     input,
     encoding: 'utf8',
