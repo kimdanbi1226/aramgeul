@@ -1,0 +1,101 @@
+name: Morphology Candidate Comparison
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tests/golden/morphology.v0.1.json'
+      - '.github/workflows/morphology-candidate-test.yml'
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install analyzers
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install kiwipiepy PyKomoran
+
+      - name: Run identical 15-case Golden Test
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from kiwipiepy import Kiwi
+          from PyKomoran import Komoran
+
+          cases = json.loads(Path("tests/golden/morphology.v0.1.json").read_text())["cases"]
+
+          kiwi = Kiwi()
+          komoran = Komoran("STABLE")
+
+          def kiwi_functions(tag):
+              base = tag.split("-")[0]
+              if base == "JX":
+                  return {"JOSA"}
+              if base == "NNB":
+                  return {"DEPENDENT_NOUN"}
+              if base == "VX":
+                  return {"AUXILIARY_VERB"}
+              if base in {"VV", "VA"}:
+                  return {"LEXICAL_VERB"}
+              if base in {"EF", "EC", "EP"}:
+                  return {"ENDING"}
+              return {base}
+
+          def komoran_functions(tag):
+              if tag == "JX":
+                  return {"JOSA"}
+              if tag == "NNB":
+                  return {"DEPENDENT_NOUN"}
+              if tag == "VX":
+                  return {"AUXILIARY_VERB"}
+              if tag in {"VV", "VA"}:
+                  return {"LEXICAL_VERB"}
+              if tag in {"EF", "EC", "EP"}:
+                  return {"ENDING"}
+              return {tag}
+
+          def target_match(tokens, target, mapper):
+              surface = target["surface"]
+              required = set(target["required_functions"])
+              for form, tag in tokens:
+                  if form == surface and required.intersection(mapper(tag)):
+                      return True
+              return False
+
+          def run(name, analyze, mapper):
+              passed = 0
+              print(f"\\n===== {name} =====")
+              for case in cases:
+                  raw = analyze(case["input"])
+                  tokens = [(str(x[0]), str(x[1])) for x in raw]
+                  ok = all(target_match(tokens, t, mapper) for t in case["expected_targets"])
+                  if ok:
+                      passed += 1
+                  print(f"{'MATCH' if ok else 'MISMATCH'} {case['id']} {case['input']}")
+                  print("  " + " ".join(f"{f}/{t}" for f, t in tokens))
+              print(f"{name}: {passed} MATCH / {len(cases)-passed} MISMATCH / {len(cases)} total")
+              return passed
+
+          kiwi_score = run("Kiwi", lambda s: [(t.form, t.tag) for t in kiwi.tokenize(s)], kiwi_functions)
+          komoran_score = run("KOMORAN", lambda s: [p.split("/") for p in komoran.get_plain_text(s).split()], komoran_functions)
+
+          print("\\n===== SUMMARY =====")
+          print(f"Kiwi: {kiwi_score}/{len(cases)}")
+          print(f"KOMORAN: {komoran_score}/{len(cases)}")
+          PY
