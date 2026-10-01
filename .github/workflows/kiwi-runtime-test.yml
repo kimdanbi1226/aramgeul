@@ -52,14 +52,8 @@ jobs:
           echo "=== CoNg model files ==="
           find runtime-assets/models/cong/base -maxdepth 1 -type f -printf '%f\n' | sort
 
-      - name: Start local asset server
-        run: |
-          python3 -m http.server 8765 --directory runtime-assets >/tmp/kiwi-http.log 2>&1 &
-          sleep 2
-          curl -f http://127.0.0.1:8765/wasm/kiwi-wasm.wasm -o /dev/null
-
       - name: Run real Kiwi runtime test
         env:
           KIWI_MODEL_DIR: ${{ github.workspace }}/runtime-assets/models/cong/base
-          KIWI_WASM_URL: http://127.0.0.1:8765/wasm/kiwi-wasm.wasm
+          KIWI_WASM_PATH: ${{ github.workspace }}/runtime-assets/wasm/kiwi-wasm.wasm
         run: node tests/kiwi-real-runtime.test.js
