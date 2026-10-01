@@ -1,0 +1,140 @@
+{
+  "name": "아람글 Golden Test Set - orthography v0.1",
+  "version": "0.1.0",
+  "checked_at": "2026-10-01",
+  "purpose": "초기 맞춤법·활용형·부정 표현의 회귀 테스트용 기준 데이터",
+  "cases": [
+    {
+      "id": "G-OR-001",
+      "input": "안 되나요?",
+      "expected": "안 되나요?",
+      "decision": "VALID",
+      "rule_id": "ORTHO-001-DOE-CONJUGATION",
+      "source": "국립국어원",
+      "source_reference": "온라인가나다 316812",
+      "source_url": "https://korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&qna_seq=316812",
+      "note": "어간 '되-'에 어미 '-나'가 결합한 형태이므로 '되나요'로 쓴다."
+    },
+    {
+      "id": "G-OR-002",
+      "input": "안 돼나요?",
+      "expected": "안 되나요?",
+      "decision": "CORRECTION",
+      "rule_id": "ORTHO-001-DOE-CONJUGATION",
+      "source": "국립국어원",
+      "source_reference": "온라인가나다 316812",
+      "source_url": "https://korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&qna_seq=316812",
+      "note": "'돼'는 '되어'가 줄어든 형태이므로 '-나'가 결합하는 '되나요'에는 쓰지 않는다."
+    },
+    {
+      "id": "G-OR-003",
+      "input": "해야 돼요.",
+      "expected": "해야 돼요.",
+      "decision": "VALID",
+      "rule_id": "ORTHO-001-DOE-CONJUGATION",
+      "source": "국립국어원",
+      "source_reference": "온라인가나다 315366",
+      "source_url": "https://m.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&qna_seq=315366",
+      "note": "'되-+-어요'가 축약되어 '돼요'가 된다."
+    },
+    {
+      "id": "G-OR-004",
+      "input": "해야 되요.",
+      "expected": "해야 돼요.",
+      "decision": "CORRECTION",
+      "rule_id": "ORTHO-001-DOE-CONJUGATION",
+      "source": "국립국어원",
+      "source_reference": "온라인가나다 315366",
+      "source_url": "https://m.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&qna_seq=315366",
+      "note": "'되-+-어요'가 축약되어 '돼요'가 된다."
+    },
+    {
+      "id": "G-OR-005",
+      "input": "비교된다.",
+      "expected": "비교된다.",
+      "decision": "VALID",
+      "rule_id": "ORTHO-001-DOE-CONJUGATION",
+      "source": "국립국어원",
+      "source_reference": "온라인가나다 316812",
+      "source_url": "https://korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&qna_seq=316812",
+      "note": "어간 '비교되-'에 자음 어미 '-ㄴ다'가 결합하므로 '된다' 형태가 된다."
+    },
+    {
+      "id": "G-OR-006",
+      "input": "비교됀다.",
+      "expected": "비교된다.",
+      "decision": "CORRECTION",
+      "rule_id": "ORTHO-001-DOE-CONJUGATION",
+      "source": "국립국어원",
+      "source_reference": "온라인가나다 316812",
+      "source_url": "https://korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=216&qna_seq=316812",
+      "note": "'된다'가 올바른 활용형이다."
+    },
+    {
+      "id": "G-OR-007",
+      "input": "안 돼요.",
+      "expected": "안 돼요.",
+      "decision": "VALID",
+      "rule_id": "ORTHO-002-AN-DOE",
+      "source": "국립국어원",
+      "source_reference": "온라인가나다 327841",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=27&qna_seq=327841",
+      "note": "부정 부사 '안'과 '돼요'가 결합한 표현은 띄어 쓴다."
+    },
+    {
+      "id": "G-OR-008",
+      "input": "안 되요.",
+      "expected": "안 돼요.",
+      "decision": "CORRECTION",
+      "rule_id": "ORTHO-001-DOE-CONJUGATION",
+      "source": "국립국어원",
+      "source_reference": "온라인가나다 327841",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=27&qna_seq=327841",
+      "note": "'되-+-어요'가 축약되어 '돼요'가 된다."
+    },
+    {
+      "id": "G-OR-009",
+      "input": "공부가 잘 안돼요.",
+      "expected": "공부가 잘 안돼요.",
+      "decision": "VALID",
+      "rule_id": "ORTHO-002-AN-DOE",
+      "source": "국립국어원",
+      "source_reference": "온라인가나다 327841",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=27&qna_seq=327841",
+      "note": "'안되다'가 한 단어로 쓰이는 문맥에서는 붙여 쓴다."
+    },
+    {
+      "id": "G-OR-010",
+      "input": "집에서 뛰어서는 안돼요.",
+      "expected": "집에서 뛰어서는 안 돼요.",
+      "decision": "CORRECTION",
+      "rule_id": "ORTHO-002-AN-DOE",
+      "source": "국립국어원",
+      "source_reference": "온라인가나다 327841",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=27&qna_seq=327841",
+      "note": "이 문맥의 '안'은 부정 부사이므로 '돼요'와 띄어 쓴다."
+    },
+    {
+      "id": "G-OR-011",
+      "input": "안 되는 일이 없다.",
+      "expected": "안 되는 일이 없다.",
+      "decision": "VALID",
+      "rule_id": "ORTHO-002-AN-DOE",
+      "source": "국립국어원",
+      "source_reference": "온라인가나다 326430",
+      "source_url": "https://www.korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=73&qna_seq=326430",
+      "note": "'안'이 '되다'를 수식하는 부정 부사로 쓰였으므로 띄어 쓴다."
+    },
+    {
+      "id": "G-OR-012",
+      "input": "안되는 일이 없다.",
+      "expected": "안 되는 일이 없다.",
+      "decision": "CORRECTION",
+      "rule_id": "ORTHO-002-AN-DOE",
+      "source": "국립국어원",
+      "source_reference": "온라인가나다 326430",
+      "source_url": "https://korean.go.kr/front/onlineQna/onlineQnaView.do?mn_id=73&qna_seq=326430",
+      "note": "해당 문맥에서는 부정 부사 '안'과 동사 '되는'을 띄어 쓴다."
+    }
+  ]
+}
