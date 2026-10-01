@@ -31,8 +31,8 @@ function analyze(text, tokens) {
     token('있', 3, 4, ['LEXICAL_VERB']),
     token('다', 4, 5, ['ENDING'], 'EF')
   ]));
-  assert.equal(result.revised, '할 수있다');
-  assert.equal(result.edits.length, 1);
+  assert.equal(result.revised, '할 수 있다');
+  assert.equal(result.edits.length, 2);
   assert.equal(result.edits[0].rule_id, 'SPACING-042-DEPENDENT-NOUN');
 }
 
