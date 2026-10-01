@@ -5,7 +5,8 @@
   "scripts": {
     "test:morphology": "node tests/run-morphology-golden.js",
     "test:rules": "node tests/rule-engine-spacing.test.js",
-    "test:check": "node tests/check-pipeline.test.js"
+    "test:check": "node tests/check-pipeline.test.js",
+    "test:kiwi-runtime": "node tests/kiwi-runtime.test.js"
   },
   "dependencies": {
     "mecab-ko-wasm": "0.7.0",
