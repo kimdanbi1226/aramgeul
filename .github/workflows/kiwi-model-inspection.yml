@@ -1,0 +1,39 @@
+name: Kiwi Model Inspection
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/kiwi-model-inspection.yml'
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Download kiwi-nlp package
+        run: |
+          npm pack kiwi-nlp@0.23.0 --silent
+          tar -xzf kiwi-nlp-0.23.0.tgz
+          echo "=== WASM files ==="
+          find package -type f -name '*.wasm' -print
+
+      - name: Download official Kiwi v0.23.0 base model
+        run: |
+          curl -fL --retry 3 --retry-delay 2 \
+            -o kiwi_model_v0.23.0_base.tgz \
+            https://github.com/bab2min/Kiwi/releases/download/v0.23.0/kiwi_model_v0.23.0_base.tgz
+
+      - name: Inspect model archive
+        run: |
+          echo "=== Model archive ==="
+          ls -lh kiwi_model_v0.23.0_base.tgz
+          echo "=== Model files ==="
+          tar -tzf kiwi_model_v0.23.0_base.tgz
