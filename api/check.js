@@ -1,3 +1,5 @@
+import { createBareunResult, integrateCheckResults } from '../lib/pipeline/integrate.js';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'POST 요청만 허용됩니다.' });
@@ -65,10 +67,39 @@ export default async function handler(req, res) {
         })
       : [];
 
+    /*
+     * 현재 배포 API에서는 Bareun 결과만 실제로 연결한다.
+     * 아람글 로컬 규칙 엔진은 별도의 형태소 런타임/모델 자산 공급 방식이
+     * 확정된 뒤 ruleResult로 주입한다.
+     *
+     * 따라서 이 단계에서는 Bareun 결과를 별도 evidence로 보존하면서
+     * 향후 규칙 엔진 결과와 충돌 없이 통합할 수 있는 구조를 먼저 만든다.
+     */
+    const bareunResult = createBareunResult(
+      {
+        revised: data?.revised || text,
+        revised_blocks: revisedBlocks
+      },
+      text
+    );
+
+    const integrated = integrateCheckResults(text, {
+      ruleResult: null,
+      bareunResult
+    });
+
     return res.status(200).json({
+      // 기존 프론트엔드 호환 필드
       origin: data?.origin || text,
-      revised: data?.revised || text,
-      revised_blocks: revisedBlocks
+      revised: integrated.revised,
+      revised_blocks: revisedBlocks,
+
+      // 아람글 통합 판정
+      decision: integrated.decision,
+      edits: integrated.edits,
+      sources: integrated.sources,
+      evidence: integrated.evidence,
+      candidates: integrated.candidates || []
     });
   } catch (error) {
     console.error('Check API error:', error);
