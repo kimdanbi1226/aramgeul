@@ -69,7 +69,7 @@ suite.cases.forEach((testCase, index) => {
     failed += 1;
     console.error('MISMATCH ' + testCase.id + ' ' + testCase.input);
     console.error('  tokens: ' + JSON.stringify(tokens));
-    if (missingPos.length) console.error('  missing POS: ' + missingPos.join(', '));
+    if (missingTargets.length) console.error('  missing targets: ' + JSON.stringify(missingTargets));
   }
 });
 
