@@ -18,7 +18,7 @@ main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center
 .editor{padding:24px}textarea{display:block;width:100%;min-height:260px;resize:vertical;border:1px solid #cfd8e6;border-radius:16px;padding:20px;font:inherit;font-size:18px;line-height:1.85;color:var(--ink);background:#fbfcfe;outline:none}textarea:focus{border-color:#6d9be8;box-shadow:0 0 0 4px rgba(36,87,197,.09)}textarea::placeholder{color:#9aa5b5}.editor-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}.count{font-size:13px;color:var(--muted)}.check{border:0;border-radius:12px;padding:13px 23px;background:var(--primary);color:#fff;font:inherit;font-weight:800;cursor:pointer}.check:hover{background:var(--primary-dark)}.check:disabled{opacity:.65;cursor:wait}
 .result{display:none;border-top:1px solid var(--line);padding:24px;background:#fafcff}.result.show{display:block}.result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.result-title{font-size:17px;font-weight:800}.status{font-size:12px;border-radius:999px;padding:6px 9px;background:#eef2f7;color:#5d6878}.status.correction{color:var(--primary);background:var(--soft)}.status.valid{color:var(--success);background:#eaf8f2}.status.ambiguous{color:var(--warning);background:#fff5df}
 .result-box{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff;line-height:1.8;color:#475467}.result-label{font-size:12px;font-weight:800;color:#7a8595;margin-bottom:7px}.revised-text{font-size:18px;color:var(--ink);white-space:pre-wrap;word-break:break-word}
-.corrections{display:grid;gap:12px;margin-top:14px}.correction{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}.change{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}.change-part{flex:1;min-width:180px}.change-value{padding:10px 12px;border-radius:10px;background:#f7f9fc;border:1px solid #e5e9f0;white-space:pre-wrap;word-break:break-word}.arrow{color:#98a2b3;font-weight:800;padding-top:10px}.help{margin:10px 0 0;color:#596578;font-size:13px;line-height:1.65}.source{margin-top:9px;color:#8994a4;font-size:11px}
+.corrections{display:grid;gap:12px;margin-top:14px}.correction{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}.correction.clickable{cursor:pointer;transition:border-color .15s,box-shadow .15s}.correction.clickable:hover,.correction.clickable.selected{border-color:#b9cff8;box-shadow:0 5px 18px rgba(36,87,197,.08)}.change{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}.change-part{flex:1;min-width:180px}.change-value{padding:10px 12px;border-radius:10px;background:#f7f9fc;border:1px solid #e5e9f0;white-space:pre-wrap;word-break:break-word}.arrow{color:#98a2b3;font-weight:800;padding-top:10px}.help{margin:10px 0 0;color:#596578;font-size:13px;line-height:1.65}.source{margin-top:9px;color:#8994a4;font-size:11px}.diff{font-size:18px;line-height:1.8;white-space:pre-wrap;word-break:break-word}.diff-removed{background:#fdebec;color:#a12b37;text-decoration:line-through;text-decoration-thickness:1px;border-radius:4px;padding:1px 2px}.diff-added{background:#e7f7ef;color:#14704d;border-radius:4px;padding:1px 2px}.detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid #edf0f5}.correction.selected .detail{display:block}.detail-title{font-size:12px;font-weight:800;color:#687386;margin-bottom:5px}.detail-empty{color:#8994a4;font-size:13px}.detail-meta{margin-top:8px;font-size:11px;color:#8994a4}.result-hint{margin-top:8px;color:#8994a4;font-size:12px;line-height:1.6}
 .candidates{margin-top:14px;padding:14px;border:1px solid #f0dfb6;border-radius:14px;background:#fffaf0}.candidate{padding:8px 0}.candidate+.candidate{border-top:1px solid #f0e6cf}.candidate strong{font-size:12px;color:#7a5a16}.candidate div{margin-top:3px}
 .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.info{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.info strong{display:block;margin-bottom:6px;font-size:14px}.info span{font-size:13px;color:var(--muted);line-height:1.6}
 .notice{margin:20px 0 0;color:#8994a4;font-size:12px;line-height:1.7;text-align:center}footer{text-align:center;color:#929bab;font-size:12px;padding:0 24px 34px}
@@ -117,19 +117,29 @@ function renderResult(data, input) {
   html += '<div class="result-label">검사 결과</div>';
   html += '<div class="revised-text">' + escapeHtml(revised) + '</div>';
   html += '</div>';
+  if (blocks.length) {
+    html += '<div class="result-hint">수정된 부분을 누르면 변경 내용과 검사 설명을 확인할 수 있습니다.</div>';
+  }
 
   if (blocks.length) {
     html += '<div class="corrections">';
-    html += blocks.map(block => {
-      const help = block.help ? '<div class="help"><strong>왜?</strong> ' + escapeHtml(block.help) + '</div>' : '';
-      return '<div class="correction">' +
+    html += blocks.map((block, index) => {
+      const help = block.help
+        ? '<div class="help"><strong>왜?</strong> ' + escapeHtml(block.help) + '</div>'
+        : '<div class="detail-empty">검사 엔진에서 별도 설명을 제공하지 않았습니다.</div>';
+      const diff = diffHtml(block.origin.text, block.revised);
+      return '<div class="correction clickable" data-correction-index="' + index + '" tabindex="0" role="button" aria-expanded="false">' +
         '<div class="change">' +
-          '<div class="change-part"><div class="result-label">입력</div><div class="change-value">' + escapeHtml(block.origin.text) + '</div></div>' +
+          '<div class="change-part"><div class="result-label">변경 전</div><div class="change-value">' + escapeHtml(block.origin.text) + '</div></div>' +
           '<div class="arrow">→</div>' +
-          '<div class="change-part"><div class="result-label">수정</div><div class="change-value">' + escapeHtml(block.revised) + '</div></div>' +
+          '<div class="change-part"><div class="result-label">변경 후</div><div class="change-value">' + escapeHtml(block.revised) + '</div></div>' +
         '</div>' +
-        help +
-        '<div class="source">검사 엔진: Bareun</div>' +
+        '<div class="detail">' +
+          '<div class="detail-title">문장 안에서 변경된 부분</div>' +
+          '<div class="diff">' + diff + '</div>' +
+          help +
+          '<div class="detail-meta">검사 엔진: Bareun · 현재 결과는 Bareun이 제공한 교정 후보를 기준으로 표시합니다.</div>' +
+        '</div>' +
       '</div>';
     }).join('');
     html += '</div>';
@@ -147,6 +157,61 @@ function renderResult(data, input) {
   }
 
   resultContent.innerHTML = html;
+  bindCorrectionCards();
+}
+
+function bindCorrectionCards() {
+  document.querySelectorAll('.correction.clickable').forEach(card => {
+    const toggle = () => {
+      const selected = card.classList.toggle('selected');
+      card.setAttribute('aria-expanded', selected ? 'true' : 'false');
+    };
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggle();
+      }
+    });
+  });
+}
+
+function diffHtml(original, revised) {
+  if (original === revised) return escapeHtml(revised);
+
+  const a = Array.from(original);
+  const b = Array.from(revised);
+  const rows = a.length + 1;
+  const cols = b.length + 1;
+  const dp = Array.from({length: rows}, () => new Array(cols).fill(0));
+
+  for (let i = a.length - 1; i >= 0; i--) {
+    for (let j = b.length - 1; j >= 0; j--) {
+      dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    }
+  }
+
+  const parts = [];
+  let i = 0, j = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) {
+      parts.push({type: 'same', text: a[i]});
+      i++; j++;
+    } else if (dp[i + 1][j] >= dp[i][j + 1]) {
+      parts.push({type: 'removed', text: a[i++]});
+    } else {
+      parts.push({type: 'added', text: b[j++]});
+    }
+  }
+  while (i < a.length) parts.push({type: 'removed', text: a[i++]});
+  while (j < b.length) parts.push({type: 'added', text: b[j++]});
+
+  return parts.map(part => {
+    const value = escapeHtml(part.text);
+    if (part.type === 'removed') return '<span class="diff-removed">' + value + '</span>';
+    if (part.type === 'added') return '<span class="diff-added">' + value + '</span>';
+    return value;
+  }).join('');
 }
 
 function setStatus(label, className) {
