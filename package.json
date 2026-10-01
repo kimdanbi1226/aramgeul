@@ -1,0 +1,11 @@
+{
+  "name": "aramgeul",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:morphology": "node tests/run-morphology-golden.js"
+  },
+  "dependencies": {
+    "mecab-ko-wasm": "0.7.0"
+  }
+}
