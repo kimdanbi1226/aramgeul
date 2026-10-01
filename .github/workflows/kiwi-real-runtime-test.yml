@@ -1,5 +1,7 @@
 name: Kiwi Real Runtime Test
 
+# Real runtime verification uses the official v0.23.0 model assets.
+
 on:
   workflow_dispatch:
   push:
