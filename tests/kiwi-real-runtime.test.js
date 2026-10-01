@@ -62,3 +62,4 @@ assert.equal(hasTag('생각해 보자.', '보', 'VX'), true);
 assert.equal(hasTag('안 돼요.', '안', 'MAG'), true);
 
 console.log(`Kiwi real runtime test: PASS (version=${version})`);
+
