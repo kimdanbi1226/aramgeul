@@ -25,11 +25,10 @@ function analyze(text, tokens) {
 {
   const text = '할수있다';
   const result = evaluateSpacing(analyze(text, [
-    token('하', 0, 1, ['LEXICAL_VERB']),
-    token('ᆯ', 1, 2, ['MODIFIER'], 'ETM'),
-    token('수', 2, 3, ['DEPENDENT_NOUN'], 'NNB'),
-    token('있', 3, 4, ['LEXICAL_VERB']),
-    token('다', 4, 5, ['ENDING'], 'EF')
+    token('할', 0, 1, ['MODIFIER'], 'ETM'),
+    token('수', 1, 2, ['DEPENDENT_NOUN'], 'NNB'),
+    token('있', 2, 3, ['LEXICAL_VERB']),
+    token('다', 3, 4, ['ENDING'], 'EF')
   ]));
   assert.equal(result.revised, '할 수 있다');
   assert.equal(result.edits.length, 2);
@@ -39,9 +38,9 @@ function analyze(text, tokens) {
 {
   const text = '생각해보자';
   const result = evaluateSpacing(analyze(text, [
-    token('해', 0, 2, ['LEXICAL_VERB']),
-    token('보', 2, 3, ['AUXILIARY_VERB'], 'VX'),
-    token('자', 3, 4, ['ENDING'], 'EF')
+    token('생각해', 0, 3, ['LEXICAL_VERB']),
+    token('보', 3, 4, ['AUXILIARY_VERB'], 'VX'),
+    token('자', 4, 5, ['ENDING'], 'EF')
   ]));
   assert.equal(result.revised, '생각해 보자');
   assert.equal(result.edits.length, 1);
