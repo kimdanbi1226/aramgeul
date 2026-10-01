@@ -6,6 +6,6 @@
     "test:morphology": "node tests/run-morphology-golden.js"
   },
   "dependencies": {
-    "@mecab-ko/node": "0.7.0"
+    "mecab-ko-wasm": "0.7.0"
   }
 }
