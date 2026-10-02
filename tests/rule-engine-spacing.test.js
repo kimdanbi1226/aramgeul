@@ -250,4 +250,12 @@ function analyze(text, tokens) {
   assert.equal(rule50.decision_type, 'AMBIGUOUS');
 }
 
+{
+  const rule51 = getRuleById('ORTHO-051-ADVERB-I-HI');
+  assert.equal(rule51.decision_type, 'CORRECTION');
+  assert.equal(evaluateSpacing(analyze('깨끗히')).revised, '깨끗이');
+  assert.equal(evaluateSpacing(analyze('정확이')).revised, '정확히');
+  assert.equal(evaluateSpacing(analyze('솔직히')).revised, '솔직히');
+}
+
 console.log('Rule engine spacing tests: PASS');
