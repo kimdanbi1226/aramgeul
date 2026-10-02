@@ -24,7 +24,6 @@ export default async function handler(req, res) {
     }
 
     let bareunData = null;
-    let bareunAvailable = Boolean(apiKey);
     let bareunError = null;
 
     if (apiKey) {
@@ -55,7 +54,6 @@ export default async function handler(req, res) {
 
         bareunData = data;
       } catch (error) {
-        bareunAvailable = false;
         bareunError = error instanceof Error ? error.message : String(error);
         console.error('Bareun API error; continuing with Aramgeul rule engine:', error);
       }
@@ -84,12 +82,12 @@ export default async function handler(req, res) {
     }
 
     const revisedBlocks = Array.isArray(bareunData?.revised_blocks)
-      ? data.revised_blocks.map(block => {
+      ? bareunData.revised_blocks.map(block => {
           const originText = block?.origin?.text || '';
           const revisedText = block?.revised || '';
           const helpId = block?.revisions?.[0]?.help_id;
           const help = helpId && bareunData?.helps?.[helpId]?.comment
-            ? data.helps[helpId].comment
+            ? bareunData.helps[helpId].comment
             : '';
 
           const matchedRule = findRuleForExample(originText, revisedText);
@@ -194,7 +192,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       // 기존 프론트엔드 호환 필드
-      origin: data?.origin || text,
+      origin: bareunData?.origin || text,
       revised: integrated.revised,
       revised_blocks: mergedRevisedBlocks,
       engines: {
