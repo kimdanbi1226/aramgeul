@@ -44,7 +44,7 @@ const semantic = evaluateDictionaryDecisions({
     }
   ]
 });
-assert.equal(semantic[0].status, 'EVIDENCE_ONLY');
+assert.equal(semantic[0].status, 'CONTEXT_REQUIRED');
 
 const bothCandidates = evaluateDictionaryDecisions({
   enabled: true,
