@@ -300,4 +300,14 @@ function analyze(text, tokens) {
   assert.equal(rule55.decision_type, 'CORRECTION');
 }
 
+{
+  const rule56 = getRuleById('ORTHO-056-DEON-DEUN');
+  assert.equal(evaluateSpacing(analyze('지난겨울은 몹시 춥드라.')).revised, '지난겨울은 몹시 춥더라.');
+  assert.equal(evaluateSpacing(analyze('배던지 사과던지 마음대로 먹어라.')).revised, '배든지 사과든지 마음대로 먹어라.');
+  assert.equal(evaluateSpacing(analyze('먹든지 말든지 마음대로 하렴.')).revised, '먹든지 말든지 마음대로 하렴.');
+  assert.equal(evaluateSpacing(analyze('하든')).revised, '하든');
+  assert.equal(evaluateSpacing(analyze('하던')).revised, '하던');
+  assert.equal(rule56.decision_type, 'AMBIGUOUS');
+}
+
 console.log('Rule engine spacing tests: PASS');
