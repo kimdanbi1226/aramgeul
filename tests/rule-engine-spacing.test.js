@@ -219,4 +219,25 @@ function analyze(text, tokens) {
   assert.equal(rule.allowed_examples.some(example => example.input === text && example.allowed === text), true);
 }
 
+{
+  // 사전 등재 단어가 형태소 분석기에서 관형사+의존 명사로 분해되어도 잘못 띄우지 않는다.
+  for (const [text, left, right] of [
+    ['그동안', '그', '동안'],
+    ['그사이', '그', '사이'],
+    ['이때', '이', '때'],
+    ['그때', '그', '때'],
+    ['저때', '저', '때'],
+    ['이만큼', '이', '만큼'],
+    ['그만큼', '그', '만큼'],
+    ['저만큼', '저', '만큼']
+  ]) {
+    const result = evaluateSpacing(analyze(text, [
+      token(left, 0, left.length, ['MODIFIER'], 'MM'),
+      token(right, left.length, text.length, ['DEPENDENT_NOUN'], 'NNB')
+    ]));
+    assert.equal(result.revised, text);
+    assert.equal(result.decision, 'VALID');
+  }
+}
+
 console.log('Rule engine spacing tests: PASS');
