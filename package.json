@@ -12,7 +12,7 @@
     "test:rule-blocks": "node tests/rule-correction-blocks.test.js"
   },
   "dependencies": {
-    "mecab-ko-wasm": "0.7.0",
-    "kiwi-nlp": "0.23.0"
+    "kiwi-nlp": "0.23.0",
+    "kuromoji-ko": "1.0.8"
   }
 }
