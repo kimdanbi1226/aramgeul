@@ -108,6 +108,10 @@ function renderResult(data, input) {
   else setStatus('판정 보류', '');
 
   const revised = data.revised || input;
+  const htmlWarning = data.engine_warning
+    ? '<div class="result-warning">' + escapeHtml(data.engine_warning) + '</div>'
+    : '';
+
   const blocks = Array.isArray(data.revised_blocks)
     ? data.revised_blocks.filter(block =>
         block && typeof block.revised === 'string' &&
@@ -120,6 +124,7 @@ function renderResult(data, input) {
   html += '<div class="result-label">검사 결과</div>';
   html += '<div class="revised-text" id="revisedSentence">' + renderSentenceWithEdits(revised, blocks) + '</div>';
   html += '</div>';
+  html += htmlWarning;
   if (blocks.length) {
     html += '<div class="result-hint">수정된 부분을 누르면 변경 내용과 검사 설명을 확인할 수 있습니다.</div>';
   }
