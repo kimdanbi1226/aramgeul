@@ -284,3 +284,9 @@ assert.equal(rule53.decision_type, 'CORRECTION');
 assert.equal(rule53.examples.some(example => example.input === '할께' && example.expected === '할게'), true);
 assert.equal(rule53.examples.some(example => example.input === '할찌라도' && example.expected === '할지라도'), true);
 assert.equal(rule53.allowed_examples.some(example => example.input === '갈까'), true);
+
+const rule54 = getRuleById('ORTHO-054-TENSE-SUFFIX');
+assert.equal(rule54.decision_type, 'CORRECTION');
+assert.equal(rule54.suffixes.some(group => group.suffix === '꾼'), true);
+assert.equal(rule54.suffixes.some(group => group.suffix === '빼기'), true);
+assert.equal(rule54.allowed_examples.some(example => example.input === '뚝배기'), true);
