@@ -6,8 +6,10 @@ on:
     paths:
       - 'lib/rules/**'
       - 'lib/pipeline/integrate.js'
+      - 'lib/pipeline/rule-blocks.js'
       - 'tests/rule-engine-spacing.test.js'
       - 'tests/result-integration.test.js'
+      - 'tests/rule-correction-blocks.test.js'
       - 'package.json'
       - '.github/workflows/rule-engine-test.yml'
 
@@ -25,3 +27,5 @@ jobs:
         run: node tests/rule-engine-spacing.test.js
       - name: Run result integration tests
         run: node tests/result-integration.test.js
+      - name: Run rule correction block tests
+        run: node tests/rule-correction-blocks.test.js
