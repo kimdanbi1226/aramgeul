@@ -186,3 +186,23 @@ for (const [input52, expected52] of article52Cases) {
   assert.equal(r52.revised, expected52, `제52항 실제 kuromoji-ko 결과가 예상과 다릅니다: ${input52}`);
 }
 console.log('Kuromoji article 52 runtime: PASS');
+
+const article53Cases = [
+  ['할께', '할게'],
+  ['할께요', '할게요'],
+  ['할꺼나', '할거나'],
+  ['할껄', '할걸'],
+  ['할쑤록', '할수록'],
+  ['할찌라도', '할지라도'],
+  ['할찌언정', '할지언정'],
+  ['올씨다', '올시다'],
+  ['갈까', '갈까'],
+  ['할꼬', '할꼬'],
+  ['합니까', '합니까']
+];
+for (const [input53, expected53] of article53Cases) {
+  const a53 = await analyze(input53);
+  const r53 = evaluateSpacing(a53);
+  assert.equal(r53.revised, expected53, `제53항 실제 kuromoji-ko 결과가 예상과 다릅니다: ${input53}`);
+}
+console.log('Kuromoji article 53 runtime: PASS');
