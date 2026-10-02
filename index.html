@@ -158,7 +158,11 @@ function renderResult(data, input) {
               (block.rule.rule_id ? ' · ' + escapeHtml(block.rule.rule_id) : '') +
             '</div>' +
             (block.rule.source_url
-              ? '<a class="rule-source" href="' + escapeHtml(block.rule.source_url) + '" target="_blank" rel="noopener noreferrer">공식 근거 보기 ↗</a>'
+              ? '<a class="rule-source" href="' + escapeHtml(block.rule.source_url) + '" target="_blank" rel="noopener noreferrer">어문 규범 원문 보기 ↗</a>'
+              : '') +
+            (block.rule.source_detail_url
+              ? '<a class="rule-source secondary" href="' + escapeHtml(block.rule.source_detail_url) + '" target="_blank" rel="noopener noreferrer">' +
+                escapeHtml(block.rule.source_detail_label || '관련 국립국어원 설명 보기') + ' ↗</a>'
               : '') +
           '</div>'
         : '';
