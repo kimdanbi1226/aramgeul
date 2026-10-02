@@ -89,8 +89,10 @@ export default async function handler(req, res) {
             .map(edit => edit.rule)
             .filter(Boolean)
             .filter(rule =>
-              originText.includes(rule.examples?.[0]?.input || '\u0000') ||
-              revisedText.includes(rule.examples?.[0]?.expected || '\u0000')
+              (rule.examples || []).some(example =>
+                originText.includes(example?.input || '\u0000') ||
+                revisedText.includes(example?.expected || '\u0000')
+              )
             );
 
           const rules = [
@@ -131,11 +133,24 @@ export default async function handler(req, res) {
       bareunResult
     });
 
+    // Bareun이 특정 교정을 블록으로 돌려주지 않더라도
+    // 아람글 규칙 엔진의 판정과 근거가 사라지지 않도록 보존한다.
+    const ruleEdits = (ruleResult?.edits || [])
+      .map(edit => ({
+        rule_id: edit.rule_id,
+        rule: edit.rule,
+        start: edit.start,
+        end: edit.end,
+        replacement: edit.replacement
+      }))
+      .filter(edit => edit.rule);
+
     return res.status(200).json({
       // 기존 프론트엔드 호환 필드
       origin: data?.origin || text,
       revised: integrated.revised,
       revised_blocks: revisedBlocks,
+      rule_edits: ruleEdits,
 
       // 아람글 통합 판정
       decision: integrated.decision,
