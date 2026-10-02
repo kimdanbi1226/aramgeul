@@ -1,5 +1,5 @@
 import { createBareunResult, integrateCheckResults } from '../lib/pipeline/integrate.js';
-import { findRuleForExample, toRuleEvidence, getRuleById } from '../lib/rules/rules.v0.1.js';
+import { findRuleForExample, toRuleEvidence } from '../lib/rules/rules.v0.1.js';
 import { checkText } from '../lib/pipeline/check.js';
 import { analyze as analyzeMecab } from '../lib/morphology/mecab-ko.js';
 
@@ -75,6 +75,87 @@ export default async function handler(req, res) {
       console.error('Aramgeul rule engine error:', ruleError);
     }
 
+    function applyRuleEditsToText(source, edits) {
+      return [...edits]
+        .sort((a, b) => b.start - a.start)
+        .reduce(
+          (current, edit) =>
+            current.slice(0, edit.start) +
+            edit.replacement +
+            current.slice(edit.end),
+          source
+        );
+    }
+
+    function buildRuleFallbackBlocks(source, edits) {
+      const sorted = [...edits]
+        .filter(edit =>
+          edit &&
+          Number.isInteger(edit.start) &&
+          Number.isInteger(edit.end) &&
+          typeof edit.replacement === 'string' &&
+          edit.rule
+        )
+        .sort((a, b) => a.start - b.start);
+
+      return sorted.map((edit, index) => {
+        const contextStart = Math.max(0, edit.start - 8);
+        const contextEnd = Math.min(source.length, Math.max(edit.end, edit.start) + 8);
+        const relevantEdits = sorted.filter(candidate =>
+          candidate.start >= contextStart && candidate.end <= contextEnd
+        );
+
+        const originText = source.slice(contextStart, contextEnd);
+        const revisedContext = applyRuleEditsToText(
+          originText,
+          relevantEdits.map(candidate => ({
+            ...candidate,
+            start: candidate.start - contextStart,
+            end: candidate.end - contextStart
+          }))
+        );
+
+        const deltaBefore = sorted
+          .filter(candidate => candidate.start < edit.start)
+          .reduce(
+            (sum, candidate) => sum + candidate.replacement.length - (candidate.end - candidate.start),
+            0
+          );
+
+        const revisedStart = edit.start + deltaBefore;
+        const revisedEnd = revisedStart + edit.replacement.length;
+        const revisedContextStart = contextStart + sorted
+          .filter(candidate => candidate.start < contextStart)
+          .reduce(
+            (sum, candidate) => sum + candidate.replacement.length - (candidate.end - candidate.start),
+            0
+          );
+
+        return {
+          id: 'rule-' + index + '-' + edit.rule.rule_id,
+          origin: {
+            text: originText,
+            start: contextStart,
+            end: contextEnd
+          },
+          revised: revisedContext,
+          revised_start: revisedStart,
+          revised_end: revisedEnd,
+          rule: edit.rule,
+          rules: [edit.rule],
+          help: edit.rule.description || '',
+          source: 'aramgeul-rule',
+          rule_edit: {
+            start: edit.start,
+            end: edit.end,
+            replacement: edit.replacement
+          },
+          context_revised_start: revisedContextStart,
+          context_revised_end: revisedContextStart + revisedContext.length
+        };
+      });
+    }
+
     const revisedBlocks = Array.isArray(data?.revised_blocks)
       ? data.revised_blocks.map(block => {
           const originText = block?.origin?.text || '';
@@ -112,8 +193,19 @@ export default async function handler(req, res) {
         })
       : [];
 
+    const ruleFallbackBlocks = ruleResult?.edits?.length
+      ? buildRuleFallbackBlocks(text, ruleResult.edits)
+      : [];
+
+    const mergedRevisedBlocks = revisedBlocks.length
+      ? revisedBlocks
+      : ruleFallbackBlocks;
+
     /*
-     * 현재 배포 API에서는 Bareun 결과만 실제로 연결한다.
+     * Bareun이 교정 블록을 반환한 경우에는 Bareun 블록을 우선 사용하되,
+     * 아람글 규칙 엔진이 독립적으로 확인한 교정은 fallback 블록으로
+     * 보존한다. 이렇게 해야 특정 예문에 등록되지 않은 새 문장도
+     * 규칙 근거와 정확한 수정 위치를 잃지 않는다.
      * 아람글 로컬 규칙 엔진은 별도의 형태소 런타임/모델 자산 공급 방식이
      * 확정된 뒤 ruleResult로 주입한다.
      *
@@ -123,7 +215,7 @@ export default async function handler(req, res) {
     const bareunResult = createBareunResult(
       {
         revised: data?.revised || text,
-        revised_blocks: revisedBlocks
+        revised_blocks: mergedRevisedBlocks
       },
       text
     );
@@ -141,7 +233,9 @@ export default async function handler(req, res) {
         rule: edit.rule,
         start: edit.start,
         end: edit.end,
-        replacement: edit.replacement
+        replacement: edit.replacement,
+        revised_start: Number.isInteger(edit.start) ? edit.start : null,
+        revised_end: Number.isInteger(edit.start) ? edit.start + edit.replacement.length : null
       }))
       .filter(edit => edit.rule);
 
