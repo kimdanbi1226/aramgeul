@@ -130,6 +130,24 @@ assertValid(
   ]
 );
 
+
+// 사전 등재 단어가 의존 명사 형태소로 분해되어도 일반 규칙으로 잘못 띄우지 않는다.
+for (const [text, left, right] of [
+  ['그동안', '그', '동안'],
+  ['그사이', '그', '사이'],
+  ['이때', '이', '때'],
+  ['그때', '그', '때'],
+  ['저때', '저', '때'],
+  ['이만큼', '이', '만큼'],
+  ['그만큼', '그', '만큼'],
+  ['저만큼', '저', '만큼']
+]) {
+  assertValid(text, [
+    token(left, 0, left.length, ['MODIFIER'], 'MM'),
+    token(right, left.length, text.length, ['DEPENDENT_NOUN'], 'NNB')
+  ]);
+}
+
 // 제45항: 이어 주거나 열거하는 말
 assertCorrection(
   '국장겸과장',
