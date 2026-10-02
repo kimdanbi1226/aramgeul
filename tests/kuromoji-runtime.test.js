@@ -223,3 +223,22 @@ for (const [input54, expected54] of article54Cases) {
   assert.equal(r54.revised, expected54, `제54항 실제 kuromoji-ko 결과가 예상과 다릅니다: ${input54}`);
 }
 console.log('Kuromoji article 54 runtime: PASS');
+
+const article55Cases = [
+  ['마추다', '맞추다'],
+  ['마춘다', '맞춘다'],
+  ['마춰', '맞춰'],
+  ['마췄다', '맞췄다'],
+  ['뻐치다', '뻗치다'],
+  ['뻐친다', '뻗친다'],
+  ['뻐쳐', '뻗쳐'],
+  ['뻐쳤다', '뻗쳤다'],
+  ['맞추다', '맞추다'],
+  ['맞히다', '맞히다']
+];
+for (const [input55, expected55] of article55Cases) {
+  const a55 = await analyze(input55);
+  const r55 = evaluateSpacing(a55);
+  assert.equal(r55.revised, expected55, `제55항 실제 kuromoji-ko 결과가 예상과 다릅니다: ${input55}`);
+}
+console.log('Kuromoji article 55 runtime: PASS');
