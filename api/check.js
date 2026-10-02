@@ -1,7 +1,6 @@
 import { createBareunResult, integrateCheckResults } from '../lib/pipeline/integrate.js';
 import { findRuleForExample, toRuleEvidence } from '../lib/rules/rules.v0.1.js';
 import { checkText } from '../lib/pipeline/check.js';
-import { analyze as analyzeMecab } from '../lib/morphology/mecab-ko.js';
 import { buildRuleFallbackBlocks } from '../lib/pipeline/rule-blocks.js';
 
 export default async function handler(req, res) {
@@ -60,7 +59,9 @@ export default async function handler(req, res) {
     }
 
     let ruleResult = null;
+    let ruleEngineError = null;
     try {
+      const { analyze: analyzeMecab } = await import('../lib/morphology/mecab-ko.js');
       const rulePipeline = await checkText(text, {
         analyze: analyzeMecab
       });
@@ -78,6 +79,7 @@ export default async function handler(req, res) {
           }))
       };
     } catch (ruleError) {
+      ruleEngineError = ruleError instanceof Error ? ruleError.message : String(ruleError);
       console.error('Aramgeul rule engine error:', ruleError);
     }
 
@@ -202,6 +204,12 @@ export default async function handler(req, res) {
       engine_warning: bareunError
         ? 'Bareun 검사 엔진에 연결되지 않아 아람글 규칙 엔진 기준으로 검사했습니다.'
         : (!apiKey ? 'Bareun API 인증 정보가 없어 아람글 규칙 엔진 기준으로 검사했습니다.' : null),
+      diagnostics: process.env.NODE_ENV === 'production'
+        ? undefined
+        : {
+            bareun_error: bareunError,
+            rule_engine_error: ruleEngineError
+          },
       rule_edits: ruleEdits,
 
       // 아람글 통합 판정
