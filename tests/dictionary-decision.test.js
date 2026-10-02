@@ -237,3 +237,25 @@ const properNounNoEvidence = evaluateDictionaryDecisions({
 assert.equal(properNounNoEvidence[0].status, 'INSUFFICIENT');
 assert.deepEqual(properNounNoEvidence[0].supported_units, []);
 assert.deepEqual(properNounNoEvidence[0].missing_units, ['한국대학교', '의과대학']);
+
+
+const nameBoundaryRequired = evaluateDictionaryDecisions({
+  enabled: true,
+  rule_evidence: [
+    {
+      rule_id: 'SPACING-048-NAME-APPELLATION',
+      queries: ['김양수'],
+      contexts: []
+    }
+  ],
+  matches: [
+    {
+      rule_id: 'SPACING-048-NAME-APPELLATION',
+      query: '김양수',
+      entries: [
+        { word: '김양수', source: 'standard-korean-dictionary', person_name: true }
+      ]
+    }
+  ]
+});
+assert.equal(nameBoundaryRequired[0].status, 'BOUNDARY_REQUIRED');
