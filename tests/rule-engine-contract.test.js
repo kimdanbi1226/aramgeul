@@ -3,7 +3,7 @@ import { createRuleEngine } from '../lib/rules/engine.js';
 
 const engine = createRuleEngine();
 
-assert.equal(engine.version, '1.0.0');
+assert.equal(engine.version, '1.3.0');
 assert.deepEqual(engine.supportedCategories, ['spacing']);
 
 const analysis = {
