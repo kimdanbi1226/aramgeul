@@ -199,6 +199,30 @@ assertCorrection(
   'SPACING-047-AUXILIARY-VERB'
 );
 
+// 제47항: 최신 근거가 확인된 파생어 사례
+assertCorrection(
+  '깨뜨려버렸다',
+  [
+    token('깨뜨려', 0, 3, ['LEXICAL_VERB'], 'VV', '깨뜨리다'),
+    token('버리', 3, 5, ['AUXILIARY_VERB'], 'VX', '버리다'),
+    token('었다', 5, 7, ['ENDING'], 'EP')
+  ],
+  '깨뜨려 버렸다',
+  'SPACING-047-AUXILIARY-VERB'
+);
+
+// 제47항: 2음절 활용형의 허용 붙여쓰기는 오류로 만들지 않는다.
+for (const [text, lexical, aux, lemma] of [
+  ['구해본다', '구해', '본다', '구하다'],
+  ['더해줬다', '더해', '줬다', '더하다']
+]) {
+  const auxStart = lexical.length;
+  assertValid(text, [
+    token(lexical, 0, lexical.length, ['LEXICAL_VERB'], 'VV', lemma),
+    token(aux, auxStart, text.length, ['AUXILIARY_VERB'], 'VX')
+  ]);
+}
+
 // 제48항: 성명/호칭 구조는 실제 규칙 데이터에서도 자동 판정을 보류한다.
 const rule48 = getRuleById('SPACING-048-NAME-APPELLATION');
 assert.equal(rule48.decision_type, 'AMBIGUOUS');
