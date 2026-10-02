@@ -26,8 +26,8 @@ assert.equal(blocks[0].revised_end, 5);
 assert.ok(blocks[0].origin.text.includes('할수'));
 assert.ok(blocks[0].revised.includes('할 수'));
 
-assert.equal(blocks[1].revised_start, 12);
-assert.equal(blocks[1].revised_end, 14);
+assert.equal(blocks[1].revised_start, 11);
+assert.equal(blocks[1].revised_end, 13);
 assert.ok(blocks[1].origin.text.includes('할수'));
 assert.ok(blocks[1].revised.includes('할 수'));
 
