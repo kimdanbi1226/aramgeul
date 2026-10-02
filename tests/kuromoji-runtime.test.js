@@ -304,3 +304,68 @@ for (const [input52Safe, expected52Safe] of article52SafetyCases) {
   const r52Safe = evaluateSpacing(a52Safe);
   assert.equal(r52Safe.revised, expected52Safe, `제52항 정상어 보호 실패: ${input52Safe}`);
 }
+
+
+const article53SafetyCases = [
+  ['할게', '할게'],
+  ['할까', '할까'],
+  ['합니까', '합니까'],
+  ['할수록', '할수록'],
+  ['올시다', '올시다']
+];
+for (const [input53Safe, expected53Safe] of article53SafetyCases) {
+  const a53Safe = await analyze(input53Safe);
+  const r53Safe = evaluateSpacing(a53Safe);
+  assert.equal(r53Safe.revised, expected53Safe, `제53항 정상어 보호 실패: ${input53Safe}`);
+}
+
+const article54SafetyCases = [
+  ['나무꾼', '나무꾼'],
+  ['귀때기', '귀때기'],
+  ['코빼기', '코빼기'],
+  ['뚝배기', '뚝배기']
+];
+for (const [input54Safe, expected54Safe] of article54SafetyCases) {
+  const a54Safe = await analyze(input54Safe);
+  const r54Safe = evaluateSpacing(a54Safe);
+  assert.equal(r54Safe.revised, expected54Safe, `제54항 정상어 보호 실패: ${input54Safe}`);
+}
+
+const article55SafetyCases = [
+  ['맞추다', '맞추다'],
+  ['맞춰', '맞춰'],
+  ['뻗치다', '뻗치다'],
+  ['뻗쳐', '뻗쳐'],
+  ['맞히다', '맞히다']
+];
+for (const [input55Safe, expected55Safe] of article55SafetyCases) {
+  const a55Safe = await analyze(input55Safe);
+  const r55Safe = evaluateSpacing(a55Safe);
+  assert.equal(r55Safe.revised, expected55Safe, `제55항 정상어 보호 실패: ${input55Safe}`);
+}
+
+const article56SafetyCases = [
+  ['어릴 적 살던 곳.', '어릴 적 살던 곳.'],
+  ['먹든지 말든지 마음대로 하렴.', '먹든지 말든지 마음대로 하렴.'],
+  ['가든지 오든지 마음대로 해라.', '가든지 오든지 마음대로 해라.'],
+  ['얼마나 놀랐던지 몰라.', '얼마나 놀랐던지 몰라.']
+];
+for (const [input56Safe, expected56Safe] of article56SafetyCases) {
+  const a56Safe = await analyze(input56Safe);
+  const r56Safe = evaluateSpacing(a56Safe);
+  assert.equal(r56Safe.revised, expected56Safe, `제56항 정상어 보호 실패: ${input56Safe}`);
+}
+
+const article57SafetyCases = [
+  ['그는 부지런하다. 그러므로 잘 산다.', '그는 부지런하다. 그러므로 잘 산다.'],
+  ['그는 열심히 공부한다. 그럼으로써 은혜에 보답한다.', '그는 열심히 공부한다. 그럼으로써 은혜에 보답한다.'],
+  ['우표를 부친다.', '우표를 부친다.'],
+  ['편지를 붙인다.', '편지를 붙인다.'],
+  ['밥을 안친다.', '밥을 안친다.'],
+  ['아이를 앉힌다.', '아이를 앉힌다.']
+];
+for (const [input57Safe, expected57Safe] of article57SafetyCases) {
+  const a57Safe = await analyze(input57Safe);
+  const r57Safe = evaluateSpacing(a57Safe);
+  assert.equal(r57Safe.revised, expected57Safe, `제57항 정상어 보호 실패: ${input57Safe}`);
+}
