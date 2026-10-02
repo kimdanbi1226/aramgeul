@@ -11,10 +11,6 @@ export default async function handler(req, res) {
 
   const apiKey = process.env.BAREUN_API_KEY;
 
-  if (!apiKey) {
-    return res.status(500).json({ error: '검사 서버의 API 인증 정보가 설정되지 않았습니다.' });
-  }
-
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     const text = typeof body?.text === 'string' ? body.text.trim() : '';
@@ -27,31 +23,42 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: '검사할 문장은 5,000자 이내로 입력해 주세요.' });
     }
 
-    const response = await fetch(
-      'https://api.bareun.ai/bareun.RevisionService/CorrectError',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'api-key': apiKey
-        },
-        body: JSON.stringify({
-          document: {
-            content: text,
-            language: 'ko_KR'
-          },
-          encoding_type: 'UTF8'
-        })
+    let bareunData = null;
+    let bareunAvailable = Boolean(apiKey);
+    let bareunError = null;
+
+    if (apiKey) {
+      try {
+        const response = await fetch(
+          'https://api.bareun.ai/bareun.RevisionService/CorrectError',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'api-key': apiKey
+            },
+            body: JSON.stringify({
+              document: {
+                content: text,
+                language: 'ko_KR'
+              },
+              encoding_type: 'UTF8'
+            })
+          }
+        );
+
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok) {
+          throw new Error(`Bareun API HTTP ${response.status}`);
+        }
+
+        bareunData = data;
+      } catch (error) {
+        bareunAvailable = false;
+        bareunError = error instanceof Error ? error.message : String(error);
+        console.error('Bareun API error; continuing with Aramgeul rule engine:', error);
       }
-    );
-
-    const data = await response.json().catch(() => null);
-
-    if (!response.ok) {
-      console.error('Bareun API error:', response.status, data);
-      return res.status(502).json({
-        error: '검사용 API에서 정상적인 응답을 받지 못했습니다.'
-      });
     }
 
     let ruleResult = null;
@@ -76,12 +83,12 @@ export default async function handler(req, res) {
       console.error('Aramgeul rule engine error:', ruleError);
     }
 
-    const revisedBlocks = Array.isArray(data?.revised_blocks)
+    const revisedBlocks = Array.isArray(bareunData?.revised_blocks)
       ? data.revised_blocks.map(block => {
           const originText = block?.origin?.text || '';
           const revisedText = block?.revised || '';
           const helpId = block?.revisions?.[0]?.help_id;
-          const help = helpId && data?.helps?.[helpId]?.comment
+          const help = helpId && bareunData?.helps?.[helpId]?.comment
             ? data.helps[helpId].comment
             : '';
 
@@ -156,13 +163,15 @@ export default async function handler(req, res) {
      * 따라서 이 단계에서는 Bareun 결과를 별도 evidence로 보존하면서
      * 향후 규칙 엔진 결과와 충돌 없이 통합할 수 있는 구조를 먼저 만든다.
      */
-    const bareunResult = createBareunResult(
-      {
-        revised: data?.revised || text,
-        revised_blocks: mergedRevisedBlocks
-      },
-      text
-    );
+    const bareunResult = bareunData
+      ? createBareunResult(
+          {
+            revised: bareunData?.revised || text,
+            revised_blocks: revisedBlocks
+          },
+          text
+        )
+      : null;
 
     const integrated = integrateCheckResults(text, {
       ruleResult,
@@ -187,7 +196,14 @@ export default async function handler(req, res) {
       // 기존 프론트엔드 호환 필드
       origin: data?.origin || text,
       revised: integrated.revised,
-      revised_blocks: revisedBlocks,
+      revised_blocks: mergedRevisedBlocks,
+      engines: {
+        aramgeul_rule: Boolean(ruleResult),
+        bareun: Boolean(bareunResult)
+      },
+      engine_warning: bareunError
+        ? 'Bareun 검사 엔진에 연결되지 않아 아람글 규칙 엔진 기준으로 검사했습니다.'
+        : (!apiKey ? 'Bareun API 인증 정보가 없어 아람글 규칙 엔진 기준으로 검사했습니다.' : null),
       rule_edits: ruleEdits,
 
       // 아람글 통합 판정
