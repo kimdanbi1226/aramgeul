@@ -85,3 +85,39 @@ for (const lexicalizedInput of lexicalizedCases) {
 }
 
 console.log('Kuromoji lexicalized-form guard test: PASS');
+
+const auxiliaryCases = [
+  ['공부해보아라', '공부해 보아라'],
+  ['깨뜨려버렸다', '깨뜨려 버렸다'],
+  ['먹어보았다', '먹어보았다'],
+  ['구해본다', '구해본다'],
+  ['더해줬다', '더해줬다']
+];
+
+for (const [auxiliaryInput, expected] of auxiliaryCases) {
+  const auxiliaryAnalysis = await analyze(auxiliaryInput);
+  const auxiliaryResult = evaluateSpacing(auxiliaryAnalysis);
+  assert.equal(
+    auxiliaryResult.revised,
+    expected,
+    `제47항 실제 kuromoji-ko 런타임 결과가 예상과 다릅니다: ${auxiliaryInput}`
+  );
+}
+
+const connectiveCases = [
+  ['국장겸과장', '국장 겸 과장'],
+  ['청군대백군', '청군 대 백군'],
+  ['이사장및이사들', '이사장 및 이사들']
+];
+
+for (const [connectiveInput, expected] of connectiveCases) {
+  const connectiveAnalysis = await analyze(connectiveInput);
+  const connectiveResult = evaluateSpacing(connectiveAnalysis);
+  assert.equal(
+    connectiveResult.revised,
+    expected,
+    `제45항 실제 kuromoji-ko 런타임 결과가 예상과 다릅니다: ${connectiveInput}`
+  );
+}
+
+console.log('Kuromoji auxiliary/connective runtime regression test: PASS');
