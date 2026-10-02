@@ -31,3 +31,31 @@ const auxiliaryEdits = result.edits.filter(
 assert.ok(auxiliaryEdits.length >= 1, '생각해 보았다 보조 용언 교정이 생성되어야 합니다.');
 
 console.log('Kuromoji production runtime spacing test: PASS');
+
+const numberCases = [
+  ['12억3456만7898', '12억 3456만 7898'],
+  ['십이억삼천사백오십육만칠천팔백구십팔', '십이억 삼천사백오십육만 칠천팔백구십팔'],
+  ['12 억 3456 만 7898', '12억 3456만 7898']
+];
+
+for (const [numberInput, expected] of numberCases) {
+  const numberAnalysis = await analyze(numberInput);
+  const numberResult = evaluateSpacing(numberAnalysis);
+  console.log(JSON.stringify({
+    input: numberInput,
+    tokens: numberAnalysis.tokens.map(token => ({
+      text: token.text,
+      pos: token.pos,
+      functions: token.features.grammar_functions,
+      start: token.start,
+      end: token.end
+    })),
+    revised: numberResult.revised
+  }, null, 2));
+
+  assert.equal(
+    numberResult.revised,
+    expected,
+    `제44항 실제 kuromoji-ko 런타임 결과가 예상과 다릅니다: ${numberInput}`
+  );
+}
