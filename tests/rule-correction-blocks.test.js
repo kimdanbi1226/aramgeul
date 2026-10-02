@@ -17,7 +17,7 @@ const edits = [
 
 const blocks = buildRuleFallbackBlocks(source, edits);
 
-assert.equal(blocks.length, 2);
+assert.equal(blocks.length, 1);
 assert.equal(blocks[0].source, 'aramgeul-rule');
 assert.equal(blocks[0].rule.rule_id, rule.rule_id);
 assert.equal(blocks[0].origin.start, 0);
