@@ -61,6 +61,28 @@ function analyze(text, tokens) {
 }
 
 {
+  const text = '한개';
+  const result = evaluateSpacing(analyze(text, [
+    token('한', 0, 1, ['NUMBER'], 'NR'),
+    token('개', 1, 2, ['DEPENDENT_NOUN'], 'NNB')
+  ]));
+  assert.equal(result.revised, '한 개');
+  assert.equal(result.edits.length, 1);
+  assert.equal(result.edits[0].rule_id, 'SPACING-043-UNIT-NOUN');
+}
+
+{
+  // 아라비아 숫자 + 단위 명사는 붙여 쓰기도 허용되므로 자동 교정하지 않는다.
+  const text = '10개';
+  const result = evaluateSpacing(analyze(text, [
+    token('10', 0, 2, ['NUMBER'], 'SN'),
+    token('개', 2, 3, ['DEPENDENT_NOUN'], 'NNB')
+  ]));
+  assert.equal(result.revised, text);
+  assert.equal(result.decision, 'VALID');
+}
+
+{
   const text = '먹어보았다';
   const result = evaluateSpacing(analyze(text, [
     token('먹어', 0, 2, ['LEXICAL_VERB'], 'VV', '먹다'),
