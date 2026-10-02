@@ -158,7 +158,11 @@ function renderResult(data, input) {
           '<div class="diff">' + diff + '</div>' +
           help +
           rule +
-          '<div class="detail-meta">검사 엔진: Bareun · 아람글 규칙 근거가 확인된 경우 규칙과 공식 출처를 함께 표시합니다.</div>' +
+          '<div class="detail-meta">' +
+          (block.source === 'aramgeul-rule'
+            ? '검사 엔진: 아람글 규칙 엔진 · 형태소 분석과 등록된 규칙을 근거로 판단했습니다.'
+            : '검사 엔진: Bareun · 아람글 규칙 근거가 확인된 경우 규칙과 공식 출처를 함께 표시합니다.') +
+        '</div>' +
         '</div>' +
       '</div>';
     }).join('');
@@ -188,6 +192,18 @@ function renderSentenceWithEdits(revised, blocks) {
   let cursor = 0;
 
   blocks.forEach((block, index) => {
+    const explicitStart = Number.isInteger(block.revised_start);
+    const explicitEnd = Number.isInteger(block.revised_end);
+
+    if (explicitStart && explicitEnd && explicitStart >= 0 && explicitEnd >= explicitStart) {
+      ranges.push({
+        start: explicitStart,
+        end: explicitEnd,
+        index
+      });
+      return;
+    }
+
     const value = block.revised || '';
     if (!value) return;
 
@@ -202,6 +218,8 @@ function renderSentenceWithEdits(revised, blocks) {
     cursor = start + value.length;
   });
 
+  ranges.sort((a, b) => a.start - b.start);
+
   if (!ranges.length) return escapeHtml(revised);
 
   let html = '';
@@ -211,10 +229,17 @@ function renderSentenceWithEdits(revised, blocks) {
     if (range.start < position) return;
 
     html += escapeHtml(revised.slice(position, range.start));
+
+    const highlighted = revised.slice(range.start, range.end);
+    const label = highlighted.trim()
+      ? highlighted
+      : '띄어쓰기 수정';
+
     html += '<span class="sentence-edit" data-correction-index="' + range.index + '" tabindex="0" role="button" aria-label="수정된 부분: ' +
-      escapeHtml(blocks[range.index].revised) + '">' +
-      escapeHtml(revised.slice(range.start, range.end)) +
+      escapeHtml(label) + '">' +
+      escapeHtml(highlighted || ' ') +
       '</span>';
+
     position = range.end;
   });
 
