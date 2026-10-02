@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import { evaluateSpacing } from '../lib/rules/engine.js';
 
-function token(text, start, end, functions, pos = 'VV') {
+function token(text, start, end, functions, pos = 'VV', lemma = null) {
   return {
     text,
     normalized: text,
-    lemma: null,
+    lemma,
     pos,
     morphemes: [{ text, pos }],
     features: {
@@ -38,11 +38,34 @@ function analyze(text, tokens) {
 {
   const text = '생각해보자';
   const result = evaluateSpacing(analyze(text, [
-    token('생각해', 0, 3, ['LEXICAL_VERB']),
+    token('생각해', 0, 3, ['LEXICAL_VERB'], 'VV', '생각하다'),
     token('보', 3, 4, ['AUXILIARY_VERB'], 'VX'),
     token('자', 4, 5, ['ENDING'], 'EF')
   ]));
   assert.equal(result.revised, '생각해 보자');
+  assert.equal(result.edits.length, 1);
+  assert.equal(result.edits[0].rule_id, 'SPACING-047-AUXILIARY-VERB');
+}
+
+{
+  const text = '먹어보았다';
+  const result = evaluateSpacing(analyze(text, [
+    token('먹어', 0, 2, ['LEXICAL_VERB'], 'VV', '먹다'),
+    token('보', 2, 3, ['AUXILIARY_VERB'], 'VX', '보다'),
+    token('았다', 3, 5, ['ENDING'], 'EP')
+  ]));
+  assert.equal(result.revised, text);
+  assert.equal(result.decision, 'VALID');
+}
+
+{
+  const text = '공부해보아라';
+  const result = evaluateSpacing(analyze(text, [
+    token('공부해', 0, 3, ['LEXICAL_VERB'], 'VV', '공부하다'),
+    token('보', 3, 4, ['AUXILIARY_VERB'], 'VX', '보다'),
+    token('아라', 4, 6, ['ENDING'], 'EF')
+  ]));
+  assert.equal(result.revised, '공부해 보아라');
   assert.equal(result.edits.length, 1);
   assert.equal(result.edits[0].rule_id, 'SPACING-047-AUXILIARY-VERB');
 }
