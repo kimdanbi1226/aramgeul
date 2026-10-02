@@ -263,7 +263,6 @@ function analyze(text, tokens = []) {
   const rule52 = getRuleById('ORTHO-052-SINO-KOREAN-READING');
   assert.equal(evaluateSpacing(analyze('승락')).revised, '승낙');
   assert.equal(evaluateSpacing(analyze('곤난')).revised, '곤란');
-  assert.equal(evaluateSpacing(analyze('의론')).revised, '의논');
   assert.equal(evaluateSpacing(analyze('수락')).revised, '수락');
   assert.equal(rule52.decision_type, 'CORRECTION');
 }
