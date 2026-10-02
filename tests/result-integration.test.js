@@ -167,3 +167,52 @@ assert.equal(insufficientDictionaryDoesNotOverrideRule.decision, 'CORRECTION');
 assert.equal(insufficientDictionaryDoesNotOverrideRule.revised, '김양수 씨');
 
 console.log('Dictionary insufficient-vs-boundary behavior: PASS');
+
+
+const technicalSupported = integrateCheckResults('결산소득세', {
+  ruleResult: {
+    revised: '결산 소득세',
+    edits: [
+      {
+        rule_id: 'SPACING-050-TECHNICAL-TERM',
+        start: 0,
+        end: '결산소득세'.length,
+        replacement: '결산 소득세'
+      }
+    ],
+    sources: [{ source: 'NIKL' }]
+  },
+  dictionaryDecisions: [
+    {
+      rule_id: 'SPACING-050-TECHNICAL-TERM',
+      status: 'SUPPORTS'
+    }
+  ]
+});
+assert.equal(technicalSupported.decision, 'CORRECTION');
+assert.equal(technicalSupported.revised, '결산 소득세');
+
+const technicalInsufficient = integrateCheckResults('결산소득세', {
+  ruleResult: {
+    revised: '결산 소득세',
+    edits: [
+      {
+        rule_id: 'SPACING-050-TECHNICAL-TERM',
+        start: 0,
+        end: '결산소득세'.length,
+        replacement: '결산 소득세'
+      }
+    ],
+    sources: [{ source: 'NIKL' }]
+  },
+  dictionaryDecisions: [
+    {
+      rule_id: 'SPACING-050-TECHNICAL-TERM',
+      status: 'INSUFFICIENT'
+    }
+  ]
+});
+assert.equal(technicalInsufficient.decision, 'CORRECTION');
+assert.equal(technicalInsufficient.revised, '결산 소득세');
+
+console.log('Technical term dictionary behavior: PASS');
