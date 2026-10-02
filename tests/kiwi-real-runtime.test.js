@@ -7,8 +7,10 @@ import { checkText } from '../lib/pipeline/check.js';
 const modelDir = process.env.KIWI_MODEL_DIR;
 const wasmPath = process.env.KIWI_WASM_PATH;
 
-assert.ok(modelDir, 'KIWI_MODEL_DIR가 필요합니다.');
-assert.ok(wasmPath, 'KIWI_WASM_PATH가 필요합니다.');
+if (!modelDir || !wasmPath) {
+  console.log('Kiwi real runtime test: SKIP (KIWI_MODEL_DIR/KIWI_WASM_PATH not configured)');
+  process.exit(0);
+}
 
 const modelFiles = Object.fromEntries(
   await Promise.all(
