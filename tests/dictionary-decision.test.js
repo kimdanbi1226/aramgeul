@@ -152,7 +152,9 @@ const properNoun = evaluateDictionaryDecisions({
     }
   ]
 });
-assert.equal(properNoun[0].status, 'SUPPORTS');
+assert.equal(properNoun[0].status, 'BOUNDARY_REQUIRED');
+assert.deepEqual(properNoun[0].supported_units, ['한국대학교']);
+assert.deepEqual(properNoun[0].missing_units, ['의과대학']);
 
 const properNounWithoutContext = evaluateDictionaryDecisions({
   enabled: true,
@@ -174,3 +176,64 @@ const properNounWithoutContext = evaluateDictionaryDecisions({
   ]
 });
 assert.equal(properNounWithoutContext[0].status, 'INSUFFICIENT');
+
+
+const properNounFullyCovered = evaluateDictionaryDecisions({
+  enabled: true,
+  rule_evidence: [
+    {
+      rule_id: 'SPACING-049-PROPER-NOUN',
+      queries: ['아람글대학교연구원', '아람글대학교', '연구원'],
+      contexts: [
+        {
+          input: '아람글대학교연구원',
+          expected: '아람글대학교 연구원',
+          tokens: ['아람글대학교', '연구원'],
+          candidate_units: ['아람글대학교', '연구원']
+        }
+      ]
+    }
+  ],
+  matches: [
+    {
+      rule_id: 'SPACING-049-PROPER-NOUN',
+      query: '아람글대학교',
+      entries: [
+        { word: '아람글대학교', source: 'standard-korean-dictionary', proper_noun: true }
+      ]
+    },
+    {
+      rule_id: 'SPACING-049-PROPER-NOUN',
+      query: '연구원',
+      entries: [
+        { word: '연구원', source: 'standard-korean-dictionary', proper_noun: true }
+      ]
+    }
+  ]
+});
+assert.equal(properNounFullyCovered[0].status, 'SUPPORTS');
+assert.deepEqual(properNounFullyCovered[0].candidate_units, ['아람글대학교', '연구원']);
+assert.deepEqual(properNounFullyCovered[0].supported_units, ['아람글대학교', '연구원']);
+assert.deepEqual(properNounFullyCovered[0].missing_units, []);
+
+const properNounNoEvidence = evaluateDictionaryDecisions({
+  enabled: true,
+  rule_evidence: [
+    {
+      rule_id: 'SPACING-049-PROPER-NOUN',
+      queries: ['한국대학교의과대학'],
+      contexts: [
+        {
+          input: '한국대학교의과대학',
+          expected: '한국대학교 의과대학',
+          tokens: ['한국대학교', '의과대학'],
+          candidate_units: ['한국대학교', '의과대학']
+        }
+      ]
+    }
+  ],
+  matches: []
+});
+assert.equal(properNounNoEvidence[0].status, 'INSUFFICIENT');
+assert.deepEqual(properNounNoEvidence[0].supported_units, []);
+assert.deepEqual(properNounNoEvidence[0].missing_units, ['한국대학교', '의과대학']);
