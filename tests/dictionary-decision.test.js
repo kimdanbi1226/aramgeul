@@ -123,8 +123,37 @@ const nameWithoutContext = evaluateDictionaryDecisions({
     }
   ]
 });
-assert.equal(nameWithoutContext[0].status, 'INSUFFICIENT');
+assert.equal(nameWithoutContext[0].status, 'BOUNDARY_REQUIRED');
 
+
+const distinguishingFallback = evaluateDictionaryDecisions({
+  enabled: true,
+  rule_evidence: [
+    {
+      rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+      queries: ['가름 갈음']
+    }
+  ],
+  matches: [
+    {
+      rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+      query: '가름 갈음',
+      entries: []
+    },
+    {
+      rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+      query: '가름',
+      entries: [{ word: '가름', source: 'standard-korean-dictionary' }]
+    },
+    {
+      rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+      query: '갈음',
+      entries: [{ word: '갈음', source: 'standard-korean-dictionary' }]
+    }
+  ]
+});
+assert.equal(distinguishingFallback[0].status, 'CONTEXT_REQUIRED');
+assert.deepEqual(distinguishingFallback[0].lexical_candidates, ['가름', '갈음']);
 
 const properNoun = evaluateDictionaryDecisions({
   enabled: true,
