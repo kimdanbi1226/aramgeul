@@ -259,3 +259,27 @@ for (const [input56, expected56] of article56Cases) {
   assert.equal(r56.revised, expected56, `제56항 실제 kuromoji-ko 결과가 예상과 다릅니다: ${input56}`);
 }
 console.log('Kuromoji article 56 runtime: PASS');
+
+const article57Cases = [
+  ['둘로 갈음', '둘로 가름'],
+  ['새 책상으로 가름하였다.', '새 책상으로 갈음하였다.'],
+  ['영월을 걷혀 왔다.', '영월을 거쳐 왔다.'],
+  ['외상값이 잘 거쳐진다.', '외상값이 잘 걷힌다.'],
+  ['걷잡아서 이틀 걸릴 일이다.', '겉잡아서 이틀 걸릴 일이다.'],
+  ['고무줄을 늘린다.', '고무줄을 늘인다.'],
+  ['수출량을 더 늘인다.', '수출량을 더 늘린다.'],
+  ['옷을 달인다.', '옷을 다린다.'],
+  ['약을 다린다.', '약을 달인다.'],
+  ['우표를 부친다.', '우표를 붙인다.'],
+  ['편지를 붙인다.', '편지를 부친다.'],
+  ['밥을 앉힌다.', '밥을 안친다.'],
+  ['아이를 안친다.', '아이를 앉힌다.'],
+  ['약속은 반듯이 지켜라.', '약속은 반드시 지켜라.'],
+  ['고개를 반드시 들어라.', '고개를 반듯이 들어라.']
+];
+for (const [input57, expected57] of article57Cases) {
+  const a57 = await analyze(input57);
+  const r57 = evaluateSpacing(a57);
+  assert.equal(r57.revised, expected57, `제57항 실제 kuromoji-ko 결과가 예상과 다릅니다: ${input57}`);
+}
+console.log('Kuromoji article 57 runtime: PASS');
