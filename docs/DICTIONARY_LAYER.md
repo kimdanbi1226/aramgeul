@@ -93,9 +93,9 @@ The dictionary evidence is now converted into a separate dictionary_decisions si
 
 - SPACING-050-TECHNICAL-TERM: returns SUPPORTS only when a normalized dictionary entry explicitly has technical_term=true.
 - SPACING-048-NAME-APPELLATION: returns SUPPORTS only when a normalized entry explicitly has person_name=true **and** the registered name/appellation context identifies the name segment.
-- SPACING-049-PROPER-NOUN: returns SUPPORTS only when a normalized entry explicitly has proper_noun=true **and** the registered proper-noun unit context identifies a relevant lexical boundary.
+- SPACING-049-PROPER-NOUN: uses a three-stage decision: `SUPPORTS` when every registered candidate unit is confirmed by `proper_noun=true`, `BOUNDARY_REQUIRED` when only part of the candidate structure is confirmed, and `INSUFFICIENT` when no proper-noun evidence is available.
 - ORTHO-057-DISTINGUISHING-WORDS: never promotes dictionary presence alone to an automatic correction; when competing lexical candidates are both present, it returns CONTEXT_REQUIRED.
-- These decisions are advisory evidence and do not directly alter revised, decision, or edits.
+- These decisions are advisory evidence and do not directly alter revised, decision, or edits. `BOUNDARY_REQUIRED` is intentionally conservative: partial dictionary evidence is not enough to assert the remaining spacing boundary.
 - Added tests/dictionary-decision.test.js and registered test:dictionary-decision.
 
 The normalized person/proper-noun/technical-term flags are populated from verified official API fields. The 048/049 decisions now require both lexical evidence and registered context, and decision tests cover context-present/context-absent cases. Live-key smoke tests remain separate because credentials are not stored in the repository.
