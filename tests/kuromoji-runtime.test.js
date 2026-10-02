@@ -167,3 +167,22 @@ for (const [article51Input, expected] of article51Cases) {
 }
 
 console.log('Kuromoji article 51 runtime: PASS');
+
+const article52Cases = [
+  ['승락', '승낙'],
+  ['곤난', '곤란'],
+  ['논난', '논란'],
+  ['의녕', '의령'],
+  ['회녕', '회령'],
+  ['의론', '의논'],
+  ['유월', '유월'],
+  ['시월', '시월'],
+  ['초파일', '초파일'],
+  ['수락', '수락']
+];
+for (const [input52, expected52] of article52Cases) {
+  const a52 = await analyze(input52);
+  const r52 = evaluateSpacing(a52);
+  assert.equal(r52.revised, expected52, `제52항 실제 kuromoji-ko 결과가 예상과 다릅니다: ${input52}`);
+}
+console.log('Kuromoji article 52 runtime: PASS');
