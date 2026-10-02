@@ -56,8 +56,6 @@ normalizeDictionaryEntry()는 외부 응답을 다음 형태로 정규화한다.
 
 아직 하지 않은 것:
 - 실제 인증키를 환경변수에 등록하고 실 API 호출 검증
-- 사전 결과를 SPACING-048/049/050/057 evaluator에 연결
-- dictionary-backed golden tests 추가
 - provider별 rate limit 정책을 실제 운영 한도에 맞게 세분화
 - 사전 결과를 자동 교정으로 직접 승격
 
@@ -67,9 +65,8 @@ normalizeDictionaryEntry()는 외부 응답을 다음 형태로 정규화한다.
 
 1. 실제 Open API 이용 신청/인증 정보 확보 및 서버 환경변수 등록
 2. 인증키를 사용한 실 API smoke test
-3. 사전 증거를 SPACING-048/049/050/057 evaluator에 연결
-4. dictionary-backed golden tests 추가
-5. 운영 rate limit/캐시 정책 검증
+3. provider별 rate limit/캐시 정책을 실제 운영 한도에 맞게 검증
+4. 사전 결정 신호를 최종 교정 파이프라인에 연결할지 별도 검증
 
 
 ## 2026-10-02 dictionary evidence integration
@@ -95,10 +92,10 @@ This is intentionally a non-breaking integration step. The next layer is to add 
 The dictionary evidence is now converted into a separate dictionary_decisions signal.
 
 - SPACING-050-TECHNICAL-TERM: returns SUPPORTS only when a normalized dictionary entry explicitly has technical_term=true.
-- SPACING-048-NAME-APPELLATION: returns SUPPORTS only when a normalized entry explicitly has person_name=true.
-- SPACING-049-PROPER-NOUN: returns SUPPORTS only when a normalized entry explicitly has proper_noun=true.
+- SPACING-048-NAME-APPELLATION: returns SUPPORTS only when a normalized entry explicitly has person_name=true **and** the registered name/appellation context identifies the name segment.
+- SPACING-049-PROPER-NOUN: returns SUPPORTS only when a normalized entry explicitly has proper_noun=true **and** the registered proper-noun unit context identifies a relevant lexical boundary.
 - ORTHO-057-DISTINGUISHING-WORDS: never promotes dictionary presence alone to an automatic correction; when competing lexical candidates are both present, it returns CONTEXT_REQUIRED.
 - These decisions are advisory evidence and do not directly alter revised, decision, or edits.
 - Added tests/dictionary-decision.test.js and registered test:dictionary-decision.
 
-The remaining implementation work is to populate the normalized person/proper-noun/technical-term flags from verified official API fields, then add context-aware decision evaluators and live-key smoke tests.
+The normalized person/proper-noun/technical-term flags are populated from verified official API fields. The 048/049 decisions now require both lexical evidence and registered context, and decision tests cover context-present/context-absent cases. Live-key smoke tests remain separate because credentials are not stored in the repository.
