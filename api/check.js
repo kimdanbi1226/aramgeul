@@ -197,9 +197,33 @@ export default async function handler(req, res) {
       ? buildRuleFallbackBlocks(text, ruleResult.edits)
       : [];
 
-    const mergedRevisedBlocks = revisedBlocks.length
-      ? revisedBlocks
-      : ruleFallbackBlocks;
+    const representedRuleCounts = revisedBlocks.reduce((counts, block) => {
+      const rules = Array.isArray(block?.rules)
+        ? block.rules
+        : (block?.rule ? [block.rule] : []);
+
+      rules.forEach(rule => {
+        if (rule?.rule_id) {
+          counts[rule.rule_id] = (counts[rule.rule_id] || 0) + 1;
+        }
+      });
+
+      return counts;
+    }, {});
+
+    const fallbackRuleCounts = {};
+    const additionalRuleBlocks = ruleFallbackBlocks.filter(block => {
+      const ruleId = block?.rule?.rule_id;
+      if (!ruleId) return false;
+
+      fallbackRuleCounts[ruleId] = (fallbackRuleCounts[ruleId] || 0) + 1;
+      return fallbackRuleCounts[ruleId] > (representedRuleCounts[ruleId] || 0);
+    });
+
+    const mergedRevisedBlocks = [
+      ...revisedBlocks,
+      ...additionalRuleBlocks
+    ];
 
     /*
      * Bareun이 교정 블록을 반환한 경우에는 Bareun 블록을 우선 사용하되,
