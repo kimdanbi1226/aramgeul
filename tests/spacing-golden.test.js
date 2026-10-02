@@ -278,3 +278,9 @@ assert.equal(rule52.decision_type, 'CORRECTION');
 assert.equal(rule52.examples.some(example => example.input === '승락' && example.expected === '승낙'), true);
 assert.equal(rule52.examples.some(example => example.input === '의론' && example.expected === '의논'), true);
 assert.equal(rule52.allowed_examples.some(example => example.input === '유월'), true);
+
+const rule53 = getRuleById('ORTHO-053-ENDINGS-TENSE');
+assert.equal(rule53.decision_type, 'CORRECTION');
+assert.equal(rule53.examples.some(example => example.input === '할께' && example.expected === '할게'), true);
+assert.equal(rule53.examples.some(example => example.input === '할찌라도' && example.expected === '할지라도'), true);
+assert.equal(rule53.allowed_examples.some(example => example.input === '갈까'), true);
