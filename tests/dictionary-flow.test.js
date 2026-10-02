@@ -52,4 +52,66 @@ assert.equal(properNounDecision.status, 'BOUNDARY_REQUIRED');
 assert.deepEqual(properNounDecision.supported_units, ['한국대학교']);
 assert.deepEqual(properNounDecision.missing_units, ['의과대학']);
 
+
+
+const distinguishingText = '둘로 갈음';
+const distinguishingService = {
+  async lookup(query) {
+    const entries = {
+      갈음: [
+        {
+          word: '갈음',
+          source: 'standard-korean-dictionary'
+        }
+      ],
+      가름: [
+        {
+          word: '가름',
+          source: 'standard-korean-dictionary'
+        }
+      ]
+    };
+    return entries[query] ?? [];
+  }
+};
+
+const distinguishingEvidence = await collectDictionaryEvidence({
+  text: distinguishingText,
+  ruleResult: {
+    edits: [
+      {
+        rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+        start: 3,
+        end: 5,
+        replacement: '가름'
+      }
+    ]
+  },
+  dictionaryService: distinguishingService
+});
+
+const distinguishingRuleEvidence = distinguishingEvidence.rule_evidence.find(
+  item => item.rule_id === 'ORTHO-057-DISTINGUISHING-WORDS'
+);
+
+assert.ok(distinguishingRuleEvidence);
+assert.ok(distinguishingEvidence.queries.some(item => item.query === '갈음'));
+assert.ok(distinguishingEvidence.queries.some(item => item.query === '가름'));
+assert.deepEqual(
+  distinguishingRuleEvidence.contexts[0]?.input_tokens,
+  ['둘로', '갈음']
+);
+assert.deepEqual(
+  distinguishingRuleEvidence.contexts[0]?.expected_tokens,
+  ['둘로', '가름']
+);
+
+const distinguishingDecision = evaluateDictionaryDecisions(distinguishingEvidence).find(
+  item => item.rule_id === 'ORTHO-057-DISTINGUISHING-WORDS'
+);
+
+assert.ok(distinguishingDecision);
+assert.equal(distinguishingDecision.status, 'CONTEXT_REQUIRED');
+assert.deepEqual(distinguishingDecision.lexical_candidates, ['갈음', '가름']);
+
 console.log('dictionary flow test passed');
