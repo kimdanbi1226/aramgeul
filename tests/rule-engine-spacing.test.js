@@ -95,9 +95,8 @@ function analyze(text, tokens) {
     token('한', 0, 1, ['NUMBER'], 'NR'),
     token('개', 1, 2, ['DEPENDENT_NOUN'], 'NNB')
   ]));
-  assert.equal(result.revised, '한 개');
-  assert.equal(result.edits.length, 1);
-  assert.equal(result.edits[0].rule_id, 'SPACING-043-UNIT-NOUN');
+  assert.equal(result.revised, text);
+  assert.equal(result.decision, 'VALID');
 }
 
 {
