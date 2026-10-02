@@ -242,3 +242,20 @@ for (const [input55, expected55] of article55Cases) {
   assert.equal(r55.revised, expected55, `제55항 실제 kuromoji-ko 결과가 예상과 다릅니다: ${input55}`);
 }
 console.log('Kuromoji article 55 runtime: PASS');
+
+const article56Cases = [
+  ['지난겨울은 몹시 춥드라.', '지난겨울은 몹시 춥더라.'],
+  ['깊든 물이 얕아졌다.', '깊던 물이 얕아졌다.'],
+  ['그렇게 좋든가?', '그렇게 좋던가?'],
+  ['그 사람 말 잘하든데!', '그 사람 말 잘하던데!'],
+  ['얼마나 놀랐든지 몰라.', '얼마나 놀랐던지 몰라.'],
+  ['배던지 사과던지 마음대로 먹어라.', '배든지 사과든지 마음대로 먹어라.'],
+  ['가던지 오던지 마음대로 해라.', '가든지 오든지 마음대로 해라.'],
+  ['먹든지 말든지 마음대로 하렴.', '먹든지 말든지 마음대로 하렴.']
+];
+for (const [input56, expected56] of article56Cases) {
+  const a56 = await analyze(input56);
+  const r56 = evaluateSpacing(a56);
+  assert.equal(r56.revised, expected56, `제56항 실제 kuromoji-ko 결과가 예상과 다릅니다: ${input56}`);
+}
+console.log('Kuromoji article 56 runtime: PASS');
