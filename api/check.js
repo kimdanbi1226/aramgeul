@@ -3,6 +3,12 @@ import { findRuleForExample, toRuleEvidence } from '../lib/rules/rules.v0.1.js';
 import { checkText } from '../lib/pipeline/check.js';
 import { analyze as analyzeMecab } from '../lib/morphology/mecab-ko.js';
 import { buildRuleFallbackBlocks } from '../lib/pipeline/rule-blocks.js';
+import {
+  createDictionaryService,
+  createStandardDictionaryProvider,
+  createUrimalsaemProvider
+} from '../lib/dictionary/index.js';
+import { collectDictionaryEvidence } from '../lib/dictionary/evidence.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -81,6 +87,49 @@ export default async function handler(req, res) {
     } catch (ruleError) {
       ruleEngineError = ruleError instanceof Error ? ruleError.message : String(ruleError);
       console.error('Aramgeul rule engine error:', ruleError);
+    }
+
+    let dictionaryEvidence = {
+      enabled: false,
+      queries: [],
+      matches: [],
+      rule_evidence: []
+    };
+    let dictionaryError = null;
+
+    const hasDictionaryKey = Boolean(
+      process.env.STANDARD_DICTIONARY_API_KEY ||
+      process.env.URIMALSAEM_API_KEY
+    );
+
+    if (hasDictionaryKey) {
+      try {
+        const standard = process.env.STANDARD_DICTIONARY_API_KEY
+          ? createStandardDictionaryProvider()
+          : null;
+        const urimal = process.env.URIMALSAEM_API_KEY
+          ? createUrimalsaemProvider()
+          : null;
+
+        const dictionaryService = createDictionaryService(
+          { standard, urimal },
+          {
+            retries: 2,
+            baseDelayMs: 150,
+            ttlMs: 60_000,
+            maxEntries: 500
+          }
+        );
+
+        dictionaryEvidence = await collectDictionaryEvidence({
+          text,
+          ruleResult,
+          dictionaryService
+        });
+      } catch (error) {
+        dictionaryError = error instanceof Error ? error.message : String(error);
+        console.error('Dictionary evidence error; continuing without dictionary evidence:', error);
+      }
     }
 
     const revisedBlocks = Array.isArray(bareunData?.revised_blocks)
@@ -228,7 +277,16 @@ export default async function handler(req, res) {
       edits: integrated.edits,
       sources: integrated.sources,
       evidence: integrated.evidence,
-      candidates: integrated.candidates || []
+      candidates: integrated.candidates || [],
+
+      // 사전은 문맥 의존 규칙의 어휘적 증거만 제공하며
+      // 현재 단계에서는 최종 교정문을 직접 변경하지 않는다.
+      dictionary_evidence: dictionaryEvidence,
+      dictionary_warning: dictionaryError
+        ? `사전 증거 계층을 초기화하지 못했습니다: ${dictionaryError}`
+        : (!hasDictionaryKey
+          ? '사전 API 인증 정보가 없어 사전 증거 계층을 실행하지 않았습니다.'
+          : null)
     });
   } catch (error) {
     console.error('Check API error:', error);
