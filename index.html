@@ -118,6 +118,23 @@ function renderResult(data, input) {
       (engines.bareun ? '' : ' · Bareun 미연결') + '</div>'
     : '<div class="engine-status"><strong>검사 엔진</strong> · 연결된 엔진이 없습니다.</div>';
 
+  const dictionaryEvidence = data.dictionary_evidence || {};
+  const dictionaryDecisions = Array.isArray(data.dictionary_decisions)
+    ? data.dictionary_decisions
+    : [];
+  const dictionaryWarning = data.dictionary_warning
+    ? '<div class="result-warning">' + escapeHtml(data.dictionary_warning) + '</div>'
+    : '';
+  const dictionaryStatus = dictionaryEvidence.enabled
+    ? '<div class="engine-status"><strong>사전 증거 계층</strong> · 활성화 · ' +
+      (dictionaryDecisions.length
+        ? dictionaryDecisions.map(item =>
+            escapeHtml(item.rule_id || '규칙') + ': ' + escapeHtml(item.status || '판정 없음')
+          ).join(' · ')
+        : '해당 규칙의 사전 판정 없음') +
+      '</div>'
+    : '';
+
   const htmlWarning = data.engine_warning
     ? '<div class="result-warning">' + escapeHtml(data.engine_warning) + '</div>'
     : '';
@@ -135,7 +152,9 @@ function renderResult(data, input) {
   html += '<div class="revised-text" id="revisedSentence">' + renderSentenceWithEdits(revised, blocks) + '</div>';
   html += '</div>';
   html += engineStatus;
+  html += dictionaryStatus;
   html += htmlWarning;
+  html += dictionaryWarning;
   if (blocks.length) {
     html += '<div class="result-hint">수정된 부분을 누르면 변경 내용과 검사 설명을 확인할 수 있습니다.</div>';
   }
