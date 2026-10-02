@@ -201,9 +201,11 @@ export default async function handler(req, res) {
         aramgeul_rule: Boolean(ruleResult),
         bareun: Boolean(bareunResult)
       },
-      engine_warning: bareunError
-        ? 'Bareun 검사 엔진에 연결되지 않아 아람글 규칙 엔진 기준으로 검사했습니다.'
-        : (!apiKey ? 'Bareun API 인증 정보가 없어 아람글 규칙 엔진 기준으로 검사했습니다.' : null),
+      engine_warning: ruleEngineError
+        ? `아람글 규칙 엔진을 초기화하지 못했습니다: ${ruleEngineError}`
+        : (bareunError
+          ? 'Bareun 검사 엔진에 연결되지 않아 아람글 규칙 엔진 기준으로 검사했습니다.'
+          : (!apiKey ? 'Bareun API 인증 정보가 없어 아람글 규칙 엔진 기준으로 검사했습니다.' : null)),
       diagnostics: process.env.NODE_ENV === 'production'
         ? undefined
         : {
