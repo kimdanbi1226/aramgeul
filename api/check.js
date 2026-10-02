@@ -228,7 +228,8 @@ export default async function handler(req, res) {
 
     const integrated = integrateCheckResults(text, {
       ruleResult,
-      bareunResult
+      bareunResult,
+      dictionaryDecisions
     });
 
     // Bareun이 특정 교정을 블록으로 돌려주지 않더라도
