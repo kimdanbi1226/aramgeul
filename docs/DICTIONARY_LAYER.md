@@ -99,3 +99,17 @@ The dictionary evidence is now converted into a separate dictionary_decisions si
 - Added tests/dictionary-decision.test.js and registered test:dictionary-decision.
 
 The normalized person/proper-noun/technical-term flags are populated from verified official API fields. The 048/049 decisions now require both lexical evidence and registered context, and decision tests cover context-present/context-absent cases. Live-key smoke tests remain separate because credentials are not stored in the repository.
+
+
+## 2026-10-02 integration gating update
+
+Dictionary decisions are now connected to the Aramgeul rule candidate at the integration boundary.
+
+- SPACING-048-NAME-APPELLATION: BOUNDARY_REQUIRED blocks the affected Aramgeul rule edits.
+- SPACING-049-PROPER-NOUN: BOUNDARY_REQUIRED blocks the affected Aramgeul rule edits.
+- ORTHO-057-DISTINGUISHING-WORDS: CONTEXT_REQUIRED blocks the affected Aramgeul rule edits because competing lexical candidates require semantic/contextual judgment.
+- SPACING-050-TECHNICAL-TERM: SUPPORTS confirms dictionary evidence but does not introduce a new blocking state; INSUFFICIENT leaves the existing rule result unchanged.
+- INSUFFICIENT and EVIDENCE_ONLY remain non-blocking for the corresponding rule candidate.
+- The gating applies to the Aramgeul rule candidate only. An independent Bareun correction is still evaluated as a separate evidence source by the existing integration policy.
+
+This keeps the dictionary layer conservative: dictionary evidence can prevent an unsafe automatic rule correction when the decision explicitly says that a boundary or context is required, but absence of evidence does not silently disable the core rule engine.
