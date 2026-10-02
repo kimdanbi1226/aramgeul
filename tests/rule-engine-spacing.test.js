@@ -64,6 +64,19 @@ function analyze(text, tokens) {
 }
 
 {
+  // 형태소 분석 결과가 불완전해도 공식 근거가 등록된 '생각해 보다'를
+  // 원문 패턴 fallback으로 검출하는지 확인한다.
+  const text = '나는 생각해보았다';
+  const result = evaluateSpacing(analyze(text, [
+    token('나는', 0, 2, ['NOUN'], 'NP'),
+    token('생각해보았다', 3, 9, [], 'NA')
+  ]));
+  assert.equal(result.revised, '나는 생각해 보았다');
+  assert.equal(result.edits.length, 1);
+  assert.equal(result.edits[0].rule_id, 'SPACING-047-AUXILIARY-VERB');
+}
+
+{
   const text = '먹어보았다';
   const result = evaluateSpacing(analyze(text, [
     token('먹어', 0, 2, ['LEXICAL_VERB'], 'VV', '먹다'),
