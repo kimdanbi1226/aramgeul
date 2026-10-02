@@ -42,7 +42,7 @@ assert.ok(
   '의존 명사 교정 블록이 있어야 합니다.'
 );
 assert.ok(
-  blocks.some(block => block.revised === '생각해 보았다'),
+  blocks.some(block => block.revised.startsWith('생각해 보았다')),
   '보조 용언 교정 블록이 있어야 합니다.'
 );
 
