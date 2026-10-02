@@ -229,7 +229,10 @@ function analyze(text, tokens) {
     ['저때', '저', '때'],
     ['이만큼', '이', '만큼'],
     ['그만큼', '그', '만큼'],
-    ['저만큼', '저', '만큼']
+    ['저만큼', '저', '만큼'],
+    ['그따위', '그', '따위'],
+    ['이따위', '이', '따위'],
+    ['저따위', '저', '따위']
   ]) {
     const result = evaluateSpacing(analyze(text, [
       token(left, 0, left.length, ['MODIFIER'], 'MM'),
