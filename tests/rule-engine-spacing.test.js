@@ -213,7 +213,7 @@ function analyze(text, tokens) {
 
 {
   // 제46항에서 허용하는 붙여쓰기는 기본 검사에서 오류로 취급하지 않는다.
-  const text = '좀더';
+  const text = '좀더 큰 이 새차';
   const rule = (await import('../lib/rules/rules.v0.1.js')).getRuleById('SPACING-046-MONOSYLLABLE-ALLOWANCE');
   assert.equal(rule.decision_type, 'VALID');
   assert.equal(rule.allowed_examples.some(example => example.input === text && example.allowed === text), true);
