@@ -1,6 +1,7 @@
 import { createBareunResult, integrateCheckResults } from '../lib/pipeline/integrate.js';
 import { findRuleForExample, toRuleEvidence } from '../lib/rules/rules.v0.1.js';
 import { checkText } from '../lib/pipeline/check.js';
+import { analyze as analyzeMecab } from '../lib/morphology/mecab-ko.js';
 import { buildRuleFallbackBlocks } from '../lib/pipeline/rule-blocks.js';
 
 export default async function handler(req, res) {
@@ -61,7 +62,6 @@ export default async function handler(req, res) {
     let ruleResult = null;
     let ruleEngineError = null;
     try {
-      const { analyze: analyzeMecab } = await import('../lib/morphology/mecab-ko.js');
       const rulePipeline = await checkText(text, {
         analyze: analyzeMecab
       });
