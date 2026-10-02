@@ -9,9 +9,9 @@ const rule = {
   source_reference: '한글 맞춤법 제42항'
 };
 
-const source = '나는 할수있고 너도 할수있다.';
+const source = '할수있다. 오늘도 할수있다.';
 const edits = [
-  { start: 4, end: 4, replacement: ' ', rule },
+  { start: 1, end: 1, replacement: ' ', rule },
   { start: 11, end: 11, replacement: ' ', rule }
 ];
 
@@ -20,15 +20,14 @@ const blocks = buildRuleFallbackBlocks(source, edits);
 assert.equal(blocks.length, 2);
 assert.equal(blocks[0].source, 'aramgeul-rule');
 assert.equal(blocks[0].rule.rule_id, rule.rule_id);
-assert.equal(blocks[0].origin.start, 3);
-assert.equal(blocks[0].revised_start, 3);
-assert.equal(blocks[0].revised_end, 5);
-assert.ok(blocks[0].origin.text.includes('할수'));
-assert.ok(blocks[0].revised.includes('할 수'));
+assert.equal(blocks[0].origin.start, 0);
+assert.equal(blocks[0].revised_start, 0);
+assert.equal(blocks[0].revised_end, 2);
+assert.equal(blocks[0].revised, '할 수있다.');
 
+assert.equal(blocks[1].origin.start, 10);
 assert.equal(blocks[1].revised_start, 11);
 assert.equal(blocks[1].revised_end, 13);
-assert.ok(blocks[1].origin.text.includes('할수'));
 assert.equal(blocks[1].revised, '할 수있다.');
 
 console.log('Rule correction block tests: PASS');
