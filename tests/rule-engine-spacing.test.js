@@ -289,4 +289,15 @@ function analyze(text, tokens) {
   assert.equal(rule54.decision_type, 'CORRECTION');
 }
 
+{
+  const rule55 = getRuleById('ORTHO-055-UNIFIED-FORMS');
+  assert.equal(evaluateSpacing(analyze('마추다')).revised, '맞추다');
+  assert.equal(evaluateSpacing(analyze('마춰')).revised, '맞춰');
+  assert.equal(evaluateSpacing(analyze('뻐치다')).revised, '뻗치다');
+  assert.equal(evaluateSpacing(analyze('뻐쳐')).revised, '뻗쳐');
+  assert.equal(evaluateSpacing(analyze('맞추다')).revised, '맞추다');
+  assert.equal(evaluateSpacing(analyze('맞히다')).revised, '맞히다');
+  assert.equal(rule55.decision_type, 'CORRECTION');
+}
+
 console.log('Rule engine spacing tests: PASS');
