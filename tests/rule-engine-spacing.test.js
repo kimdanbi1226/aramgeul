@@ -267,4 +267,15 @@ function analyze(text, tokens) {
   assert.equal(rule52.decision_type, 'CORRECTION');
 }
 
+{
+  const rule53 = getRuleById('ORTHO-053-ENDINGS-TENSE');
+  assert.equal(evaluateSpacing(analyze('할께')).revised, '할게');
+  assert.equal(evaluateSpacing(analyze('할꺼나')).revised, '할거나');
+  assert.equal(evaluateSpacing(analyze('할찌라도')).revised, '할지라도');
+  assert.equal(evaluateSpacing(analyze('할게')).revised, '할게');
+  assert.equal(evaluateSpacing(analyze('갈까')).revised, '갈까');
+  assert.equal(evaluateSpacing(analyze('합니까')).revised, '합니까');
+  assert.equal(rule53.decision_type, 'CORRECTION');
+}
+
 console.log('Rule engine spacing tests: PASS');
