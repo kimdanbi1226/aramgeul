@@ -68,7 +68,10 @@ const lexicalizedCases = [
   '저때',
   '이만큼',
   '그만큼',
-  '저만큼'
+  '저만큼',
+  '그따위',
+  '이따위',
+  '저따위'
 ];
 
 for (const lexicalizedInput of lexicalizedCases) {
