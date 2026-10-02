@@ -19,7 +19,7 @@ function token(text, start, end, functions, pos = 'VV', lemma = null) {
   };
 }
 
-function analyze(text, tokens) {
+function analyze(text, tokens = []) {
   return { text, tokens, candidates: [], metadata: { analyzer: 'fixture' } };
 }
 
