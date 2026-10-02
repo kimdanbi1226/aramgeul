@@ -282,3 +282,25 @@ for (const [input57, expected57] of article57Cases) {
   assert.equal(r57.revised, expected57, `제57항 실제 kuromoji-ko 결과가 예상과 다릅니다: ${input57}`);
 }
 console.log('Kuromoji article 57 runtime: PASS');
+
+const article51SafetyCases = [
+  ['속이', '속이'],
+  ['특이', '특이'],
+  ['고히', '고히'],
+  ['급이', '급이']
+];
+for (const [input51Safe, expected51Safe] of article51SafetyCases) {
+  const a51Safe = await analyze(input51Safe);
+  const r51Safe = evaluateSpacing(a51Safe);
+  assert.equal(r51Safe.revised, expected51Safe, `제51항 정상어 보호 실패: ${input51Safe}`);
+}
+
+const article52SafetyCases = [
+  ['의론', '의론'],
+  ['의논', '의논']
+];
+for (const [input52Safe, expected52Safe] of article52SafetyCases) {
+  const a52Safe = await analyze(input52Safe);
+  const r52Safe = evaluateSpacing(a52Safe);
+  assert.equal(r52Safe.revised, expected52Safe, `제52항 정상어 보호 실패: ${input52Safe}`);
+}
