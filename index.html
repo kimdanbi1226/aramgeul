@@ -18,10 +18,10 @@ main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center
 .editor{padding:24px}textarea{display:block;width:100%;min-height:260px;resize:vertical;border:1px solid #cfd8e6;border-radius:16px;padding:20px;font:inherit;font-size:18px;line-height:1.85;color:var(--ink);background:#fbfcfe;outline:none}textarea:focus{border-color:#6d9be8;box-shadow:0 0 0 4px rgba(36,87,197,.09)}textarea::placeholder{color:#9aa5b5}.editor-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}.count{font-size:13px;color:var(--muted)}.check{border:0;border-radius:12px;padding:13px 23px;background:var(--primary);color:#fff;font:inherit;font-weight:800;cursor:pointer}.check:hover{background:var(--primary-dark)}.check:disabled{opacity:.65;cursor:wait}
 .result{display:none;border-top:1px solid var(--line);padding:24px;background:#fafcff}.result.show{display:block}.result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.result-title{font-size:17px;font-weight:800}.status{font-size:12px;border-radius:999px;padding:6px 9px;background:#eef2f7;color:#5d6878}.status.correction{color:var(--primary);background:var(--soft)}.status.valid{color:var(--success);background:#eaf8f2}.status.ambiguous{color:var(--warning);background:#fff5df}
 .result-box{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff;line-height:1.8;color:#475467}.result-label{font-size:12px;font-weight:800;color:#7a8595;margin-bottom:7px}.revised-text{font-size:18px;color:var(--ink);white-space:pre-wrap;word-break:break-word}
-.sentence-edit{background:#e8f0ff;color:#173f98;border-bottom:2px solid #6d9be8;border-radius:5px;padding:1px 3px;cursor:pointer;transition:background .15s,box-shadow .15s}
-.sentence-edit:hover,.sentence-edit.selected{background:#d7e5ff;box-shadow:0 0 0 3px rgba(36,87,197,.10)}
+.sentence-edit{background:#fff0f1;color:#c6283d;border-bottom:3px solid #e05262;border-radius:4px;padding:1px 3px;font-weight:800;cursor:pointer;transition:background .15s,box-shadow .15s}
+.sentence-edit:hover,.sentence-edit.selected{background:#ffe0e3;box-shadow:0 0 0 3px rgba(198,40,61,.12)}
 .correction:focus-visible,.sentence-edit:focus-visible{outline:3px solid rgba(36,87,197,.22);outline-offset:2px}
-.corrections{display:grid;gap:12px;margin-top:14px}.correction{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}.correction.clickable{cursor:pointer;transition:border-color .15s,box-shadow .15s}.correction.clickable:hover,.correction.clickable.selected{border-color:#b9cff8;box-shadow:0 5px 18px rgba(36,87,197,.08)}.change{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}.change-part{flex:1;min-width:180px}.change-value{padding:10px 12px;border-radius:10px;background:#f7f9fc;border:1px solid #e5e9f0;white-space:pre-wrap;word-break:break-word}.arrow{color:#98a2b3;font-weight:800;padding-top:10px}.help{margin:10px 0 0;color:#596578;font-size:13px;line-height:1.65}.source{margin-top:9px;color:#8994a4;font-size:11px}.diff{font-size:18px;line-height:1.8;white-space:pre-wrap;word-break:break-word}.diff-removed{background:#fdebec;color:#a12b37;text-decoration:line-through;text-decoration-thickness:1px;border-radius:4px;padding:1px 2px}.diff-added{background:#e7f7ef;color:#14704d;border-radius:4px;padding:1px 2px}.detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid #edf0f5}.correction.selected .detail{display:block}.detail-title{font-size:12px;font-weight:800;color:#687386;margin-bottom:5px}.detail-empty{color:#8994a4;font-size:13px}.detail-meta{margin-top:8px;font-size:11px;color:#8994a4}.rule-evidence{margin-top:12px;padding:12px;border:1px solid #dce8fb;border-radius:10px;background:#f8fbff}.rule-title{font-size:14px;font-weight:800;color:var(--ink)}.rule-description{margin-top:5px;font-size:13px;line-height:1.6;color:#596578}.rule-meta{margin-top:7px;font-size:11px;color:#718096}.rule-source{display:inline-block;margin-top:8px;font-size:12px;color:var(--primary);text-decoration:none;font-weight:700}.rule-source:hover{text-decoration:underline}.detail-meta{margin-top:8px;font-size:11px;color:#8994a4}.result-hint{margin-top:8px;color:#8994a4;font-size:12px;line-height:1.6}
+.corrections{display:grid;gap:12px;margin-top:14px}.correction{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}.correction.clickable{cursor:pointer;transition:border-color .15s,box-shadow .15s}.correction.clickable:hover,.correction.clickable.selected{border-color:#b9cff8;box-shadow:0 5px 18px rgba(36,87,197,.08)}.change{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}.change-part{flex:1;min-width:180px}.change-value{padding:10px 12px;border-radius:10px;background:#f7f9fc;border:1px solid #e5e9f0;white-space:pre-wrap;word-break:break-word}.arrow{color:#98a2b3;font-weight:800;padding-top:10px}.help{margin:10px 0 0;color:#596578;font-size:13px;line-height:1.65}.source{margin-top:9px;color:#8994a4;font-size:11px}.diff{font-size:18px;line-height:1.8;white-space:pre-wrap;word-break:break-word}.diff-removed{background:#fdebec;color:#a12b37;text-decoration:line-through;text-decoration-thickness:1px;border-radius:4px;padding:1px 2px}.diff-added{background:#e7f7ef;color:#14704d;border-radius:4px;padding:1px 2px}.detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid #edf0f5}.correction.selected .detail{display:block}.detail-title{font-size:12px;font-weight:800;color:#687386;margin-bottom:5px}.detail-empty{color:#8994a4;font-size:13px}.detail-meta{margin-top:8px;font-size:11px;color:#8994a4}.rule-evidence{margin-top:12px;padding:12px;border:1px solid #dce8fb;border-radius:10px;background:#f8fbff}.rule-title{font-size:14px;font-weight:800;color:var(--ink)}.rule-description{margin-top:5px;font-size:13px;line-height:1.6;color:#596578}.rule-meta{margin-top:7px;font-size:11px;color:#718096}.rule-source{display:inline-block;margin-top:8px;font-size:12px;color:var(--primary);text-decoration:none;font-weight:700}.rule-source:hover{text-decoration:underline}.detail-meta{margin-top:8px;font-size:11px;color:#8994a4}.result-hint{margin-top:8px;color:#8994a4;font-size:12px;line-height:1.6}.engine-status{margin-top:10px;padding:10px 12px;border:1px solid #dfe7f4;border-radius:10px;background:#f8faff;color:#596578;font-size:12px;line-height:1.5}.engine-status strong{color:#172033}.result-warning{margin-top:8px;color:#7a8595;font-size:12px;line-height:1.6}
 .candidates{margin-top:14px;padding:14px;border:1px solid #f0dfb6;border-radius:14px;background:#fffaf0}.candidate{padding:8px 0}.candidate+.candidate{border-top:1px solid #f0e6cf}.candidate strong{font-size:12px;color:#7a5a16}.candidate div{margin-top:3px}
 .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.info{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.info strong{display:block;margin-bottom:6px;font-size:14px}.info span{font-size:13px;color:var(--muted);line-height:1.6}
 .notice{margin:20px 0 0;color:#8994a4;font-size:12px;line-height:1.7;text-align:center}footer{text-align:center;color:#929bab;font-size:12px;padding:0 24px 34px}
@@ -108,6 +108,16 @@ function renderResult(data, input) {
   else setStatus('판정 보류', '');
 
   const revised = data.revised || input;
+  const engines = data.engines || {};
+  const engineNames = [];
+  if (engines.aramgeul_rule) engineNames.push('아람글 규칙 엔진');
+  if (engines.bareun) engineNames.push('Bareun');
+
+  const engineStatus = engineNames.length
+    ? '<div class="engine-status"><strong>검사 엔진</strong> · ' + escapeHtml(engineNames.join(' + ')) +
+      (engines.bareun ? '' : ' · Bareun 미연결') + '</div>'
+    : '<div class="engine-status"><strong>검사 엔진</strong> · 연결된 엔진이 없습니다.</div>';
+
   const htmlWarning = data.engine_warning
     ? '<div class="result-warning">' + escapeHtml(data.engine_warning) + '</div>'
     : '';
@@ -124,6 +134,7 @@ function renderResult(data, input) {
   html += '<div class="result-label">검사 결과</div>';
   html += '<div class="revised-text" id="revisedSentence">' + renderSentenceWithEdits(revised, blocks) + '</div>';
   html += '</div>';
+  html += engineStatus;
   html += htmlWarning;
   if (blocks.length) {
     html += '<div class="result-hint">수정된 부분을 누르면 변경 내용과 검사 설명을 확인할 수 있습니다.</div>';
@@ -197,6 +208,25 @@ function renderSentenceWithEdits(revised, blocks) {
   let cursor = 0;
 
   blocks.forEach((block, index) => {
+    const value = typeof block.revised === 'string' ? block.revised : '';
+
+    // 화면에서는 서버가 계산한 숫자 오프셋보다 실제 교정 문구를
+    // 교정문에서 순서대로 찾는 것을 우선한다. 그래야 형태소 분석기의
+    // 원문 오프셋 차이 때문에 '나는'처럼 엉뚱한 부분이 강조되지 않는다.
+    if (value) {
+      const start = revised.indexOf(value, cursor);
+
+      if (start !== -1) {
+        ranges.push({
+          start,
+          end: start + value.length,
+          index
+        });
+        cursor = start + value.length;
+        return;
+      }
+    }
+
     const explicitStart = Number.isInteger(block.revised_start);
     const explicitEnd = Number.isInteger(block.revised_end);
 
@@ -206,21 +236,8 @@ function renderSentenceWithEdits(revised, blocks) {
         end: explicitEnd,
         index
       });
-      return;
+      cursor = Math.max(cursor, explicitEnd);
     }
-
-    const value = block.revised || '';
-    if (!value) return;
-
-    const start = revised.indexOf(value, cursor);
-    if (start === -1) return;
-
-    ranges.push({
-      start,
-      end: start + value.length,
-      index
-    });
-    cursor = start + value.length;
   });
 
   ranges.sort((a, b) => a.start - b.start);
