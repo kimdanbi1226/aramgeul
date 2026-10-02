@@ -59,3 +59,26 @@ for (const [numberInput, expected] of numberCases) {
     `제44항 실제 kuromoji-ko 런타임 결과가 예상과 다릅니다: ${numberInput}`
   );
 }
+
+const lexicalizedCases = [
+  '그동안',
+  '그사이',
+  '이때',
+  '그때',
+  '저때',
+  '이만큼',
+  '그만큼',
+  '저만큼'
+];
+
+for (const lexicalizedInput of lexicalizedCases) {
+  const lexicalizedAnalysis = await analyze(lexicalizedInput);
+  const lexicalizedResult = evaluateSpacing(lexicalizedAnalysis);
+  assert.equal(
+    lexicalizedResult.revised,
+    lexicalizedInput,
+    `사전 등재 표현을 제42항으로 잘못 띄우면 안 됩니다: ${lexicalizedInput}`
+  );
+}
+
+console.log('Kuromoji lexicalized-form guard test: PASS');
