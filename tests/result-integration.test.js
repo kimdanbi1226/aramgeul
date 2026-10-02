@@ -118,3 +118,52 @@ assert.equal(supportedProperNoun.decision, 'CORRECTION');
 assert.equal(supportedProperNoun.revised, '한국대학교 의과대학');
 
 console.log('Dictionary boundary gating: PASS');
+
+
+const blockedNameBoundary = integrateCheckResults('김양수씨', {
+  ruleResult: {
+    revised: '김양수 씨',
+    edits: [
+      {
+        rule_id: 'SPACING-048-NAME-APPELLATION',
+        start: 0,
+        end: '김양수씨'.length,
+        replacement: '김양수 씨'
+      }
+    ],
+    sources: [{ source: 'NIKL' }]
+  },
+  dictionaryDecisions: [
+    {
+      rule_id: 'SPACING-048-NAME-APPELLATION',
+      status: 'BOUNDARY_REQUIRED'
+    }
+  ]
+});
+assert.equal(blockedNameBoundary.decision, 'VALID');
+assert.equal(blockedNameBoundary.revised, '김양수씨');
+
+const insufficientDictionaryDoesNotOverrideRule = integrateCheckResults('김양수씨', {
+  ruleResult: {
+    revised: '김양수 씨',
+    edits: [
+      {
+        rule_id: 'SPACING-048-NAME-APPELLATION',
+        start: 0,
+        end: '김양수씨'.length,
+        replacement: '김양수 씨'
+      }
+    ],
+    sources: [{ source: 'NIKL' }]
+  },
+  dictionaryDecisions: [
+    {
+      rule_id: 'SPACING-048-NAME-APPELLATION',
+      status: 'INSUFFICIENT'
+    }
+  ]
+});
+assert.equal(insufficientDictionaryDoesNotOverrideRule.decision, 'CORRECTION');
+assert.equal(insufficientDictionaryDoesNotOverrideRule.revised, '김양수 씨');
+
+console.log('Dictionary insufficient-vs-boundary behavior: PASS');
