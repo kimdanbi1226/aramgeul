@@ -1,0 +1,30 @@
+name: Kuromoji Production Runtime Test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'lib/morphology/mecab-ko.js'
+      - 'lib/rules/engine.js'
+      - 'lib/rules/rules.v0.1.js'
+      - 'tests/kuromoji-runtime.test.js'
+      - 'package.json'
+      - '.github/workflows/kuromoji-runtime-test.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Run production Kuromoji runtime regression test
+        run: node tests/kuromoji-runtime.test.js
