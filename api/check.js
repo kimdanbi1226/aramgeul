@@ -1,5 +1,7 @@
 import { createBareunResult, integrateCheckResults } from '../lib/pipeline/integrate.js';
-import { findRuleForExample, toRuleEvidence } from '../lib/rules/rules.v0.1.js';
+import { findRuleForExample, toRuleEvidence, getRuleById } from '../lib/rules/rules.v0.1.js';
+import { checkText } from '../lib/pipeline/check.js';
+import { analyze as analyzeMecab } from '../lib/morphology/mecab-ko.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -51,6 +53,28 @@ export default async function handler(req, res) {
       });
     }
 
+    let ruleResult = null;
+    try {
+      const rulePipeline = await checkText(text, {
+        analyze: analyzeMecab
+      });
+      ruleResult = {
+        ...rulePipeline.result,
+        sources: rulePipeline.result.edits
+          .map(edit => edit.rule)
+          .filter(Boolean)
+          .map(rule => ({
+            source: rule.source_name,
+            source_type: rule.source_type,
+            source_url: rule.source_url,
+            source_reference: rule.source_reference,
+            rule_id: rule.rule_id
+          }))
+      };
+    } catch (ruleError) {
+      console.error('Aramgeul rule engine error:', ruleError);
+    }
+
     const revisedBlocks = Array.isArray(data?.revised_blocks)
       ? data.revised_blocks.map(block => {
           const originText = block?.origin?.text || '';
@@ -59,15 +83,29 @@ export default async function handler(req, res) {
           const help = helpId && data?.helps?.[helpId]?.comment
             ? data.helps[helpId].comment
             : '';
+
           const matchedRule = findRuleForExample(originText, revisedText);
+          const ruleMatches = (ruleResult?.edits || [])
+            .map(edit => edit.rule)
+            .filter(Boolean)
+            .filter(rule =>
+              originText.includes(rule.examples?.[0]?.input || '\u0000') ||
+              revisedText.includes(rule.examples?.[0]?.expected || '\u0000')
+            );
+
+          const rules = [
+            ...(matchedRule ? [toRuleEvidence(matchedRule)] : []),
+            ...ruleMatches
+          ].filter((rule, index, all) =>
+            all.findIndex(item => item.rule_id === rule.rule_id) === index
+          );
 
           return {
-            origin: {
-              text: originText
-            },
+            origin: { text: originText },
             revised: revisedText,
             help,
-            rule: toRuleEvidence(matchedRule)
+            rules,
+            rule: rules[0] || null
           };
         })
       : [];
@@ -89,7 +127,7 @@ export default async function handler(req, res) {
     );
 
     const integrated = integrateCheckResults(text, {
-      ruleResult: null,
+      ruleResult,
       bareunResult
     });
 
