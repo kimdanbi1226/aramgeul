@@ -249,5 +249,7 @@ for (const [text, lexical, aux, lemma] of [
 const rule48 = getRuleById('SPACING-048-NAME-APPELLATION');
 assert.equal(rule48.decision_type, 'AMBIGUOUS');
 assert.equal(rule48.deferred_examples.some(example => example.input === '김모 씨'), true);
+assert.equal(rule48.examples.some(example => example.input === '김양수씨' && example.expected === '김양수 씨'), true);
+assert.equal(rule48.examples.some(example => example.input === '충무공이순신장군' && example.expected === '충무공 이순신 장군'), true);
 
 console.log('Spacing golden test set: PASS');
