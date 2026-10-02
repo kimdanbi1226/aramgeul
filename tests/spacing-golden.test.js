@@ -266,3 +266,9 @@ assert.equal(rule50.allowed_examples.some(example => example.input === '만성 �
 assert.equal(rule50.allowed_examples.some(example => example.input === '학교 폭력'), true);
 assert.equal(rule50.deferred_examples.some(example => example.input === '결산 소득세'), true);
 
+
+const rule51 = getRuleById('ORTHO-051-ADVERB-I-HI');
+assert.equal(rule51.decision_type, 'CORRECTION');
+assert.equal(rule51.examples.some(example => example.input === '깨끗히' && example.expected === '깨끗이'), true);
+assert.equal(rule51.examples.some(example => example.input === '정확이' && example.expected === '정확히'), true);
+assert.equal(rule51.allowed_examples.some(example => example.input === '솔직히'), true);
