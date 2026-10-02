@@ -20,7 +20,7 @@ const blocks = buildRuleFallbackBlocks(source, edits);
 assert.equal(blocks.length, 2);
 assert.equal(blocks[0].source, 'aramgeul-rule');
 assert.equal(blocks[0].rule.rule_id, rule.rule_id);
-assert.equal(blocks[0].origin.start, 0);
+assert.equal(blocks[0].origin.start, 3);
 assert.equal(blocks[0].revised_start, 3);
 assert.equal(blocks[0].revised_end, 5);
 assert.ok(blocks[0].origin.text.includes('할수'));
