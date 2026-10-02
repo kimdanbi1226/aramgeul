@@ -48,6 +48,35 @@ function analyze(text, tokens) {
 }
 
 {
+  // 최신 근거가 확인된 파생어 사례: '깨뜨리다' + 보조 용언은 띄어 쓴다.
+  const text = '깨뜨려버렸다';
+  const result = evaluateSpacing(analyze(text, [
+    token('깨뜨려', 0, 3, ['LEXICAL_VERB'], 'VV', '깨뜨리다'),
+    token('버리', 3, 5, ['AUXILIARY_VERB'], 'VX', '버리다'),
+    token('었다', 5, 7, ['ENDING'], 'EP')
+  ]));
+  assert.equal(result.revised, '깨뜨려 버렸다');
+  assert.equal(result.edits.length, 1);
+  assert.equal(result.edits[0].rule_id, 'SPACING-047-AUXILIARY-VERB');
+}
+
+{
+  // 2음절 활용형은 붙여쓰기가 허용되는 사례이므로 자동 교정하지 않는다.
+  for (const [text, lexical, aux, lemma] of [
+    ['구해본다', '구해', '본다', '구하다'],
+    ['더해줬다', '더해', '줬다', '더하다']
+  ]) {
+    const auxStart = lexical.length;
+    const result = evaluateSpacing(analyze(text, [
+      token(lexical, 0, lexical.length, ['LEXICAL_VERB'], 'VV', lemma),
+      token(aux, auxStart, text.length, ['AUXILIARY_VERB'], 'VX')
+    ]));
+    assert.equal(result.revised, text);
+    assert.equal(result.decision, 'VALID');
+  }
+}
+
+{
   // 형태소 분석 결과가 불완전해도 공식 근거가 등록된 '생각해 보다'를
   // 원문 패턴 fallback으로 검출하는지 확인한다.
   const text = '나는 생각해보았다';
