@@ -216,3 +216,81 @@ assert.equal(technicalInsufficient.decision, 'CORRECTION');
 assert.equal(technicalInsufficient.revised, '결산 소득세');
 
 console.log('Technical term dictionary behavior: PASS');
+
+
+const blockedDistinguishingWord = integrateCheckResults('둘로 가름하였다.', {
+  ruleResult: {
+    revised: '둘로 갈음하였다.',
+    edits: [
+      {
+        rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+        start: 3,
+        end: 5,
+        replacement: '갈음'
+      }
+    ],
+    sources: [{ source: 'NIKL' }]
+  },
+  bareunResult: {
+    revised: '둘로 가름하였다.',
+    edits: [],
+    sources: [{ source: 'Bareun' }]
+  },
+  dictionaryDecisions: [
+    {
+      rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+      status: 'CONTEXT_REQUIRED'
+    }
+  ]
+});
+assert.equal(blockedDistinguishingWord.decision, 'VALID');
+assert.equal(blockedDistinguishingWord.revised, '둘로 가름하였다.');
+assert.deepEqual(blockedDistinguishingWord.edits, []);
+
+const distinguishingEvidenceOnlyKeepsRule = integrateCheckResults('둘로 가름하였다.', {
+  ruleResult: {
+    revised: '둘로 갈음하였다.',
+    edits: [
+      {
+        rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+        start: 3,
+        end: 5,
+        replacement: '갈음'
+      }
+    ],
+    sources: [{ source: 'NIKL' }]
+  },
+  dictionaryDecisions: [
+    {
+      rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+      status: 'EVIDENCE_ONLY'
+    }
+  ]
+});
+assert.equal(distinguishingEvidenceOnlyKeepsRule.decision, 'CORRECTION');
+assert.equal(distinguishingEvidenceOnlyKeepsRule.revised, '둘로 갈음하였다.');
+
+const distinguishingInsufficientKeepsRule = integrateCheckResults('둘로 가름하였다.', {
+  ruleResult: {
+    revised: '둘로 갈음하였다.',
+    edits: [
+      {
+        rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+        start: 3,
+        end: 5,
+        replacement: '갈음'
+      }
+    ],
+    sources: [{ source: 'NIKL' }]
+  },
+  dictionaryDecisions: [
+    {
+      rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+      status: 'INSUFFICIENT'
+    }
+  ]
+});
+assert.equal(distinguishingInsufficientKeepsRule.decision, 'CORRECTION');
+assert.equal(distinguishingInsufficientKeepsRule.revised, '둘로 갈음하였다.');
+
+console.log('Distinguishing-word context gating: PASS');
