@@ -9,14 +9,24 @@ let failed = 0;
 
 for (const testCase of suite.cases) {
   const result = await analyze(testCase.input);
-  const pos = result.tokens.flatMap(token => token.features.grammar_functions ?? []).filter(Boolean);
-  const surfaces = result.tokens.map(token => token.text);
+  const tokens = result.tokens;
+  const functions = tokens.flatMap(token => token.features.grammar_functions ?? []).filter(Boolean);
+  const pos = tokens.flatMap(token => String(token.pos ?? '').split('+')).filter(Boolean);
+  const availableTags = new Set([...functions, ...pos]);
 
-  const missingPos = (testCase.required_pos ?? []).filter(tag => !pos.includes(tag));
-  const missingSurface = (testCase.expected_features ?? [])
-    .map(feature => feature.split('/')[0].split('+').pop())
+  const missingPos = (testCase.required_pos ?? [])
+    .filter(tag => !availableTags.has(tag));
+
+  // expected_targets는 실제 토큰 표면형을 검증하고,
+  // expected_features는 설명용 형태소 분석 메모로 취급한다.
+  // '거 + 야', '되 + 나요'처럼 한 어절이 여러 토큰으로 분해되는
+  // 경우를 expected_features 문자열로 직접 비교하면 정상 분석도
+  // 잘못 실패할 수 있기 때문이다.
+  const surfaces = new Set(tokens.map(token => token.text));
+  const missingSurface = (testCase.expected_targets ?? [])
+    .map(target => target.surface)
     .filter(Boolean)
-    .filter(surface => !surfaces.includes(surface));
+    .filter(surface => !surfaces.has(surface));
 
   const ok = missingPos.length === 0 && missingSurface.length === 0;
 
@@ -26,7 +36,7 @@ for (const testCase of suite.cases) {
   } else {
     failed += 1;
     console.error('FAIL ' + testCase.id + ' ' + testCase.input);
-    console.error('  tokens: ' + JSON.stringify(result.tokens));
+    console.error('  tokens: ' + JSON.stringify(tokens));
     if (missingPos.length) console.error('  missing POS: ' + missingPos.join(', '));
     if (missingSurface.length) console.error('  missing surface: ' + missingSurface.join(', '));
   }
