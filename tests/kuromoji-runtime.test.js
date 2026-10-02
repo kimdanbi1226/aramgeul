@@ -121,3 +121,26 @@ for (const [connectiveInput, expected] of connectiveCases) {
 }
 
 console.log('Kuromoji auxiliary/connective runtime regression test: PASS');
+
+const additionalSpacingCases = [
+  ['나 만큼', '나만큼'],
+  ['한개', '한개'],
+  ['두시간', '두시간'],
+  ['10개', '10개'],
+  ['2대1', '2 대 1'],
+  ['16동502호', '16동502호'],
+  ['80원', '80원'],
+  ['7미터', '7미터']
+];
+
+for (const [spacingInput, expected] of additionalSpacingCases) {
+  const spacingAnalysis = await analyze(spacingInput);
+  const spacingResult = evaluateSpacing(spacingAnalysis);
+  assert.equal(
+    spacingResult.revised,
+    expected,
+    `실제 kuromoji-ko 띄어쓰기 회귀 결과가 예상과 다릅니다: ${spacingInput}`
+  );
+}
+
+console.log('Kuromoji article 41/43 runtime regression test: PASS');
