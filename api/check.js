@@ -157,11 +157,12 @@ export default async function handler(req, res) {
      * 아람글 규칙 엔진이 독립적으로 확인한 교정은 fallback 블록으로
      * 보존한다. 이렇게 해야 특정 예문에 등록되지 않은 새 문장도
      * 규칙 근거와 정확한 수정 위치를 잃지 않는다.
-     * 아람글 로컬 규칙 엔진은 별도의 형태소 런타임/모델 자산 공급 방식이
-     * 확정된 뒤 ruleResult로 주입한다.
      *
-     * 따라서 이 단계에서는 Bareun 결과를 별도 evidence로 보존하면서
-     * 향후 규칙 엔진 결과와 충돌 없이 통합할 수 있는 구조를 먼저 만든다.
+     * 아람글 규칙 엔진은 checkText() 내부에서 kuromoji-ko 형태소 분석 결과를
+     * 받아 실제 ruleEngine.evaluate()를 수행한다. 따라서 이 단계에서는
+     * 별도의 ruleResult 주입이나 외부 모델 런타임을 전제로 하지 않는다.
+     * Bareun 결과는 별도 evidence로 보존하면서 규칙 엔진 결과와 충돌 없이
+     * 통합한다.
      */
     const bareunResult = bareunData
       ? createBareunResult(
@@ -192,7 +193,15 @@ export default async function handler(req, res) {
       }))
       .filter(edit => edit.rule);
 
+    const buildVersion =
+      process.env.VERCEL_GIT_COMMIT_SHA ||
+      process.env.GITHUB_SHA ||
+      'local';
+
     return res.status(200).json({
+      // 배포된 서버 코드 버전을 확인하기 위한 진단 필드
+      build_version: buildVersion,
+
       // 기존 프론트엔드 호환 필드
       origin: bareunData?.origin || text,
       revised: integrated.revised,
