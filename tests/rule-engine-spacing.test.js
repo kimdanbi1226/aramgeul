@@ -71,13 +71,15 @@ function analyze(text, tokens) {
 }
 
 {
+  // '안돼요/안 돼요'는 의미와 문맥에 따라 달라질 수 있으므로
+  // 현재 규칙 엔진은 자동 교정하지 않는다.
   const text = '안돼요';
   const result = evaluateSpacing(analyze(text, [
     token('안', 0, 1, ['NEGATIVE_ADVERB'], 'MAG'),
     token('돼요', 1, 3, ['LEXICAL_VERB'], 'VA')
   ]));
-  assert.equal(result.revised, '안 돼요');
-  assert.equal(result.edits[0].rule_id, 'SPACING-NEGATIVE-ADVERB');
+  assert.equal(result.revised, text);
+  assert.equal(result.decision, 'VALID');
 }
 
 {
