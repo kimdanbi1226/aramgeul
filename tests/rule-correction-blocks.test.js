@@ -17,17 +17,17 @@ const edits = [
 
 const blocks = buildRuleFallbackBlocks(source, edits);
 
-assert.equal(blocks.length, 1);
+assert.equal(blocks.length, 2);
 assert.equal(blocks[0].source, 'aramgeul-rule');
 assert.equal(blocks[0].rule.rule_id, rule.rule_id);
 assert.equal(blocks[0].origin.start, 0);
-assert.equal(blocks[0].revised_start, 4);
+assert.equal(blocks[0].revised_start, 3);
 assert.equal(blocks[0].revised_end, 5);
 assert.ok(blocks[0].origin.text.includes('할수'));
 assert.ok(blocks[0].revised.includes('할 수'));
 
-assert.equal(blocks[1].revised_start, 13);
-assert.equal(blocks[1].revised_end, 15);
+assert.equal(blocks[1].revised_start, 12);
+assert.equal(blocks[1].revised_end, 14);
 assert.ok(blocks[1].origin.text.includes('할수'));
 assert.ok(blocks[1].revised.includes('할 수'));
 
