@@ -74,3 +74,53 @@ const disabled = evaluateDictionaryDecisions({ enabled: false });
 assert.deepEqual(disabled, []);
 
 console.log('dictionary decision tests passed');
+
+
+const nameAppellation = evaluateDictionaryDecisions({
+  enabled: true,
+  rule_evidence: [
+    {
+      rule_id: 'SPACING-048-NAME-APPELLATION',
+      queries: ['김양수씨', '김양수'],
+      contexts: [
+        { input: '김양수씨', expected: '김양수 씨', tokens: ['김양수', '씨'] }
+      ]
+    }
+  ],
+  matches: [
+    {
+      rule_id: 'SPACING-048-NAME-APPELLATION',
+      query: '김양수씨',
+      entries: []
+    },
+    {
+      rule_id: 'SPACING-048-NAME-APPELLATION',
+      query: '김양수',
+      entries: [
+        { word: '김양수', source: 'standard-korean-dictionary', person_name: true }
+      ]
+    }
+  ]
+});
+assert.equal(nameAppellation[0].status, 'SUPPORTS');
+
+const nameWithoutContext = evaluateDictionaryDecisions({
+  enabled: true,
+  rule_evidence: [
+    {
+      rule_id: 'SPACING-048-NAME-APPELLATION',
+      queries: ['김양수'],
+      contexts: []
+    }
+  ],
+  matches: [
+    {
+      rule_id: 'SPACING-048-NAME-APPELLATION',
+      query: '김양수',
+      entries: [
+        { word: '김양수', source: 'standard-korean-dictionary', person_name: true }
+      ]
+    }
+  ]
+});
+assert.equal(nameWithoutContext[0].status, 'INSUFFICIENT');
