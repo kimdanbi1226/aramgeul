@@ -290,3 +290,9 @@ assert.equal(rule54.decision_type, 'CORRECTION');
 assert.equal(rule54.suffixes.some(group => group.suffix === '꾼'), true);
 assert.equal(rule54.suffixes.some(group => group.suffix === '빼기'), true);
 assert.equal(rule54.allowed_examples.some(example => example.input === '뚝배기'), true);
+
+const rule55 = getRuleById('ORTHO-055-UNIFIED-FORMS');
+assert.equal(rule55.decision_type, 'CORRECTION');
+assert.equal(rule55.examples.some(example => example.input === '마추다' && example.expected === '맞추다'), true);
+assert.equal(rule55.examples.some(example => example.input === '뻐치다' && example.expected === '뻗치다'), true);
+assert.equal(rule55.allowed_examples.some(example => example.input === '맞히다'), true);
