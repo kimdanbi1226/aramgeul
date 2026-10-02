@@ -71,7 +71,7 @@ const adapter = createKiwiAdapter(kiwi, {
 const pipelineCases = [
   ['할수있다', '할 수 있다'],
   ['생각해보자', '생각해 보자'],
-  ['안돼요', '안 돼요'],
+  ['안돼요', '안돼요'],
   ['나만큼', '나만큼']
 ];
 
