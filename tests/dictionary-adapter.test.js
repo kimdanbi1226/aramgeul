@@ -39,3 +39,22 @@ assert.equal(malformedResult[0].word, '테스트');
 assert.equal(malformedResult[0].source, 'test');
 
 console.log('Dictionary adapter test: PASS');
+
+const standardCategoryAdapter = createDictionaryAdapter({
+  source: DICTIONARY_SOURCES.STANDARD,
+  async lookup() {
+    return [{
+      word: '홍길동',
+      pos: '명사',
+      categories: ['인명'],
+      standard: true,
+      person_name: true,
+      proper_noun: true
+    }];
+  }
+});
+const person = await standardCategoryAdapter.lookup('홍길동');
+assert.equal(person[0].person_name, true);
+assert.equal(person[0].proper_noun, true);
+
+console.log('Official category flag normalization: PASS');
