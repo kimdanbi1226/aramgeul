@@ -243,4 +243,11 @@ function analyze(text, tokens) {
   }
 }
 
+{
+  const rule49 = getRuleById('SPACING-049-PROPER-NOUN');
+  const rule50 = getRuleById('SPACING-050-TECHNICAL-TERM');
+  assert.equal(rule49.decision_type, 'AMBIGUOUS');
+  assert.equal(rule50.decision_type, 'AMBIGUOUS');
+}
+
 console.log('Rule engine spacing tests: PASS');
