@@ -296,3 +296,8 @@ assert.equal(rule55.decision_type, 'CORRECTION');
 assert.equal(rule55.examples.some(example => example.input === '마추다' && example.expected === '맞추다'), true);
 assert.equal(rule55.examples.some(example => example.input === '뻐치다' && example.expected === '뻗치다'), true);
 assert.equal(rule55.allowed_examples.some(example => example.input === '맞히다'), true);
+
+const rule56 = getRuleById('ORTHO-056-DEON-DEUN');
+assert.equal(rule56.decision_type, 'AMBIGUOUS');
+assert.equal(rule56.examples.some(example => example.input === '지난겨울은 몹시 춥드라.' && example.expected === '지난겨울은 몹시 춥더라.'), true);
+assert.equal(rule56.deferred_examples.some(example => example.input === '하든/하던 단독 어절'), true);
