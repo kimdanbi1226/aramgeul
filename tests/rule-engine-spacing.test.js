@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { evaluateSpacing } from '../lib/rules/engine.js';
+import { getRuleById } from '../lib/rules/rules.v0.1.js';
 
 function token(text, start, end, functions, pos = 'VV', lemma = null) {
   return {
