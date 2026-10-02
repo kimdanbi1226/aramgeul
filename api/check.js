@@ -9,6 +9,7 @@ import {
   createUrimalsaemProvider
 } from '../lib/dictionary/index.js';
 import { collectDictionaryEvidence } from '../lib/dictionary/evidence.js';
+import { evaluateDictionaryDecisions } from '../lib/dictionary/decision.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -96,6 +97,7 @@ export default async function handler(req, res) {
       rule_evidence: []
     };
     let dictionaryError = null;
+    let dictionaryDecisions = [];
 
     const hasDictionaryKey = Boolean(
       process.env.STANDARD_DICTIONARY_API_KEY ||
@@ -126,6 +128,7 @@ export default async function handler(req, res) {
           ruleResult,
           dictionaryService
         });
+        dictionaryDecisions = evaluateDictionaryDecisions(dictionaryEvidence);
       } catch (error) {
         dictionaryError = error instanceof Error ? error.message : String(error);
         console.error('Dictionary evidence error; continuing without dictionary evidence:', error);
@@ -282,6 +285,8 @@ export default async function handler(req, res) {
       // 사전은 문맥 의존 규칙의 어휘적 증거만 제공하며
       // 현재 단계에서는 최종 교정문을 직접 변경하지 않는다.
       dictionary_evidence: dictionaryEvidence,
+      // 사전 판단은 보조 신호일 뿐이며 기존 revised/decision/edits를 직접 변경하지 않는다.
+      dictionary_decisions: dictionaryDecisions,
       dictionary_warning: dictionaryError
         ? `사전 증거 계층을 초기화하지 못했습니다: ${dictionaryError}`
         : (!hasDictionaryKey
