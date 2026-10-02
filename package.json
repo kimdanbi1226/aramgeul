@@ -8,7 +8,8 @@
     "test:check": "node tests/check-pipeline.test.js",
     "test:integration": "node tests/result-integration.test.js",
     "test:kiwi-runtime": "node tests/kiwi-runtime.test.js",
-    "test:kiwi-real-runtime": "node tests/kiwi-real-runtime.test.js"
+    "test:kiwi-real-runtime": "node tests/kiwi-real-runtime.test.js",
+    "test:rule-blocks": "node tests/rule-correction-blocks.test.js"
   },
   "dependencies": {
     "mecab-ko-wasm": "0.7.0",
