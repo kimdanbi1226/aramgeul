@@ -11,7 +11,8 @@
     "test:kiwi-real-runtime": "node tests/kiwi-real-runtime.test.js",
     "test:rule-blocks": "node tests/rule-correction-blocks.test.js",
     "test:engine-contract": "node tests/rule-engine-contract.test.js",
-    "test:spacing-golden": "node tests/spacing-golden.test.js"
+    "test:spacing-golden": "node tests/spacing-golden.test.js",
+    "test:dictionary": "node tests/dictionary-adapter.test.js"
   },
   "dependencies": {
     "kiwi-nlp": "0.23.0",
