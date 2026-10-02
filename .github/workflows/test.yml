@@ -1,0 +1,35 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install
+      - name: Run test suite
+        run: |
+          npm run test:morphology
+          npm run test:rules
+          npm run test:check
+          npm run test:integration
+          npm run test:kiwi-runtime
+          npm run test:kiwi-real-runtime
+          npm run test:rule-blocks
+          npm run test:engine-contract
+          npm run test:spacing-golden
+          npm run test:dictionary
+          npm run test:dictionary-resilience
+          npm run test:dictionary-evidence
+          npm run test:dictionary-decision
+          npm run test:dictionary-flow
