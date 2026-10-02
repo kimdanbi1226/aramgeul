@@ -30,9 +30,15 @@ const semantic = evaluateDictionaryDecisions({
   matches: [
     {
       rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
-      query: '새 책상으로 가름하였다.',
+      query: '가름',
       entries: [
-        { word: '가름', source: 'standard-korean-dictionary' },
+        { word: '가름', source: 'standard-korean-dictionary' }
+      ]
+    },
+    {
+      rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+      query: '갈음',
+      entries: [
         { word: '갈음', source: 'standard-korean-dictionary' }
       ]
     }
