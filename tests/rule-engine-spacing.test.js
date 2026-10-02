@@ -278,4 +278,15 @@ function analyze(text, tokens) {
   assert.equal(rule53.decision_type, 'CORRECTION');
 }
 
+{
+  const rule54 = getRuleById('ORTHO-054-TENSE-SUFFIX');
+  assert.equal(evaluateSpacing(analyze('나무군')).revised, '나무꾼');
+  assert.equal(evaluateSpacing(analyze('심부름군')).revised, '심부름꾼');
+  assert.equal(evaluateSpacing(analyze('빛갈')).revised, '빛깔');
+  assert.equal(evaluateSpacing(analyze('귀대기')).revised, '귀때기');
+  assert.equal(evaluateSpacing(analyze('나무꾼')).revised, '나무꾼');
+  assert.equal(evaluateSpacing(analyze('뚝배기')).revised, '뚝배기');
+  assert.equal(rule54.decision_type, 'CORRECTION');
+}
+
 console.log('Rule engine spacing tests: PASS');
