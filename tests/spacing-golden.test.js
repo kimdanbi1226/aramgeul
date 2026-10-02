@@ -199,8 +199,9 @@ assertCorrection(
   'SPACING-047-AUXILIARY-VERB'
 );
 
-// 제48항: 고유명사/호칭 정보가 필요한 영역은 실제 규칙 데이터에서도 보류 상태다.
-const rule48 = getRuleById('SPACING-046-MONOSYLLABLE-ALLOWANCE');
+// 제48항: 성명/호칭 구조는 실제 규칙 데이터에서도 자동 판정을 보류한다.
+const rule48 = getRuleById('SPACING-048-NAME-APPELLATION');
+assert.equal(rule48.decision_type, 'AMBIGUOUS');
 assert.equal(rule48.deferred_examples.some(example => example.input === '김모 씨'), true);
 
 console.log('Spacing golden test set: PASS');
