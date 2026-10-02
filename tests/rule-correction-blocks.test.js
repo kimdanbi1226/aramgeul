@@ -12,7 +12,7 @@ const rule = {
 const source = '나는 할수있고 너도 할수있다.';
 const edits = [
   { start: 4, end: 4, replacement: ' ', rule },
-  { start: 12, end: 12, replacement: ' ', rule }
+  { start: 11, end: 11, replacement: ' ', rule }
 ];
 
 const blocks = buildRuleFallbackBlocks(source, edits);
