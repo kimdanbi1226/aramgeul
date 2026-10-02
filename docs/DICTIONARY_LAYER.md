@@ -88,3 +88,17 @@ The dictionary layer is now connected to `api/check.js` as an evidence-only laye
 - Missing API keys, API failures, and empty dictionary results do not fail the spelling/spacing check.
 
 This is intentionally a non-breaking integration step. The next layer is to add rule-specific dictionary decision logic and golden tests before allowing dictionary evidence to change a correction decision.
+
+
+## 2026-10-02 conservative dictionary decision layer
+
+The dictionary evidence is now converted into a separate dictionary_decisions signal.
+
+- SPACING-050-TECHNICAL-TERM: returns SUPPORTS only when a normalized dictionary entry explicitly has technical_term=true.
+- SPACING-048-NAME-APPELLATION: returns SUPPORTS only when a normalized entry explicitly has person_name=true.
+- SPACING-049-PROPER-NOUN: returns SUPPORTS only when a normalized entry explicitly has proper_noun=true.
+- ORTHO-057-DISTINGUISHING-WORDS: never promotes dictionary presence alone to an automatic correction; when competing lexical candidates are both present, it returns CONTEXT_REQUIRED.
+- These decisions are advisory evidence and do not directly alter revised, decision, or edits.
+- Added tests/dictionary-decision.test.js and registered test:dictionary-decision.
+
+The remaining implementation work is to populate the normalized person/proper-noun/technical-term flags from verified official API fields, then add context-aware decision evaluators and live-key smoke tests.
