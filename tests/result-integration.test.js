@@ -63,3 +63,58 @@ assert.equal(normalized.edits.length, 1);
 assert.equal(normalized.sources[0].source, 'Bareun');
 
 console.log('Result integration tests: PASS');
+
+
+const blockedProperNoun = integrateCheckResults('한국대학교의과대학', {
+  ruleResult: {
+    revised: '한국대학교 의과대학',
+    edits: [
+      {
+        rule_id: 'SPACING-049-PROPER-NOUN',
+        start: 0,
+        end: '한국대학교의과대학'.length,
+        replacement: '한국대학교 의과대학'
+      }
+    ],
+    sources: [{ source: 'NIKL' }]
+  },
+  bareunResult: {
+    revised: '한국대학교의과대학',
+    edits: [],
+    sources: [{ source: 'Bareun' }]
+  },
+  dictionaryDecisions: [
+    {
+      rule_id: 'SPACING-049-PROPER-NOUN',
+      status: 'BOUNDARY_REQUIRED'
+    }
+  ]
+});
+assert.equal(blockedProperNoun.decision, 'VALID');
+assert.equal(blockedProperNoun.revised, '한국대학교의과대학');
+assert.deepEqual(blockedProperNoun.edits, []);
+
+const supportedProperNoun = integrateCheckResults('한국대학교의과대학', {
+  ruleResult: {
+    revised: '한국대학교 의과대학',
+    edits: [
+      {
+        rule_id: 'SPACING-049-PROPER-NOUN',
+        start: 0,
+        end: '한국대학교의과대학'.length,
+        replacement: '한국대학교 의과대학'
+      }
+    ],
+    sources: [{ source: 'NIKL' }]
+  },
+  dictionaryDecisions: [
+    {
+      rule_id: 'SPACING-049-PROPER-NOUN',
+      status: 'SUPPORTS'
+    }
+  ]
+});
+assert.equal(supportedProperNoun.decision, 'CORRECTION');
+assert.equal(supportedProperNoun.revised, '한국대학교 의과대학');
+
+console.log('Dictionary boundary gating: PASS');
