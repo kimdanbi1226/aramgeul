@@ -12,7 +12,7 @@ const rule = {
 const source = '나는 할수있고 너도 할수있다.';
 const edits = [
   { start: 4, end: 4, replacement: ' ', rule },
-  { start: 13, end: 13, replacement: ' ', rule }
+  { start: 12, end: 12, replacement: ' ', rule }
 ];
 
 const blocks = buildRuleFallbackBlocks(source, edits);
@@ -26,7 +26,7 @@ assert.equal(blocks[0].revised_end, 5);
 assert.ok(blocks[0].origin.text.includes('할수'));
 assert.ok(blocks[0].revised.includes('할 수'));
 
-assert.equal(blocks[1].revised_start, 14);
+assert.equal(blocks[1].revised_start, 13);
 assert.equal(blocks[1].revised_end, 15);
 assert.ok(blocks[1].origin.text.includes('할수'));
 assert.ok(blocks[1].revised.includes('할 수'));
