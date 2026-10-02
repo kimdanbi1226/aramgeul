@@ -18,18 +18,33 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run test suite
+        shell: bash
         run: |
-          npm run test:morphology
-          npm run test:rules
-          npm run test:check
-          npm run test:integration
-          npm run test:kiwi-runtime
-          npm run test:kiwi-real-runtime
-          npm run test:rule-blocks
-          npm run test:engine-contract
-          npm run test:spacing-golden
-          npm run test:dictionary
-          npm run test:dictionary-resilience
-          npm run test:dictionary-evidence
-          npm run test:dictionary-decision
-          npm run test:dictionary-flow
+          set +e
+          tests=(
+            test:morphology
+            test:rules
+            test:check
+            test:integration
+            test:kiwi-runtime
+            test:kiwi-real-runtime
+            test:rule-blocks
+            test:engine-contract
+            test:spacing-golden
+            test:dictionary
+            test:dictionary-resilience
+            test:dictionary-evidence
+            test:dictionary-decision
+            test:dictionary-flow
+          )
+          failed=0
+          for test_name in "${tests[@]}"; do
+            echo "===== npm run $test_name ====="
+            npm run "$test_name"
+            status=$?
+            if [ $status -ne 0 ]; then
+              failed=1
+              echo "::error::$test_name failed with exit code $status"
+            fi
+          done
+          exit $failed
