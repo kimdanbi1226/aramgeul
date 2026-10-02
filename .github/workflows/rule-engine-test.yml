@@ -11,6 +11,7 @@ on:
       - 'lib/morphology/mecab-ko.js'
       - 'tests/api-runtime.test.js'
       - 'tests/rule-engine-spacing.test.js'
+      - 'tests/spacing-golden.test.js'
       - 'tests/rule-engine-contract.test.js'
       - 'tests/result-integration.test.js'
       - 'tests/rule-correction-blocks.test.js'
@@ -31,6 +32,8 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Run rule engine tests
         run: node tests/rule-engine-spacing.test.js
+      - name: Run spacing golden tests
+        run: node tests/spacing-golden.test.js
       - name: Run rule engine contract tests
         run: node tests/rule-engine-contract.test.js
       - name: Run result integration tests
