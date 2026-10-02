@@ -1,4 +1,5 @@
 import { createBareunResult, integrateCheckResults } from '../lib/pipeline/integrate.js';
+import { findRuleForExample, toRuleEvidence } from '../lib/rules/rules.v0.1.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -52,17 +53,21 @@ export default async function handler(req, res) {
 
     const revisedBlocks = Array.isArray(data?.revised_blocks)
       ? data.revised_blocks.map(block => {
+          const originText = block?.origin?.text || '';
+          const revisedText = block?.revised || '';
           const helpId = block?.revisions?.[0]?.help_id;
           const help = helpId && data?.helps?.[helpId]?.comment
             ? data.helps[helpId].comment
             : '';
+          const matchedRule = findRuleForExample(originText, revisedText);
 
           return {
             origin: {
-              text: block?.origin?.text || ''
+              text: originText
             },
-            revised: block?.revised || '',
-            help
+            revised: revisedText,
+            help,
+            rule: toRuleEvidence(matchedRule)
           };
         })
       : [];
