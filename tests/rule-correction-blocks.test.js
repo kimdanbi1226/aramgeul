@@ -29,6 +29,6 @@ assert.ok(blocks[0].revised.includes('할 수'));
 assert.equal(blocks[1].revised_start, 11);
 assert.equal(blocks[1].revised_end, 13);
 assert.ok(blocks[1].origin.text.includes('할수'));
-assert.ok(blocks[1].revised.includes('할 수'));
+assert.equal(blocks[1].revised, '할 수있다.');
 
 console.log('Rule correction block tests: PASS');
