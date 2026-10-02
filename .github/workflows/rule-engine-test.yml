@@ -7,6 +7,9 @@ on:
       - 'lib/rules/**'
       - 'lib/pipeline/integrate.js'
       - 'lib/pipeline/rule-blocks.js'
+      - 'api/check.js'
+      - 'lib/morphology/mecab-ko.js'
+      - 'tests/api-runtime.test.js'
       - 'tests/rule-engine-spacing.test.js'
       - 'tests/result-integration.test.js'
       - 'tests/rule-correction-blocks.test.js'
@@ -29,3 +32,5 @@ jobs:
         run: node tests/result-integration.test.js
       - name: Run rule correction block tests
         run: node tests/rule-correction-blocks.test.js
+      - name: Run API production path test
+        run: node tests/api-runtime.test.js
