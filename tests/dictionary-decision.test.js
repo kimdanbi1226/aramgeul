@@ -25,7 +25,7 @@ assert.equal(technical[0].status, 'SUPPORTS');
 const semantic = evaluateDictionaryDecisions({
   enabled: true,
   rule_evidence: [
-    { rule_id: 'ORTHO-057-DISTINGUISHING-WORDS', queries: ['새 책상으로 가름하였다.'] }
+    { rule_id: 'ORTHO-057-DISTINGUISHING-WORDS', queries: ['가름', '갈음'] }
   ],
   matches: [
     {
@@ -54,9 +54,15 @@ const bothCandidates = evaluateDictionaryDecisions({
   matches: [
     {
       rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
-      query: '부치다/붙이다',
+      query: '부치다',
       entries: [
-        { word: '부치다', source: 'standard-korean-dictionary' },
+        { word: '부치다', source: 'standard-korean-dictionary' }
+      ]
+    },
+    {
+      rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+      query: '붙이다',
+      entries: [
         { word: '붙이다', source: 'standard-korean-dictionary' }
       ]
     }
