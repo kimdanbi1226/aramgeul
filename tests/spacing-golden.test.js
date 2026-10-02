@@ -91,6 +91,44 @@ assertValid(
   ]
 );
 
+// 제44항: 수를 만 단위로 구획한다.
+assertCorrection(
+  '12억3456만7898',
+  [
+    token('12', 0, 2, ['NUMBER'], 'SN'),
+    token('억', 2, 3, ['NUMBER_UNIT'], 'NNB'),
+    token('3456', 3, 7, ['NUMBER'], 'SN'),
+    token('만', 7, 8, ['NUMBER_UNIT'], 'NNB'),
+    token('7898', 8, 12, ['NUMBER'], 'SN')
+  ],
+  '12억 3456만 7898',
+  'SPACING-044-NUMBER-GROUPING'
+);
+
+assertCorrection(
+  '12 억 3456 만 7898',
+  [
+    token('12', 0, 2, ['NUMBER'], 'SN'),
+    token('억', 3, 4, ['NUMBER_UNIT'], 'NNB'),
+    token('3456', 5, 9, ['NUMBER'], 'SN'),
+    token('만', 10, 11, ['NUMBER_UNIT'], 'NNB'),
+    token('7898', 12, 16, ['NUMBER'], 'SN')
+  ],
+  '12억 3456만 7898',
+  'SPACING-044-NUMBER-GROUPING'
+);
+
+assertValid(
+  '12억 3456만 7898',
+  [
+    token('12', 0, 2, ['NUMBER'], 'SN'),
+    token('억', 2, 3, ['NUMBER_UNIT'], 'NNB'),
+    token('3456', 4, 8, ['NUMBER'], 'SN'),
+    token('만', 8, 9, ['NUMBER_UNIT'], 'NNB'),
+    token('7898', 10, 14, ['NUMBER'], 'SN')
+  ]
+);
+
 // 제45항: 이어 주거나 열거하는 말
 assertCorrection(
   '국장겸과장',
@@ -161,11 +199,8 @@ assertCorrection(
   'SPACING-047-AUXILIARY-VERB'
 );
 
-// 제48항: 고유명사/호칭 정보가 필요한 영역은 현재 문자열 규칙으로 자동 수정하지 않는다.
-const rule48Policy = {
-  status: 'DEFERRED',
-  reason: 'proper-name and appellation data required'
-};
-assert.equal(rule48Policy.status, 'DEFERRED');
+// 제48항: 고유명사/호칭 정보가 필요한 영역은 실제 규칙 데이터에서도 보류 상태다.
+const rule48 = getRuleById('SPACING-046-MONOSYLLABLE-ALLOWANCE');
+assert.equal(rule48.deferred_examples.some(example => example.input === '김모 씨'), true);
 
 console.log('Spacing golden test set: PASS');
