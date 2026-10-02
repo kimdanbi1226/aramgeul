@@ -253,3 +253,16 @@ assert.equal(rule48.examples.some(example => example.input === '김양수씨' &&
 assert.equal(rule48.examples.some(example => example.input === '충무공이순신장군' && example.expected === '충무공 이순신 장군'), true);
 
 console.log('Spacing golden test set: PASS');
+
+
+const rule49 = getRuleById('SPACING-049-PROPER-NOUN');
+assert.equal(rule49.decision_type, 'AMBIGUOUS');
+assert.equal(rule49.allowed_examples.some(example => example.input === '대한 중학교'), true);
+assert.equal(rule49.allowed_examples.some(example => example.input === '한국 대학교 사범 대학'), true);
+
+const rule50 = getRuleById('SPACING-050-TECHNICAL-TERM');
+assert.equal(rule50.decision_type, 'AMBIGUOUS');
+assert.equal(rule50.allowed_examples.some(example => example.input === '만성 골수성 백혈병'), true);
+assert.equal(rule50.allowed_examples.some(example => example.input === '학교 폭력'), true);
+assert.equal(rule50.deferred_examples.some(example => example.input === '결산 소득세'), true);
+
