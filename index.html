@@ -18,6 +18,9 @@ main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center
 .editor{padding:24px}textarea{display:block;width:100%;min-height:260px;resize:vertical;border:1px solid #cfd8e6;border-radius:16px;padding:20px;font:inherit;font-size:18px;line-height:1.85;color:var(--ink);background:#fbfcfe;outline:none}textarea:focus{border-color:#6d9be8;box-shadow:0 0 0 4px rgba(36,87,197,.09)}textarea::placeholder{color:#9aa5b5}.editor-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}.count{font-size:13px;color:var(--muted)}.check{border:0;border-radius:12px;padding:13px 23px;background:var(--primary);color:#fff;font:inherit;font-weight:800;cursor:pointer}.check:hover{background:var(--primary-dark)}.check:disabled{opacity:.65;cursor:wait}
 .result{display:none;border-top:1px solid var(--line);padding:24px;background:#fafcff}.result.show{display:block}.result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.result-title{font-size:17px;font-weight:800}.status{font-size:12px;border-radius:999px;padding:6px 9px;background:#eef2f7;color:#5d6878}.status.correction{color:var(--primary);background:var(--soft)}.status.valid{color:var(--success);background:#eaf8f2}.status.ambiguous{color:var(--warning);background:#fff5df}
 .result-box{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff;line-height:1.8;color:#475467}.result-label{font-size:12px;font-weight:800;color:#7a8595;margin-bottom:7px}.revised-text{font-size:18px;color:var(--ink);white-space:pre-wrap;word-break:break-word}
+.sentence-edit{background:#e8f0ff;color:#173f98;border-bottom:2px solid #6d9be8;border-radius:5px;padding:1px 3px;cursor:pointer;transition:background .15s,box-shadow .15s}
+.sentence-edit:hover,.sentence-edit.selected{background:#d7e5ff;box-shadow:0 0 0 3px rgba(36,87,197,.10)}
+.correction:focus-visible,.sentence-edit:focus-visible{outline:3px solid rgba(36,87,197,.22);outline-offset:2px}
 .corrections{display:grid;gap:12px;margin-top:14px}.correction{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}.correction.clickable{cursor:pointer;transition:border-color .15s,box-shadow .15s}.correction.clickable:hover,.correction.clickable.selected{border-color:#b9cff8;box-shadow:0 5px 18px rgba(36,87,197,.08)}.change{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}.change-part{flex:1;min-width:180px}.change-value{padding:10px 12px;border-radius:10px;background:#f7f9fc;border:1px solid #e5e9f0;white-space:pre-wrap;word-break:break-word}.arrow{color:#98a2b3;font-weight:800;padding-top:10px}.help{margin:10px 0 0;color:#596578;font-size:13px;line-height:1.65}.source{margin-top:9px;color:#8994a4;font-size:11px}.diff{font-size:18px;line-height:1.8;white-space:pre-wrap;word-break:break-word}.diff-removed{background:#fdebec;color:#a12b37;text-decoration:line-through;text-decoration-thickness:1px;border-radius:4px;padding:1px 2px}.diff-added{background:#e7f7ef;color:#14704d;border-radius:4px;padding:1px 2px}.detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid #edf0f5}.correction.selected .detail{display:block}.detail-title{font-size:12px;font-weight:800;color:#687386;margin-bottom:5px}.detail-empty{color:#8994a4;font-size:13px}.detail-meta{margin-top:8px;font-size:11px;color:#8994a4}.result-hint{margin-top:8px;color:#8994a4;font-size:12px;line-height:1.6}
 .candidates{margin-top:14px;padding:14px;border:1px solid #f0dfb6;border-radius:14px;background:#fffaf0}.candidate{padding:8px 0}.candidate+.candidate{border-top:1px solid #f0e6cf}.candidate strong{font-size:12px;color:#7a5a16}.candidate div{margin-top:3px}
 .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.info{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.info strong{display:block;margin-bottom:6px;font-size:14px}.info span{font-size:13px;color:var(--muted);line-height:1.6}
@@ -115,7 +118,7 @@ function renderResult(data, input) {
 
   let html = '<div class="result-box">';
   html += '<div class="result-label">검사 결과</div>';
-  html += '<div class="revised-text">' + escapeHtml(revised) + '</div>';
+  html += '<div class="revised-text" id="revisedSentence">' + renderSentenceWithEdits(revised, blocks) + '</div>';
   html += '</div>';
   if (blocks.length) {
     html += '<div class="result-hint">수정된 부분을 누르면 변경 내용과 검사 설명을 확인할 수 있습니다.</div>';
@@ -158,14 +161,108 @@ function renderResult(data, input) {
 
   resultContent.innerHTML = html;
   bindCorrectionCards();
+  bindSentenceEdits();
+}
+
+function renderSentenceWithEdits(revised, blocks) {
+  if (!blocks.length) return escapeHtml(revised);
+
+  const ranges = [];
+  let cursor = 0;
+
+  blocks.forEach((block, index) => {
+    const value = block.revised || '';
+    if (!value) return;
+
+    const start = revised.indexOf(value, cursor);
+    if (start === -1) return;
+
+    ranges.push({
+      start,
+      end: start + value.length,
+      index
+    });
+    cursor = start + value.length;
+  });
+
+  if (!ranges.length) return escapeHtml(revised);
+
+  let html = '';
+  let position = 0;
+
+  ranges.forEach(range => {
+    if (range.start < position) return;
+
+    html += escapeHtml(revised.slice(position, range.start));
+    html += '<span class="sentence-edit" data-correction-index="' + range.index + '" tabindex="0" role="button" aria-label="수정된 부분: ' +
+      escapeHtml(blocks[range.index].revised) + '">' +
+      escapeHtml(revised.slice(range.start, range.end)) +
+      '</span>';
+    position = range.end;
+  });
+
+  html += escapeHtml(revised.slice(position));
+  return html;
+}
+
+function bindSentenceEdits() {
+  document.querySelectorAll('.sentence-edit').forEach(edit => {
+    const activate = () => {
+      const index = Number(edit.dataset.correctionIndex);
+      selectCorrection(index, true);
+    };
+
+    edit.addEventListener('click', activate);
+    edit.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        activate();
+      }
+    });
+  });
+}
+
+function selectCorrection(index, scrollToCard = false) {
+  document.querySelectorAll('.correction.clickable').forEach(card => {
+    const selected = Number(card.dataset.correctionIndex) === index;
+    card.classList.toggle('selected', selected);
+    card.setAttribute('aria-expanded', selected ? 'true' : 'false');
+  });
+
+  document.querySelectorAll('.sentence-edit').forEach(edit => {
+    edit.classList.toggle(
+      'selected',
+      Number(edit.dataset.correctionIndex) === index
+    );
+  });
+
+  const card = document.querySelector('.correction[data-correction-index="' + index + '"]');
+
+  if (card && scrollToCard) {
+    card.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+  }
 }
 
 function bindCorrectionCards() {
   document.querySelectorAll('.correction.clickable').forEach(card => {
     const toggle = () => {
-      const selected = card.classList.toggle('selected');
-      card.setAttribute('aria-expanded', selected ? 'true' : 'false');
+      const index = Number(card.dataset.correctionIndex);
+      const wasSelected = card.classList.contains('selected');
+
+      if (wasSelected) {
+        card.classList.remove('selected');
+        card.setAttribute('aria-expanded', 'false');
+        document.querySelectorAll('.sentence-edit').forEach(edit => {
+          if (Number(edit.dataset.correctionIndex) === index) {
+            edit.classList.remove('selected');
+          }
+        });
+        return;
+      }
+
+      selectCorrection(index, false);
     };
+
     card.addEventListener('click', toggle);
     card.addEventListener('keydown', event => {
       if (event.key === 'Enter' || event.key === ' ') {
