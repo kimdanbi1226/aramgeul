@@ -72,6 +72,17 @@ function analyze(text, tokens) {
 }
 
 {
+  // 고유어 수 + 단위 명사도 제43항의 '숫자와 어울리어'에 해당하므로 붙여쓰기를 허용한다.
+  const text = '두시간';
+  const result = evaluateSpacing(analyze(text, [
+    token('두', 0, 1, ['NUMBER'], 'MM'),
+    token('시간', 1, 3, ['DEPENDENT_NOUN'], 'NNB')
+  ]));
+  assert.equal(result.revised, text);
+  assert.equal(result.decision, 'VALID');
+}
+
+{
   // 아라비아 숫자 + 단위 명사는 붙여 쓰기도 허용되므로 자동 교정하지 않는다.
   const text = '10개';
   const result = evaluateSpacing(analyze(text, [
