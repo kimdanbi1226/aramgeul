@@ -124,3 +124,53 @@ const nameWithoutContext = evaluateDictionaryDecisions({
   ]
 });
 assert.equal(nameWithoutContext[0].status, 'INSUFFICIENT');
+
+
+const properNoun = evaluateDictionaryDecisions({
+  enabled: true,
+  rule_evidence: [
+    {
+      rule_id: 'SPACING-049-PROPER-NOUN',
+      queries: ['한국대학교의과대학', '한국대학교', '의과대학'],
+      contexts: [
+        { input: '한국대학교의과대학', expected: '한국대학교 의과대학', tokens: ['한국대학교', '의과대학'] }
+      ]
+    }
+  ],
+  matches: [
+    {
+      rule_id: 'SPACING-049-PROPER-NOUN',
+      query: '한국대학교',
+      entries: [
+        { word: '한국대학교', source: 'standard-korean-dictionary', proper_noun: true }
+      ]
+    },
+    {
+      rule_id: 'SPACING-049-PROPER-NOUN',
+      query: '의과대학',
+      entries: []
+    }
+  ]
+});
+assert.equal(properNoun[0].status, 'SUPPORTS');
+
+const properNounWithoutContext = evaluateDictionaryDecisions({
+  enabled: true,
+  rule_evidence: [
+    {
+      rule_id: 'SPACING-049-PROPER-NOUN',
+      queries: ['한국대학교'],
+      contexts: []
+    }
+  ],
+  matches: [
+    {
+      rule_id: 'SPACING-049-PROPER-NOUN',
+      query: '한국대학교',
+      entries: [
+        { word: '한국대학교', source: 'standard-korean-dictionary', proper_noun: true }
+      ]
+    }
+  ]
+});
+assert.equal(properNounWithoutContext[0].status, 'INSUFFICIENT');
