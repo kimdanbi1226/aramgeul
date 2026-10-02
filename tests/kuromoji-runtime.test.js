@@ -144,3 +144,26 @@ for (const [spacingInput, expected] of additionalSpacingCases) {
 }
 
 console.log('Kuromoji article 41/43 runtime regression test: PASS');
+
+const article51Cases = [
+  ['깨끗히', '깨끗이'],
+  ['반듯히', '반듯이'],
+  ['번번히', '번번이'],
+  ['일일히', '일일이'],
+  ['정확이', '정확히'],
+  ['엄격이', '엄격히'],
+  ['솔직히', '솔직히'],
+  ['열심히', '열심히']
+];
+
+for (const [article51Input, expected] of article51Cases) {
+  const article51Analysis = await analyze(article51Input);
+  const article51Result = evaluateSpacing(article51Analysis);
+  assert.equal(
+    article51Result.revised,
+    expected,
+    `제51항 실제 kuromoji-ko 결과가 예상과 다릅니다: ${article51Input}`
+  );
+}
+
+console.log('Kuromoji article 51 runtime: PASS');
