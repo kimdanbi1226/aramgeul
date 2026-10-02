@@ -147,4 +147,37 @@ function analyze(text, tokens) {
   assert.equal(result.edits[0].rule_id, 'SPACING-JOSA-ATTACH');
 }
 
+
+{
+  const text = '국장겸과장';
+  const result = evaluateSpacing(analyze(text, [
+    token('국장', 0, 2, ['NOUN'], 'NNG'),
+    token('겸', 2, 3, ['DEPENDENT_NOUN'], 'NNB'),
+    token('과장', 3, 5, ['NOUN'], 'NNG')
+  ]));
+  assert.equal(result.revised, '국장 겸 과장');
+  assert.equal(result.edits.length, 2);
+  assert.equal(result.edits.every(edit => edit.rule_id === 'SPACING-045-CONNECTIVE-ENUMERATION'), true);
+}
+
+{
+  const text = '청군대백군';
+  const result = evaluateSpacing(analyze(text, [
+    token('청군', 0, 2, ['NOUN'], 'NNG'),
+    token('대', 2, 3, ['DEPENDENT_NOUN'], 'NNB'),
+    token('백군', 3, 5, ['NOUN'], 'NNG')
+  ]));
+  assert.equal(result.revised, '청군 대 백군');
+  assert.equal(result.edits.length, 2);
+  assert.equal(result.edits.every(edit => edit.rule_id === 'SPACING-045-CONNECTIVE-ENUMERATION'), true);
+}
+
+{
+  // 제46항에서 허용하는 붙여쓰기는 기본 검사에서 오류로 취급하지 않는다.
+  const text = '좀더';
+  const rule = (await import('../lib/rules/rules.v0.1.js')).getRuleById('SPACING-046-MONOSYLLABLE-ALLOWANCE');
+  assert.equal(rule.decision_type, 'VALID');
+  assert.equal(rule.allowed_examples.some(example => example.input === text && example.allowed === text), true);
+}
+
 console.log('Rule engine spacing tests: PASS');
