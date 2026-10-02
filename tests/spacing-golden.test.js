@@ -301,3 +301,8 @@ const rule56 = getRuleById('ORTHO-056-DEON-DEUN');
 assert.equal(rule56.decision_type, 'AMBIGUOUS');
 assert.equal(rule56.examples.some(example => example.input === '지난겨울은 몹시 춥드라.' && example.expected === '지난겨울은 몹시 춥더라.'), true);
 assert.equal(rule56.deferred_examples.some(example => example.input === '하든/하던 단독 어절'), true);
+
+const rule57 = getRuleById('ORTHO-057-DISTINGUISHING-WORDS');
+assert.equal(rule57.decision_type, 'AMBIGUOUS');
+assert.equal(rule57.examples.some(example => example.input === '약속은 반듯이 지켜라.' && example.expected === '약속은 반드시 지켜라.'), true);
+assert.equal(rule57.deferred_examples.some(example => example.input === '늘이다/늘리다'), true);
