@@ -272,3 +272,9 @@ assert.equal(rule51.decision_type, 'CORRECTION');
 assert.equal(rule51.examples.some(example => example.input === '깨끗히' && example.expected === '깨끗이'), true);
 assert.equal(rule51.examples.some(example => example.input === '정확이' && example.expected === '정확히'), true);
 assert.equal(rule51.allowed_examples.some(example => example.input === '솔직히'), true);
+
+const rule52 = getRuleById('ORTHO-052-SINO-KOREAN-READING');
+assert.equal(rule52.decision_type, 'CORRECTION');
+assert.equal(rule52.examples.some(example => example.input === '승락' && example.expected === '승낙'), true);
+assert.equal(rule52.examples.some(example => example.input === '의론' && example.expected === '의논'), true);
+assert.equal(rule52.allowed_examples.some(example => example.input === '유월'), true);
