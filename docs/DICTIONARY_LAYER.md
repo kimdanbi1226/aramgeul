@@ -70,3 +70,21 @@ normalizeDictionaryEntry()는 외부 응답을 다음 형태로 정규화한다.
 3. 사전 증거를 SPACING-048/049/050/057 evaluator에 연결
 4. dictionary-backed golden tests 추가
 5. 운영 rate limit/캐시 정책 검증
+
+
+## 2026-10-02 dictionary evidence integration
+
+The dictionary layer is now connected to `api/check.js` as an evidence-only layer.
+
+- Standard Korean Language Dictionary and Urimalsaem providers are enabled when their server-side API keys exist.
+- Dictionary lookups use the existing timeout, TTL cache, and retry wrapper.
+- `lib/dictionary/evidence.js` collects lexical evidence for the context-dependent rule groups:
+  - `SPACING-048-NAME-APPELLATION`
+  - `SPACING-049-PROPER-NOUN`
+  - `SPACING-050-TECHNICAL-TERM`
+  - `ORTHO-057-DISTINGUISHING-WORDS`
+- Dictionary evidence is returned as `dictionary_evidence` in the check API response.
+- Dictionary evidence does not directly modify `revised`, `decision`, or `edits`.
+- Missing API keys, API failures, and empty dictionary results do not fail the spelling/spacing check.
+
+This is intentionally a non-breaking integration step. The next layer is to add rule-specific dictionary decision logic and golden tests before allowing dictionary evidence to change a correction decision.
