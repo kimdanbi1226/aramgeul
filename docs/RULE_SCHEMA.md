@@ -25,10 +25,14 @@
 | decision_type | O | ERROR / CORRECTION / VALID / AMBIGUOUS 등 |
 | conditions | O | 규칙이 적용되는 형태·문맥 조건 |
 | exceptions | △ | 예외 또는 허용 조건 |
-| examples | △ | 대표 예시 |
+| examples | △ | 자동 교정이 확정되는 대표 예시 |
+| allowed_examples | △ | 원칙형과 함께 허용되는 표기 예시 |
+| deferred_examples | △ | 문맥 부족으로 자동 판정을 보류하는 예시 |
 | source_type | O | norm / dictionary / engine / term 등 |
 | source_name | O | 출처명 |
-| source_url | O | 공식 근거 URL |
+| source_url | O | 1차 공식 근거 URL(규범 원문 등) |
+| source_detail_url | △ | 해당 표현을 직접 설명하는 공식 Q&A·해설 URL |
+| source_detail_label | △ | 상세 근거 링크에 표시할 설명 |
 | source_reference | △ | 규범 조항, 사전 항목 등 구체적 근거 |
 | source_version | △ | 확인한 데이터/문서 버전 |
 | priority | O | RULE_PRIORITY에 따른 적용 우선순위 |
@@ -67,7 +71,17 @@
 
 이 경우 결과 데이터에 `preferred`, `allowed` 등의 구분이 필요하다.
 
-### 3.4 문맥 의존 규칙은 형태소 정보와 연결
+### 3.4 원칙·허용·보류를 구분
+
+규범상 원칙이 존재하더라도 붙여 쓰기가 허용되는 경우에는 자동 교정 대상으로 취급하지 않는다.
+
+- `examples`: 현재 조건에서 교정이 확정되는 사례
+- `allowed_examples`: 원칙형과 함께 허용되는 사례
+- `deferred_examples`: 의미·문맥·어휘 정보가 부족하여 자동 판정을 보류하는 사례
+
+예를 들어 `먹어 보았다`가 원칙이더라도 `먹어보았다`가 허용되는 경우에는 두 표기를 동일한 오류로 처리하지 않는다.
+
+### 3.5 문맥 의존 규칙은 형태소 정보와 연결
 
 `뿐`, `만큼`, `지`, `데`, `밖에`처럼 품사와 문법적 기능에 따라 띄어쓰기가 달라지는 항목은 단순 사전 검색만으로 판정하지 않는다.
 
@@ -91,9 +105,13 @@
       "expected": "할 수 있다"
     }
   ],
+  "allowed_examples": [],
+  "deferred_examples": [],
   "source_type": "norm",
   "source_name": "국립국어원",
   "source_url": "https://www.korean.go.kr/",
+  "source_detail_url": null,
+  "source_detail_label": null,
   "source_reference": "한글 맞춤법 제42항",
   "priority": 1,
   "confidence": "high",
