@@ -21,7 +21,7 @@ assert.equal(blocks.length, 2);
 assert.equal(blocks[0].source, 'aramgeul-rule');
 assert.equal(blocks[0].rule.rule_id, rule.rule_id);
 assert.equal(blocks[0].origin.start, 0);
-assert.equal(blocks[0].revised_start, 0);
+assert.equal(blocks[0].revised_start, 1);
 assert.equal(blocks[0].revised_end, 2);
 assert.equal(blocks[0].revised, '할 수있다.');
 
