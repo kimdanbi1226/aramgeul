@@ -30,4 +30,27 @@ assert.equal(blocks[1].revised_start, 12);
 assert.equal(blocks[1].revised_end, 13);
 assert.equal(blocks[1].revised, '할 수있다.');
 
+
+const spacingRemovalRule = {
+  rule_id: 'SPACING-042-DEPENDENT-NOUN',
+  title: '의존 명사 띄어쓰기',
+  description: '문맥에 따라 조사로 쓰이는 만큼은 붙여 쓴다.',
+  source_name: '국립국어원',
+  source_reference: '한글 맞춤법',
+};
+
+const spacingRemovalSource = '나 만큼 기쁘다';
+const spacingRemovalEdits = [
+  { start: 1, end: 2, replacement: '', rule: spacingRemovalRule }
+];
+const spacingRemovalBlocks = buildRuleFallbackBlocks(spacingRemovalSource, spacingRemovalEdits);
+
+assert.equal(spacingRemovalBlocks.length, 1);
+assert.equal(spacingRemovalBlocks[0].origin.text, '나 만큼');
+assert.equal(spacingRemovalBlocks[0].revised, '나만큼');
+assert.equal(spacingRemovalBlocks[0].revised_start, 1);
+assert.equal(spacingRemovalBlocks[0].revised_end, 1);
+assert.equal(spacingRemovalBlocks[0].rule_edit.start, 1);
+assert.equal(spacingRemovalBlocks[0].rule_edit.end, 2);
+
 console.log('Rule correction block tests: PASS');
