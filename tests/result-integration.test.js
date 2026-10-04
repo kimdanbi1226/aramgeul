@@ -197,9 +197,9 @@ const registeredDistinguishingExample = integrateCheckResults('새 책상으로 
     edits: [
       {
         rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
-        start: 7,
-        end: 9,
-        replacement: '갈음'
+        start: 0,
+        end: '새 책상으로 가름하였다.'.length,
+        replacement: '새 책상으로 갈음하였다.'
       }
     ],
     sources: [{ source: 'NIKL' }]
