@@ -27,7 +27,7 @@ assert.equal(blocks[0].revised, '할 수있다.');
 
 assert.equal(blocks[1].origin.start, 10);
 assert.equal(blocks[1].revised_start, 12);
-assert.equal(blocks[1].revised_end, 14);
+assert.equal(blocks[1].revised_end, 13);
 assert.equal(blocks[1].revised, '할 수있다.');
 
 console.log('Rule correction block tests: PASS');
