@@ -162,8 +162,9 @@ function renderResult(data, input) {
   if (blocks.length) {
     html += '<div class="corrections">';
     html += blocks.map((block, index) => {
-      const help = block.help
-        ? '<div class="help"><strong>왜?</strong> ' + escapeHtml(block.help) + '</div>'
+      const helpText = block.help || block.rule?.description || '';
+      const help = helpText
+        ? '<div class="help"><strong>왜?</strong> ' + escapeHtml(helpText) + '</div>'
         : '<div class="detail-empty">검사 엔진에서 별도 설명을 제공하지 않았습니다.</div>';
 
       const rule = block.rule
@@ -231,11 +232,30 @@ function renderSentenceWithEdits(revised, blocks) {
   let cursor = 0;
 
   blocks.forEach((block, index) => {
-    const value = typeof block.revised === 'string' ? block.revised : '';
+    const explicitStart = Number.isInteger(block.revised_start);
+    const explicitEnd = Number.isInteger(block.revised_end);
 
-    // 화면에서는 서버가 계산한 숫자 오프셋보다 실제 교정 문구를
-    // 교정문에서 순서대로 찾는 것을 우선한다. 그래야 형태소 분석기의
-    // 원문 오프셋 차이 때문에 '나는'처럼 엉뚱한 부분이 강조되지 않는다.
+    // 서버가 계산한 최종 문장 기준 오프셋을 우선한다.
+    // block.revised는 주변 문맥까지 포함한 설명용 문자열이므로,
+    // 그것을 그대로 검색해 전체 문맥을 강조하면 복합 교정에서
+    // 서로 다른 수정 블록이 겹치는 문제가 생긴다.
+    if (
+      explicitStart &&
+      explicitEnd &&
+      explicitStart >= 0 &&
+      explicitEnd >= explicitStart &&
+      explicitEnd <= revised.length
+    ) {
+      ranges.push({
+        start: explicitStart,
+        end: explicitEnd,
+        index
+      });
+      cursor = Math.max(cursor, explicitEnd);
+      return;
+    }
+
+    const value = typeof block.revised === 'string' ? block.revised : '';
     if (value) {
       const start = revised.indexOf(value, cursor);
 
@@ -246,20 +266,7 @@ function renderSentenceWithEdits(revised, blocks) {
           index
         });
         cursor = start + value.length;
-        return;
       }
-    }
-
-    const explicitStart = Number.isInteger(block.revised_start);
-    const explicitEnd = Number.isInteger(block.revised_end);
-
-    if (explicitStart && explicitEnd && explicitStart >= 0 && explicitEnd >= explicitStart) {
-      ranges.push({
-        start: explicitStart,
-        end: explicitEnd,
-        index
-      });
-      cursor = Math.max(cursor, explicitEnd);
     }
   });
 
