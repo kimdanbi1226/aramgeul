@@ -286,16 +286,50 @@ function renderSentenceWithEdits(revised, blocks) {
         return;
       }
 
-      // 띄어쓰기 삽입/삭제처럼 변경 범위가 공백뿐인 경우에는
-      // 기존처럼 교정 후 문맥에서 보이는 단위를 찾아 표시한다.
-      if (explicitText.trim()) {
-        ranges.push({
-          start: explicitStart,
-          end: explicitEnd,
-          index
-        });
-        cursor = Math.max(cursor, explicitEnd);
-        return;
+      // 띄어쓰기 삽입/삭제처럼 변경 범위가 공백뿐이면
+      // 빈 공간 자체를 강조하지 않고, 변경 지점에 인접한 실제 단어를 강조한다.
+      // 예: "나 만큼" → "나만큼"에서는 "만큼"을 표시한다.
+      if (!explicitText.trim()) {
+        let visibleStart = explicitEnd;
+        while (visibleStart < revised.length && /\\s/.test(revised[visibleStart])) {
+          visibleStart += 1;
+        }
+
+        let visibleEnd = visibleStart;
+        while (visibleEnd < revised.length && !/\\s/.test(revised[visibleEnd])) {
+          visibleEnd += 1;
+        }
+
+        if (visibleStart < visibleEnd) {
+          ranges.push({
+            start: visibleStart,
+            end: visibleEnd,
+            index
+          });
+          cursor = Math.max(cursor, visibleEnd);
+          return;
+        }
+
+        // 문장 끝에서 공백이 삭제된 경우에는 앞 단어를 표시한다.
+        let previousEnd = Math.max(0, explicitStart);
+        while (previousEnd > 0 && /\\s/.test(revised[previousEnd - 1])) {
+          previousEnd -= 1;
+        }
+
+        let previousStart = previousEnd;
+        while (previousStart > 0 && !/\\s/.test(revised[previousStart - 1])) {
+          previousStart -= 1;
+        }
+
+        if (previousStart < previousEnd) {
+          ranges.push({
+            start: previousStart,
+            end: previousEnd,
+            index
+          });
+          cursor = Math.max(cursor, previousEnd);
+          return;
+        }
       }
     }
 
