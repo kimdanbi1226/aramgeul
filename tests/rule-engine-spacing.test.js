@@ -386,12 +386,16 @@ function analyze(text, tokens = []) {
 {
   const rule57 = getRuleById('ORTHO-057-DISTINGUISHING-WORDS');
   assert.equal(evaluateSpacing(analyze('약속은 반듯이 지켜라.')).revised, '약속은 반드시 지켜라.');
+  assert.equal(evaluateSpacing(analyze('약속은 반듯이 지켜라')).revised, '약속은 반드시 지켜라');
   assert.equal(evaluateSpacing(analyze('고무줄을 늘린다.')).revised, '고무줄을 늘인다.');
   assert.equal(evaluateSpacing(analyze('수출량을 더 늘인다.')).revised, '수출량을 더 늘린다.');
   assert.equal(evaluateSpacing(analyze('우표를 부친다.')).revised, '우표를 붙인다.');
+  assert.equal(evaluateSpacing(analyze('우표를 부친다')).revised, '우표를 붙인다');
   assert.equal(evaluateSpacing(analyze('편지를 붙인다.')).revised, '편지를 부친다.');
+  assert.equal(evaluateSpacing(analyze('편지를 붙인다')).revised, '편지를 부친다');
   assert.equal(evaluateSpacing(analyze('늘이다')).revised, '늘이다');
   assert.equal(evaluateSpacing(analyze('부치다')).revised, '부치다');
+  assert.equal(evaluateSpacing(analyze('지난겨울은 몹시 춥드라')).revised, '지난겨울은 몹시 춥더라');
   assert.equal(rule57.decision_type, 'AMBIGUOUS');
 }
 
