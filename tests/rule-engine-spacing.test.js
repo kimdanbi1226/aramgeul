@@ -101,14 +101,15 @@ function analyze(text, tokens = []) {
 }
 
 {
-  // 고유어 수 + 단위 명사도 제43항의 '숫자와 어울리어'에 해당하므로 붙여쓰기를 허용한다.
+  // 실사용 검사 프로필에서는 일반 수량 표현의 원칙형을 우선 제시한다.
   const text = '두시간';
   const result = evaluateSpacing(analyze(text, [
     token('두', 0, 1, ['NUMBER'], 'MM'),
     token('시간', 1, 3, ['DEPENDENT_NOUN'], 'NNB')
   ]));
-  assert.equal(result.revised, text);
-  assert.equal(result.decision, 'VALID');
+  assert.equal(result.revised, '두 시간');
+  assert.equal(result.decision, 'CORRECTION');
+  assert.equal(result.edits.some(edit => edit.rule_id === 'SPACING-043-UNIT-NOUN'), true);
 }
 
 {
@@ -185,6 +186,66 @@ function analyze(text, tokens = []) {
   ]));
   assert.equal(result.revised, '나만큼');
   assert.equal(result.edits[0].rule_id, 'SPACING-JOSA-ATTACH');
+}
+
+{
+  const text = '김양수씨가 말했다.';
+  const result = evaluateSpacing(analyze(text, [
+    token('김양수', 0, 3, ['NOUN'], 'NNP'),
+    token('씨', 3, 4, ['DEPENDENT_NOUN'], 'NNB'),
+    token('가', 4, 5, ['JOSA'], 'JKS'),
+    token('말했다', 5, 8, ['LEXICAL_VERB'], 'VV', '말하다')
+  ]));
+  assert.equal(result.revised, '김양수 씨가 말했다.');
+  assert.equal(result.edits.some(edit => edit.rule_id === 'SPACING-048-NAME-APPELLATION'), true);
+}
+
+{
+  const text = '충무공이순신장군을 기렸다.';
+  const result = evaluateSpacing(analyze(text, [
+    token('충무공이순신장군', 0, 8, ['NOUN'], 'NNP'),
+    token('을', 8, 9, ['JOSA'], 'JKO'),
+    token('기렸다', 10, 13, ['LEXICAL_VERB'], 'VV', '기리다')
+  ]));
+  assert.equal(result.revised, '충무공 이순신 장군을 기렸다.');
+  assert.equal(result.edits.some(edit => edit.rule_id === 'SPACING-048-NAME-APPELLATION'), true);
+}
+
+{
+  const text = '학교폭력을 예방해야한다고 말했다.';
+  const result = evaluateSpacing(analyze(text, [
+    token('학교폭력', 0, 4, ['NOUN'], 'NNG'),
+    token('을', 4, 5, ['JOSA'], 'JKO'),
+    token('예방해야한다고', 6, 13, ['LEXICAL_VERB'], 'VV', '예방하다'),
+    token('말했다', 14, 17, ['LEXICAL_VERB'], 'VV', '말하다')
+  ]));
+  assert.equal(result.revised, '학교 폭력을 예방해야 한다고 말했다.');
+  assert.equal(result.edits.some(edit => edit.rule_id === 'SPACING-050-TECHNICAL-TERM'), true);
+  assert.equal(result.edits.some(edit => edit.rule_id === 'SPACING-047-AUXILIARY-VERB'), true);
+}
+
+{
+  const text = '나는 두시간 동안 공부해보았다.';
+  const result = evaluateSpacing(analyze(text, [
+    token('나는', 0, 2, ['NOUN'], 'NP'),
+    token('두시간', 3, 6, ['NOUN'], 'NNG'),
+    token('동안', 7, 9, ['NOUN'], 'NNG'),
+    token('공부해보았다', 10, 16, [], 'NA')
+  ]));
+  assert.equal(result.revised, '나는 두 시간 동안 공부해 보았다.');
+  assert.equal(result.edits.some(edit => edit.rule_id === 'SPACING-043-UNIT-NOUN'), true);
+  assert.equal(result.edits.some(edit => edit.rule_id === 'SPACING-047-AUXILIARY-VERB'), true);
+}
+
+{
+  const text = '승락을 받았다.';
+  const result = evaluateSpacing(analyze(text, [
+    token('승락', 0, 2, ['NOUN'], 'NNG'),
+    token('을', 2, 3, ['JOSA'], 'JKO'),
+    token('받았다', 4, 7, ['LEXICAL_VERB'], 'VV', '받다')
+  ]));
+  assert.equal(result.revised, '승낙을 받았다.');
+  assert.equal(result.edits.some(edit => edit.rule_id === 'ORTHO-052-SINO-KOREAN-READING'), true);
 }
 
 
