@@ -139,13 +139,21 @@ function renderResult(data, input) {
     ? '<div class="result-warning">' + escapeHtml(data.engine_warning) + '</div>'
     : '';
 
-  const blocks = Array.isArray(data.revised_blocks)
+  let blocks = Array.isArray(data.revised_blocks)
     ? data.revised_blocks.filter(block =>
         block && typeof block.revised === 'string' &&
         typeof block.origin?.text === 'string' &&
         block.revised !== block.origin.text
       )
     : [];
+
+  // 서버가 교정문(revised)과 rule_edits는 반환했지만 표시용 revised_blocks를
+  // 만들지 못한 경우에도 프런트가 스스로 표시 블록을 복원한다.
+  // 특히 Bareun 미연결 상태의 띄어쓰기 삭제처럼 최종 문장은 바뀌었지만
+  // 서버 블록이 비어 있는 경우를 여기서 복구한다.
+  if (!blocks.length && Array.isArray(data.rule_edits) && data.rule_edits.length) {
+    blocks = buildClientRuleFallbackBlocks(data.origin || input, revised, data.rule_edits);
+  }
 
   let html = '<div class="result-box">';
   html += '<div class="result-label">검사 결과</div>';
@@ -223,6 +231,87 @@ function renderResult(data, input) {
   resultContent.innerHTML = html;
   bindCorrectionCards();
   bindSentenceEdits();
+}
+
+function buildClientRuleFallbackBlocks(source, revised, ruleEdits) {
+  if (
+    typeof source !== 'string' ||
+    typeof revised !== 'string' ||
+    !Array.isArray(ruleEdits)
+  ) {
+    return [];
+  }
+
+  const edits = ruleEdits
+    .filter(edit =>
+      edit &&
+      Number.isInteger(edit.start) &&
+      Number.isInteger(edit.end) &&
+      edit.start >= 0 &&
+      edit.end >= edit.start &&
+      typeof edit.replacement === 'string' &&
+      edit.rule
+    )
+    .sort((a, b) => a.start - b.start);
+
+  return edits.map((edit, index) => {
+    const contextStart = Math.max(
+      0,
+      source.lastIndexOf(' ', Math.max(0, edit.start - 1)) + 1
+    );
+    const nextSpace = source.indexOf(' ', edit.end);
+    const contextEnd = nextSpace >= 0
+      ? nextSpace
+      : Math.min(source.length, edit.end + 8);
+
+    const originText = source.slice(contextStart, contextEnd);
+    const localStart = edit.start - contextStart;
+    const localEnd = edit.end - contextStart;
+    const revisedContext =
+      originText.slice(0, localStart) +
+      edit.replacement +
+      originText.slice(localEnd);
+
+    const revisedStart = Number.isInteger(edit.revised_start)
+      ? edit.revised_start
+      : edit.start + edits
+          .filter(previous => previous.start < edit.start)
+          .reduce(
+            (sum, previous) =>
+              sum + previous.replacement.length - (previous.end - previous.start),
+            0
+          );
+
+    const revisedEnd = Number.isInteger(edit.revised_end)
+      ? edit.revised_end
+      : revisedStart + edit.replacement.length;
+
+    return {
+      id: 'client-rule-' + index + '-' + edit.rule.rule_id,
+      origin: {
+        text: originText,
+        start: contextStart,
+        end: contextEnd
+      },
+      revised: revisedContext,
+      revised_start: revisedStart,
+      revised_end: revisedEnd,
+      rule: edit.rule,
+      rules: [edit.rule],
+      help: edit.rule.description || '',
+      source: 'aramgeul-rule',
+      rule_edit: {
+        start: edit.start,
+        end: edit.end,
+        replacement: edit.replacement
+      },
+      rule_edits: [{
+        start: edit.start,
+        end: edit.end,
+        replacement: edit.replacement
+      }]
+    };
+  });
 }
 
 function renderSentenceWithEdits(revised, blocks) {
