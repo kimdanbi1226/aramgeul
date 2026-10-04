@@ -214,6 +214,29 @@ const registeredDistinguishingExample = integrateCheckResults('새 책상으로 
 assert.equal(registeredDistinguishingExample.decision, 'CORRECTION');
 assert.equal(registeredDistinguishingExample.revised, '새 책상으로 갈음하였다.');
 
+const punctuationFreeDistinguishingExample = integrateCheckResults('우표를 부친다', {
+  ruleResult: {
+    revised: '우표를 붙인다',
+    edits: [
+      {
+        rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+        start: 0,
+        end: '우표를 부친다'.length,
+        replacement: '우표를 붙인다'
+      }
+    ],
+    sources: [{ source: 'NIKL' }]
+  },
+  dictionaryDecisions: [
+    {
+      rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+      status: 'CONTEXT_REQUIRED'
+    }
+  ]
+});
+assert.equal(punctuationFreeDistinguishingExample.decision, 'CORRECTION');
+assert.equal(punctuationFreeDistinguishingExample.revised, '우표를 붙인다');
+
 
 
 const technicalSupported = integrateCheckResults('결산소득세', {
