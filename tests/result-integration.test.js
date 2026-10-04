@@ -197,8 +197,8 @@ const registeredDistinguishingExample = integrateCheckResults('새 책상으로 
     edits: [
       {
         rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
-        start: 9,
-        end: 11,
+        start: 7,
+        end: 9,
         replacement: '갈음'
       }
     ],
