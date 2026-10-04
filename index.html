@@ -248,10 +248,46 @@ function renderSentenceWithEdits(revised, blocks) {
     ) {
       const explicitText = revised.slice(explicitStart, explicitEnd);
 
-      // 띄어쓰기 삽입/삭제처럼 실제 변경 범위가 공백만 포함하면
-      // 화면에서는 빈 강조 영역으로 보여 위치를 알기 어렵다.
-      // 이 경우 block.revised(교정 후 문맥)에서 실제 문자를 찾아
-      // 눈에 보이는 교정 단위를 강조한다.
+      // 서버 범위가 교정 구간 전체를 가리키더라도 화면에서는
+      // 실제로 바뀐 문자만 강조한다. 예: 승락을 → 승낙을에서는
+      // "승낙을" 전체가 아니라 "낙"만 강조한다.
+      const originalText = typeof block.origin?.text === 'string' ? block.origin.text : '';
+      const revisedText = typeof block.revised === 'string' ? block.revised : explicitText;
+      const commonPrefixLimit = Math.min(originalText.length, revisedText.length);
+      let commonPrefix = 0;
+      while (
+        commonPrefix < commonPrefixLimit &&
+        originalText[commonPrefix] === revisedText[commonPrefix]
+      ) {
+        commonPrefix += 1;
+      }
+
+      let commonSuffix = 0;
+      while (
+        commonSuffix < originalText.length - commonPrefix &&
+        commonSuffix < revisedText.length - commonPrefix &&
+        originalText[originalText.length - 1 - commonSuffix] ===
+          revisedText[revisedText.length - 1 - commonSuffix]
+      ) {
+        commonSuffix += 1;
+      }
+
+      const changedStart = explicitStart + commonPrefix;
+      const changedEnd = explicitEnd - commonSuffix;
+
+      // 문자 교정처럼 실제 변경 문자가 있으면 그 부분만 표시한다.
+      if (explicitText.trim() && changedEnd > changedStart) {
+        ranges.push({
+          start: changedStart,
+          end: changedEnd,
+          index
+        });
+        cursor = Math.max(cursor, changedEnd);
+        return;
+      }
+
+      // 띄어쓰기 삽입/삭제처럼 변경 범위가 공백뿐인 경우에는
+      // 기존처럼 교정 후 문맥에서 보이는 단위를 찾아 표시한다.
       if (explicitText.trim()) {
         ranges.push({
           start: explicitStart,
