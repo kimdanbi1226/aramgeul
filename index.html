@@ -489,7 +489,8 @@ function renderSentenceWithEdits(revised, blocks) {
       html += '<span class="sentence-edit space-mark space-insert" data-correction-index="' +
         range.index +
         '" tabindex="0" role="button" aria-label="띄어쓰기 추가: 여기에 띄어쓰기를 해야 합니다.">∨</span>';
-      position = range.start;
+      // 표시 부호가 실제 추가 공백 자리를 대신하므로 원래 공백은 한 번만 소비한다.
+      position = Math.min(range.start + 1, revised.length);
       return;
     }
 
