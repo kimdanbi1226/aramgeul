@@ -247,6 +247,56 @@ function renderSentenceWithEdits(revised, blocks) {
       explicitEnd <= revised.length
     ) {
       const explicitText = revised.slice(explicitStart, explicitEnd);
+      const originalText = typeof block.origin?.text === 'string' ? block.origin.text : '';
+      const revisedBlockText = typeof block.revised === 'string' ? block.revised : '';
+
+      // 공백만 추가/삭제된 교정은 최종 문장에 "변경된 문자"가 존재하지 않는다.
+      // 서버가 삽입 위치를 한 글자 범위처럼 계산한 경우에도 이 조건으로 잡아낸다.
+      if (
+        originalText &&
+        revisedBlockText &&
+        originalText.replace(/\s/g, '') === revisedBlockText.replace(/\s/g, '')
+      ) {
+        let visibleStart = Math.min(explicitStart, revised.length);
+        while (visibleStart < revised.length && /\s/.test(revised[visibleStart])) {
+          visibleStart += 1;
+        }
+
+        let visibleEnd = visibleStart;
+        while (visibleEnd < revised.length && !/\s/.test(revised[visibleEnd])) {
+          visibleEnd += 1;
+        }
+
+        if (visibleStart < visibleEnd) {
+          ranges.push({
+            start: visibleStart,
+            end: visibleEnd,
+            index
+          });
+          cursor = Math.max(cursor, visibleEnd);
+          return;
+        }
+
+        let previousEnd = Math.min(explicitStart, revised.length);
+        while (previousEnd > 0 && /\s/.test(revised[previousEnd - 1])) {
+          previousEnd -= 1;
+        }
+
+        let previousStart = previousEnd;
+        while (previousStart > 0 && !/\s/.test(revised[previousStart - 1])) {
+          previousStart -= 1;
+        }
+
+        if (previousStart < previousEnd) {
+          ranges.push({
+            start: previousStart,
+            end: previousEnd,
+            index
+          });
+          cursor = Math.max(cursor, previousEnd);
+          return;
+        }
+      }
 
       // 서버 범위가 교정 구간 전체를 가리키더라도 화면에서는
       // 실제로 바뀐 문자만 강조한다. 예: 승락을 → 승낙을에서는
