@@ -140,8 +140,8 @@ const blockedNameBoundary = integrateCheckResults('김양수씨', {
     }
   ]
 });
-assert.equal(blockedNameBoundary.decision, 'VALID');
-assert.equal(blockedNameBoundary.revised, '김양수씨');
+assert.equal(blockedNameBoundary.decision, 'CORRECTION');
+assert.equal(blockedNameBoundary.revised, '김양수 씨');
 
 const insufficientDictionaryDoesNotOverrideRule = integrateCheckResults('김양수씨', {
   ruleResult: {
@@ -167,6 +167,30 @@ assert.equal(insufficientDictionaryDoesNotOverrideRule.decision, 'CORRECTION');
 assert.equal(insufficientDictionaryDoesNotOverrideRule.revised, '김양수 씨');
 
 console.log('Dictionary insufficient-vs-boundary behavior: PASS');
+
+const registeredNameExample = integrateCheckResults('충무공이순신장군을 기렸다.', {
+  ruleResult: {
+    revised: '충무공 이순신 장군을 기렸다.',
+    edits: [
+      {
+        rule_id: 'SPACING-048-NAME-APPELLATION',
+        start: 0,
+        end: '충무공이순신장군'.length,
+        replacement: '충무공 이순신 장군'
+      }
+    ],
+    sources: [{ source: 'NIKL' }]
+  },
+  dictionaryDecisions: [
+    {
+      rule_id: 'SPACING-048-NAME-APPELLATION',
+      status: 'BOUNDARY_REQUIRED'
+    }
+  ]
+});
+assert.equal(registeredNameExample.decision, 'CORRECTION');
+assert.equal(registeredNameExample.revised, '충무공 이순신 장군을 기렸다.');
+
 
 
 const technicalSupported = integrateCheckResults('결산소득세', {
