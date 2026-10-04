@@ -408,4 +408,22 @@ function analyze(text, tokens = []) {
   assert.equal(rule57.decision_type, 'AMBIGUOUS');
 }
 
+
+{
+  // E 단계: 복합 실사용 문장에서 서로 다른 규칙의 교정이 함께 유지되는지 확인한다.
+  const cases = [
+    ['나는 오늘 할수있는 일을 먼저 생각해보자고 말했다.', '나는 오늘 할 수 있는 일을 먼저 생각해 보자고 말했다.'],
+    ['김양수씨는 학교폭력을 예방해야한다고 말했다.', '김양수 씨는 학교 폭력을 예방해야 한다고 말했다.'],
+    ['약속은 반드시 지키고 편지도 부쳐야 한다.', '약속은 반드시 지키고 편지도 부쳐야 한다.'],
+    ['그는 깨끗히 정리하고 정확이 확인했다.', '그는 깨끗이 정리하고 정확히 확인했다.'],
+    ['나는 두시간 동안 공부해보았다.', '나는 두 시간 동안 공부해 보았다.'],
+    ['12억3456만7898원의 계약을 체결했다.', '12억 3456만 7898원의 계약을 체결했다.']
+  ];
+
+  for (const [input, expected] of cases) {
+    const result = evaluateSpacing(analyze(input));
+    assert.equal(result.revised, expected, input);
+  }
+}
+
 console.log('Rule engine spacing tests: PASS');
