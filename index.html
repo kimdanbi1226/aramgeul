@@ -20,8 +20,10 @@ main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center
 .result-box{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff;line-height:1.8;color:#475467}.result-label{font-size:12px;font-weight:800;color:#7a8595;margin-bottom:7px}.revised-text{font-size:18px;color:var(--ink);white-space:pre-wrap;word-break:break-word}
 .sentence-edit{background:var(--soft);color:var(--primary-dark);border-bottom:3px solid #6d8fd6;border-radius:4px;padding:1px 3px;font-weight:800;cursor:pointer;transition:background .15s,box-shadow .15s}
 .sentence-edit:hover,.sentence-edit.selected{background:#dfeaff;box-shadow:0 0 0 3px rgba(36,87,197,.12)}
+.sentence-edit-type{display:inline-block;margin-right:5px;padding:1px 5px;border-radius:999px;background:#d7e4ff;color:var(--primary-dark);font-size:10px;line-height:1.4;font-weight:800;vertical-align:2px}
+.sentence-edit-text{font-weight:800}
 .correction:focus-visible,.sentence-edit:focus-visible{outline:3px solid rgba(36,87,197,.22);outline-offset:2px}
-.corrections{display:grid;gap:12px;margin-top:14px}.correction{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}.correction.clickable{cursor:pointer;transition:border-color .15s,box-shadow .15s}.correction.clickable:hover,.correction.clickable.selected{border-color:#b9cff8;box-shadow:0 5px 18px rgba(36,87,197,.08)}.change{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}.change-part{flex:1;min-width:180px}.change-value{padding:10px 12px;border-radius:10px;background:#f7f9fc;border:1px solid #e5e9f0;white-space:pre-wrap;word-break:break-word}.arrow{color:#98a2b3;font-weight:800;padding-top:10px}.help{margin:10px 0 0;color:#596578;font-size:13px;line-height:1.65}.source{margin-top:9px;color:#8994a4;font-size:11px}.diff{font-size:18px;line-height:1.8;white-space:pre-wrap;word-break:break-word}.diff-removed{background:#fdebec;color:#a12b37;text-decoration:line-through;text-decoration-thickness:1px;border-radius:4px;padding:1px 2px}.diff-added{background:#e7f7ef;color:#14704d;border-radius:4px;padding:1px 2px}.detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid #edf0f5}.correction.selected .detail{display:block}.detail-title{font-size:12px;font-weight:800;color:#687386;margin-bottom:5px}.detail-empty{color:#8994a4;font-size:13px}.detail-meta{margin-top:8px;font-size:11px;color:#8994a4}.rule-evidence{margin-top:12px;padding:12px;border:1px solid #dce8fb;border-radius:10px;background:#f8fbff}.rule-title{font-size:14px;font-weight:800;color:var(--ink)}.rule-description{margin-top:5px;font-size:13px;line-height:1.6;color:#596578}.rule-meta{margin-top:7px;font-size:11px;color:#718096}.rule-source{display:inline-block;margin-top:8px;font-size:12px;color:var(--primary);text-decoration:none;font-weight:700}.rule-source:hover{text-decoration:underline}.detail-meta{margin-top:8px;font-size:11px;color:#8994a4}.result-hint{margin-top:8px;color:#8994a4;font-size:12px;line-height:1.6}.engine-status{margin-top:10px;padding:10px 12px;border:1px solid #dfe7f4;border-radius:10px;background:#f8faff;color:#596578;font-size:12px;line-height:1.5}.engine-status strong{color:#172033}.result-warning{margin-top:8px;color:#7a8595;font-size:12px;line-height:1.6}
+.corrections{display:grid;gap:12px;margin-top:14px}.correction{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}.correction.clickable{cursor:pointer;transition:border-color .15s,box-shadow .15s}.correction.clickable:hover,.correction.clickable.selected{border-color:#b9cff8;box-shadow:0 5px 18px rgba(36,87,197,.08)}.change{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}.change-part{flex:1;min-width:180px}.change-value{padding:10px 12px;border-radius:10px;background:#f7f9fc;border:1px solid #e5e9f0;white-space:pre-wrap;word-break:break-word}.edit-type{display:inline-flex;align-items:center;margin-bottom:7px;padding:4px 8px;border-radius:999px;background:#eef4ff;border:1px solid #d7e4ff;color:var(--primary-dark);font-size:11px;font-weight:800}.edit-type.grammar{background:#f5f7fa;border-color:#e2e6ec;color:#596578}.arrow{color:#98a2b3;font-weight:800;padding-top:10px}.help{margin:10px 0 0;color:#596578;font-size:13px;line-height:1.65}.source{margin-top:9px;color:#8994a4;font-size:11px}.diff{font-size:18px;line-height:1.8;white-space:pre-wrap;word-break:break-word}.diff-removed{background:#fdebec;color:#a12b37;text-decoration:line-through;text-decoration-thickness:1px;border-radius:4px;padding:1px 2px}.diff-added{background:#e7f7ef;color:#14704d;border-radius:4px;padding:1px 2px}.detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid #edf0f5}.correction.selected .detail{display:block}.detail-title{font-size:12px;font-weight:800;color:#687386;margin-bottom:5px}.detail-empty{color:#8994a4;font-size:13px}.detail-meta{margin-top:8px;font-size:11px;color:#8994a4}.rule-evidence{margin-top:12px;padding:12px;border:1px solid #dce8fb;border-radius:10px;background:#f8fbff}.rule-title{font-size:14px;font-weight:800;color:var(--ink)}.rule-description{margin-top:5px;font-size:13px;line-height:1.6;color:#596578}.rule-meta{margin-top:7px;font-size:11px;color:#718096}.rule-source{display:inline-block;margin-top:8px;font-size:12px;color:var(--primary);text-decoration:none;font-weight:700}.rule-source:hover{text-decoration:underline}.detail-meta{margin-top:8px;font-size:11px;color:#8994a4}.result-hint{margin-top:8px;color:#8994a4;font-size:12px;line-height:1.6}.engine-status{margin-top:10px;padding:10px 12px;border:1px solid #dfe7f4;border-radius:10px;background:#f8faff;color:#596578;font-size:12px;line-height:1.5}.engine-status strong{color:#172033}.result-warning{margin-top:8px;color:#7a8595;font-size:12px;line-height:1.6}
 .candidates{margin-top:14px;padding:14px;border:1px solid #f0dfb6;border-radius:14px;background:#fffaf0}.candidate{padding:8px 0}.candidate+.candidate{border-top:1px solid #f0e6cf}.candidate strong{font-size:12px;color:#7a5a16}.candidate div{margin-top:3px}
 .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.info{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.info strong{display:block;margin-bottom:6px;font-size:14px}.info span{font-size:13px;color:var(--muted);line-height:1.6}
 .notice{margin:20px 0 0;color:#8994a4;font-size:12px;line-height:1.7;text-align:center}footer{text-align:center;color:#929bab;font-size:12px;padding:0 24px 34px}
@@ -181,6 +183,8 @@ function renderResult(data, input) {
     html += '<div class="corrections">';
     html += blocks.map((block, index) => {
       const helpText = block.help || block.rule?.description || '';
+      const editType = getEditType(block);
+      const typeBadge = '<div class="edit-type ' + editType.className + '">' + escapeHtml(editType.label) + '</div>';
       const help = helpText
         ? '<div class="help"><strong>왜?</strong> ' + escapeHtml(helpText) + '</div>'
         : '<div class="detail-empty">검사 엔진에서 별도 설명을 제공하지 않았습니다.</div>';
@@ -207,7 +211,7 @@ function renderResult(data, input) {
       const diff = diffHtml(block.origin.text, block.revised);
       return '<div class="correction clickable" data-correction-index="' + index + '" tabindex="0" role="button" aria-expanded="false">' +
         '<div class="change">' +
-          '<div class="change-part"><div class="result-label">변경 전</div><div class="change-value">' + escapeHtml(block.origin.text) + '</div></div>' +
+          '<div class="change-part">' + typeBadge + '<div class="result-label">변경 전</div><div class="change-value">' + escapeHtml(block.origin.text) + '</div></div>' +
           '<div class="arrow">→</div>' +
           '<div class="change-part"><div class="result-label">변경 후</div><div class="change-value">' + escapeHtml(block.revised) + '</div></div>' +
         '</div>' +
@@ -322,6 +326,24 @@ function buildClientRuleFallbackBlocks(source, revised, ruleEdits) {
       }]
     };
   });
+}
+
+function getEditType(block) {
+  const original = typeof block?.origin?.text === 'string' ? block.origin.text : '';
+  const changed = typeof block?.revised === 'string' ? block.revised : '';
+
+  if (original && changed && original.replace(/\s/g, '') === changed.replace(/\s/g, '')) {
+    const originalSpaces = (original.match(/\s/g) || []).length;
+    const revisedSpaces = (changed.match(/\s/g) || []).length;
+    if (revisedSpaces > originalSpaces) return {label: '띄어쓰기', className: 'spacing'};
+    if (revisedSpaces < originalSpaces) return {label: '붙여쓰기', className: 'spacing'};
+  }
+
+  const category = block?.rule?.category || '';
+  if (category === 'orthography') return {label: '맞춤법', className: 'grammar'};
+  if (category === 'spacing') return {label: '띄어쓰기', className: 'spacing'};
+  if (category === 'expression') return {label: '표현', className: 'grammar'};
+  return {label: '교정', className: 'grammar'};
 }
 
 function renderSentenceWithEdits(revised, blocks) {
@@ -514,13 +536,15 @@ function renderSentenceWithEdits(revised, blocks) {
     html += escapeHtml(revised.slice(position, range.start));
 
     const highlighted = revised.slice(range.start, range.end);
+    const editType = getEditType(blocks[range.index]);
     const label = highlighted.trim()
       ? highlighted
-      : '띄어쓰기 수정';
+      : editType.label + ' 수정';
 
-    html += '<span class="sentence-edit" data-correction-index="' + range.index + '" tabindex="0" role="button" aria-label="수정된 부분: ' +
-      escapeHtml(label) + '">' +
-      escapeHtml(highlighted || ' ') +
+    html += '<span class="sentence-edit" data-correction-index="' + range.index + '" tabindex="0" role="button" aria-label="' +
+      escapeHtml(editType.label + ': ' + label) + '">' +
+      '<span class="sentence-edit-type">' + escapeHtml(editType.label) + '</span>' +
+      '<span class="sentence-edit-text">' + escapeHtml(highlighted || ' ') + '</span>' +
       '</span>';
 
     position = range.end;
