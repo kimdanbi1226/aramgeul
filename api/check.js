@@ -243,23 +243,29 @@ export default async function handler(req, res) {
         : []
     );
 
+    // 최종 통합 결과의 모든 교정 edit가 UI 표시 블록으로 표현되어야 한다.
+    // 단순히 rule_id별 개수만 비교하면 같은 규칙에서 여러 교정이 있거나
+    // 기존 블록의 범위가 다른 경우 실제 누락을 놓칠 수 있다.
     const displayedRuleBlocks = [...mergedRevisedBlocks];
-    const displayedRuleCounts = displayedRuleBlocks.reduce((counts, block) => {
-      const ruleId = block?.rule?.rule_id;
-      if (ruleId) counts[ruleId] = (counts[ruleId] || 0) + 1;
-      return counts;
-    }, {});
 
     for (const block of integratedRuleFallbackBlocks) {
-      const ruleId = block?.rule?.rule_id;
-      if (!ruleId) continue;
-      displayedRuleCounts[ruleId] = displayedRuleCounts[ruleId] || 0;
+      const isRepresented = displayedRuleBlocks.some(existing => {
+        if (!existing || existing?.rule?.rule_id !== block?.rule?.rule_id) return false;
 
-      if (displayedRuleCounts[ruleId] < integratedRuleFallbackBlocks.filter(
-        candidate => candidate?.rule?.rule_id === ruleId
-      ).length) {
+        const existingEdit = existing?.rule_edit;
+        const fallbackEdit = block?.rule_edit;
+
+        return Boolean(
+          existingEdit &&
+          fallbackEdit &&
+          existingEdit.start === fallbackEdit.start &&
+          existingEdit.end === fallbackEdit.end &&
+          existingEdit.replacement === fallbackEdit.replacement
+        );
+      });
+
+      if (!isRepresented) {
         displayedRuleBlocks.push(block);
-        displayedRuleCounts[ruleId] += 1;
       }
     }
 
