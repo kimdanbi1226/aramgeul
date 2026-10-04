@@ -223,7 +223,8 @@ function renderResult(data, input) {
         : editType === '붙여쓰기'
           ? '불필요한 띄어쓰기를 붙여 썼습니다.'
           : '문맥과 규칙에 맞게 표현을 바로잡았습니다.');
-      return '<div class="correction clickable" data-correction-index="' + index + '" data-correction-type="' + escapeHtml(editType) + '" tabindex="0" role="button" aria-expanded="false">' +
+      const filterType = editType === '붙여쓰기' ? '띄어쓰기' : editType;
+      return '<div class="correction clickable" data-correction-index="' + index + '" data-correction-type="' + escapeHtml(filterType) + '" tabindex="0" role="button" aria-expanded="false">' +
         '<div class="correction-top"><span class="correction-index">교정 ' + (index + 1) + '</span><span class="correction-type">' + escapeHtml(editType) + '</span></div>' +
         '<div class="change">' +
           '<div class="change-part"><div class="result-label">변경 전</div><div class="change-value">' + escapeHtml(block.origin.text) + '</div></div>' +
@@ -547,10 +548,24 @@ function applyCorrectionFilter(filter) {
     edit.hidden = !visible;
   });
 
-  const visibleCount = Array.from(document.querySelectorAll('.correction.clickable'))
-    .filter(card => !card.hidden).length;
+  const cards = Array.from(document.querySelectorAll('.correction.clickable'));
+  const visibleCards = cards.filter(card => !card.hidden);
   const countEl = document.getElementById('correctionCount');
-  if (countEl) countEl.textContent = visibleCount + '개';
+  if (countEl) countEl.textContent = visibleCards.length + '개';
+
+  let empty = document.getElementById('correctionFilterEmpty');
+  if (!empty && cards.length) {
+    const container = document.querySelector('.corrections');
+    if (container) {
+      empty = document.createElement('div');
+      empty.id = 'correctionFilterEmpty';
+      empty.className = 'result-box';
+      empty.style.marginTop = '0';
+      empty.textContent = '이 분류에는 표시할 교정 항목이 없습니다.';
+      container.appendChild(empty);
+    }
+  }
+  if (empty) empty.hidden = visibleCards.length !== 0;
 }
 
 function bindSentenceEdits() {
