@@ -322,6 +322,15 @@ function analyze(text, tokens = []) {
   const rule50 = getRuleById('SPACING-050-TECHNICAL-TERM');
   assert.equal(rule49.decision_type, 'AMBIGUOUS');
   assert.equal(rule50.decision_type, 'AMBIGUOUS');
+
+  // D 단계: 인명·기관명·전문 용어는 사전/개체 경계가 없는 상태에서
+  // 무조건 교정하지 않고, 등록된 확정/허용 사례만 제한적으로 처리한다.
+  assert.equal(evaluateSpacing(analyze('김모 씨가 말했다.')).revised, '김모 씨가 말했다.');
+  assert.equal(evaluateSpacing(analyze('대한 중학교에 다닌다.')).revised, '대한 중학교에 다닌다.');
+  assert.equal(evaluateSpacing(analyze('한국 대학교 사범 대학에 다닌다.')).revised, '한국 대학교 사범 대학에 다닌다.');
+  assert.equal(evaluateSpacing(analyze('만성 골수성 백혈병을 연구한다.')).revised, '만성 골수성 백혈병을 연구한다.');
+  assert.equal(evaluateSpacing(analyze('학교폭력을 예방한다.')).revised, '학교 폭력을 예방한다.');
+  assert.equal(evaluateSpacing(analyze('결산 소득세를 확인한다.')).revised, '결산 소득세를 확인한다.');
 }
 
 {
