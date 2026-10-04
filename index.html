@@ -358,56 +358,53 @@ function renderSentenceWithEdits(revised, blocks) {
     const originalText = typeof block.origin?.text === 'string' ? block.origin.text : '';
     const revisedBlockText = typeof block.revised === 'string' ? block.revised : '';
 
-    // 띄어쓰기/붙여쓰기는 서버 offset을 그대로 사용하지 않는다.
-    // block.revised가 실제 최종 문장에 포함되는 위치를 찾은 뒤,
-    // 원문과 수정문의 최초 차이 지점을 계산해 부호 위치를 정확히 구한다.
-    if (
-      originalText &&
-      revisedBlockText &&
-      originalText.replace(/\s/g, '') === revisedBlockText.replace(/\s/g, '')
-    ) {
+    // 하나의 rule block 안에 같은 유형의 띄어쓰기 교정이 여러 개 있을 수 있다.
+    // 예: '12억3456만7898' -> '12억 3456만 7898'은 같은 규칙으로
+    // 띄어쓰기 위치가 2곳 생긴다. 모든 위치를 개별 부호로 표시한다.
+    if (originalText && revisedBlockText && originalText.replace(/\s/g, '') === revisedBlockText.replace(/\s/g, '')) {
       const originalSpaces = (originalText.match(/\s/g) || []).length;
       const revisedSpaces = (revisedBlockText.match(/\s/g) || []).length;
-
       const blockStart = revised.indexOf(revisedBlockText, cursor);
-      if (blockStart !== -1) {
-        let localOriginal = 0;
-        let localRevised = 0;
 
-        while (
-          localOriginal < originalText.length &&
-          localRevised < revisedBlockText.length &&
-          originalText[localOriginal] === revisedBlockText[localRevised]
-        ) {
-          localOriginal++;
-          localRevised++;
+      if (blockStart !== -1 && originalSpaces !== revisedSpaces) {
+        let oi = 0;
+        let ri = 0;
+
+        while (oi < originalText.length || ri < revisedBlockText.length) {
+          if (originalText[oi] === revisedBlockText[ri]) {
+            oi++;
+            ri++;
+            continue;
+          }
+
+          if (revisedSpaces > originalSpaces && revisedBlockText[ri] === ' ') {
+            ranges.push({
+              start: blockStart + ri,
+              end: blockStart + ri,
+              index,
+              kind: 'space-insert'
+            });
+            ri++;
+            continue;
+          }
+
+          if (revisedSpaces < originalSpaces && originalText[oi] === ' ') {
+            ranges.push({
+              start: blockStart + ri,
+              end: blockStart + ri,
+              index,
+              kind: 'space-delete'
+            });
+            oi++;
+            continue;
+          }
+
+          // 공백 외 차이가 섞인 예외적인 블록은 일반 교정 경로로 넘긴다.
+          break;
         }
 
-        if (revisedSpaces > originalSpaces) {
-          // 공백이 추가된 경우: 수정문에서 추가된 공백의 위치를 표시한다.
-          const insertionAt = localRevised;
-          ranges.push({
-            start: blockStart + insertionAt,
-            end: blockStart + insertionAt,
-            index,
-            kind: 'space-insert'
-          });
-          cursor = blockStart + revisedBlockText.length;
-          return;
-        }
-
-        if (revisedSpaces < originalSpaces) {
-          // 공백이 삭제된 경우: 삭제된 공백이 있던 위치를 표시한다.
-          const deletionAt = localRevised;
-          ranges.push({
-            start: blockStart + deletionAt,
-            end: blockStart + deletionAt,
-            index,
-            kind: 'space-delete'
-          });
-          cursor = blockStart + revisedBlockText.length;
-          return;
-        }
+        cursor = blockStart + revisedBlockText.length;
+        return;
       }
     }
 
