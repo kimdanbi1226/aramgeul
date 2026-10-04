@@ -232,16 +232,16 @@ function renderSentenceWithEdits(revised, blocks) {
   let cursor = 0;
 
   blocks.forEach((block, index) => {
-    const explicitStart = Number.isInteger(block.revised_start);
-    const explicitEnd = Number.isInteger(block.revised_end);
+    const explicitStart = Number.isInteger(block.revised_start) ? block.revised_start : null;
+    const explicitEnd = Number.isInteger(block.revised_end) ? block.revised_end : null;
 
     // 서버가 계산한 최종 문장 기준 오프셋을 우선한다.
     // block.revised는 주변 문맥까지 포함한 설명용 문자열이므로,
     // 그것을 그대로 검색해 전체 문맥을 강조하면 복합 교정에서
     // 서로 다른 수정 블록이 겹치는 문제가 생긴다.
     if (
-      explicitStart &&
-      explicitEnd &&
+      explicitStart !== null &&
+      explicitEnd !== null &&
       explicitStart >= 0 &&
       explicitEnd >= explicitStart &&
       explicitEnd <= revised.length
