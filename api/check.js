@@ -232,6 +232,37 @@ export default async function handler(req, res) {
       dictionaryDecisions
     });
 
+    // 통합 판정에 실제 교정이 남아 있는데 기존 표시 블록이 비어 있는
+    // 경우에도 사용자에게 변경 내용과 규칙 근거를 보여줘야 한다.
+    // 특히 Bareun 미연결 상태에서는 ruleResult -> fallback block 경로가
+    // 최종 UI 표시까지 이어지는 것을 통합 결과 기준으로 한 번 더 보장한다.
+    const integratedRuleFallbackBlocks = buildRuleFallbackBlocks(
+      text,
+      Array.isArray(integrated.edits)
+        ? integrated.edits
+        : []
+    );
+
+    const displayedRuleBlocks = [...mergedRevisedBlocks];
+    const displayedRuleCounts = displayedRuleBlocks.reduce((counts, block) => {
+      const ruleId = block?.rule?.rule_id;
+      if (ruleId) counts[ruleId] = (counts[ruleId] || 0) + 1;
+      return counts;
+    }, {});
+
+    for (const block of integratedRuleFallbackBlocks) {
+      const ruleId = block?.rule?.rule_id;
+      if (!ruleId) continue;
+      displayedRuleCounts[ruleId] = displayedRuleCounts[ruleId] || 0;
+
+      if (displayedRuleCounts[ruleId] < integratedRuleFallbackBlocks.filter(
+        candidate => candidate?.rule?.rule_id === ruleId
+      ).length) {
+        displayedRuleBlocks.push(block);
+        displayedRuleCounts[ruleId] += 1;
+      }
+    }
+
     // Bareun이 특정 교정을 블록으로 돌려주지 않더라도
     // 아람글 규칙 엔진의 판정과 근거가 사라지지 않도록 보존한다.
     const ruleEdits = (ruleResult?.edits || [])
@@ -258,7 +289,7 @@ export default async function handler(req, res) {
       // 기존 프론트엔드 호환 필드
       origin: bareunData?.origin || text,
       revised: integrated.revised,
-      revised_blocks: mergedRevisedBlocks,
+      revised_blocks: displayedRuleBlocks,
       engines: {
         aramgeul_rule: Boolean(ruleResult),
         bareun: Boolean(bareunResult)
