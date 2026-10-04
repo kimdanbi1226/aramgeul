@@ -423,6 +423,11 @@ function analyze(text, tokens = []) {
   for (const [input, expected] of cases) {
     const result = evaluateSpacing(analyze(input));
     assert.equal(result.revised, expected, input);
+
+    if (input === '12억3456만7898원의 계약을 체결했다.') {
+      const spacingEdits = result.edits.filter(edit => edit.replacement === ' ');
+      assert.equal(spacingEdits.length, 2, 'E06 must preserve both number-group spacing edits');
+    }
   }
 }
 
