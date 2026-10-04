@@ -64,7 +64,8 @@ assertCorrection(
   'SPACING-042-DEPENDENT-NOUN'
 );
 
-// 제43항: 고유어 수관형사 + 단위 명사는 공식 답변 간 해석 차이가 있어 자동 교정하지 않는다.
+// 제43항: 고유어 수관형사 + 단위 명사의 해석 차이가 있는 항목은
+// 등록된 실사용 프로필이 있는 경우에만 원칙형으로 교정한다.
 assertValid(
   '한개',
   [
@@ -73,7 +74,7 @@ assertValid(
   ]
 );
 
-// 제43항: 명확한 허용 붙여쓰기
+// 제43항: 명확한 허용 붙여쓰기는 오류로 만들지 않는다.
 assertValid(
   '10개',
   [
@@ -81,16 +82,25 @@ assertValid(
     token('개', 2, 3, ['DEPENDENT_NOUN'], 'NNB')
   ]
 );
-assertValid(
+assertCorrection(
   '두시간',
   [
     token('두', 0, 1, ['NUMBER'], 'MM'),
     token('시간', 1, 3, ['DEPENDENT_NOUN'], 'NNB')
-  ]
+  ],
+  '두 시간',
+  'SPACING-043-UNIT-NOUN'
 );
 const rule43 = getRuleById('SPACING-043-UNIT-NOUN');
 assert.equal(rule43.deferred_examples.some(example => example.input === '한개'), true);
-assert.equal(rule43.deferred_examples.some(example => example.input === '두시간'), true);
+assert.equal(
+  rule43.deferred_examples.some(
+    example => example.input === '두시간' &&
+      example.preferred === '두 시간' &&
+      example.auto_correct_alternatives === true
+  ),
+  true
+);
 
 // 제44항: 수를 만 단위로 구획한다.
 assertCorrection(
