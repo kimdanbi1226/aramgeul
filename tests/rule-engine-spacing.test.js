@@ -189,6 +189,18 @@ function analyze(text, tokens = []) {
 }
 
 {
+  const text = '나 만큼';
+  const result = evaluateSpacing(analyze(text, [
+    // 실제 형태소 분석기가 '만큼'을 의존 명사로 태깅하더라도
+    // 문맥 보정에서 조사 후보가 추가되는 경우를 재현한다.
+    token('나', 0, 1, ['NOUN'], 'NP'),
+    token('만큼', 2, 4, ['DEPENDENT_NOUN'], 'NNB')
+  ]));
+  assert.equal(result.revised, '나만큼');
+  assert.equal(result.edits.some(edit => edit.rule_id === 'SPACING-JOSA-ATTACH'), true);
+}
+
+{
   const text = '김양수씨가 말했다.';
   const result = evaluateSpacing(analyze(text, [
     token('김양수', 0, 3, ['NOUN'], 'NNP'),
