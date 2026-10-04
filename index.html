@@ -262,6 +262,10 @@ function renderSentenceWithEdits(revised, blocks) {
           visibleStart += 1;
         }
 
+        while (visibleStart > 0 && !/\s/.test(revised[visibleStart - 1])) {
+          visibleStart -= 1;
+        }
+
         let visibleEnd = visibleStart;
         while (visibleEnd < revised.length && !/\s/.test(revised[visibleEnd])) {
           visibleEnd += 1;
@@ -301,23 +305,23 @@ function renderSentenceWithEdits(revised, blocks) {
       // 서버 범위가 교정 구간 전체를 가리키더라도 화면에서는
       // 실제로 바뀐 문자만 강조한다. 예: 승락을 → 승낙을에서는
       // "승낙을" 전체가 아니라 "낙"만 강조한다.
-      const originalText = typeof block.origin?.text === 'string' ? block.origin.text : '';
-      const revisedText = typeof block.revised === 'string' ? block.revised : explicitText;
-      const commonPrefixLimit = Math.min(originalText.length, revisedText.length);
+      const originTextForDiff = typeof block.origin?.text === 'string' ? block.origin.text : '';
+      const revisedTextForDiff = typeof block.revised === 'string' ? block.revised : explicitText;
+      const commonPrefixLimit = Math.min(originTextForDiff.length, revisedTextForDiff.length);
       let commonPrefix = 0;
       while (
         commonPrefix < commonPrefixLimit &&
-        originalText[commonPrefix] === revisedText[commonPrefix]
+        originTextForDiff[commonPrefix] === revisedTextForDiff[commonPrefix]
       ) {
         commonPrefix += 1;
       }
 
       let commonSuffix = 0;
       while (
-        commonSuffix < originalText.length - commonPrefix &&
-        commonSuffix < revisedText.length - commonPrefix &&
-        originalText[originalText.length - 1 - commonSuffix] ===
-          revisedText[revisedText.length - 1 - commonSuffix]
+        commonSuffix < originTextForDiff.length - commonPrefix &&
+        commonSuffix < revisedTextForDiff.length - commonPrefix &&
+        originTextForDiff[originTextForDiff.length - 1 - commonSuffix] ===
+          revisedTextForDiff[revisedTextForDiff.length - 1 - commonSuffix]
       ) {
         commonSuffix += 1;
       }
@@ -341,12 +345,12 @@ function renderSentenceWithEdits(revised, blocks) {
       // 예: "나 만큼" → "나만큼"에서는 "만큼"을 표시한다.
       if (!explicitText.trim()) {
         let visibleStart = explicitEnd;
-        while (visibleStart < revised.length && /\\s/.test(revised[visibleStart])) {
+        while (visibleStart < revised.length && /\s/.test(revised[visibleStart])) {
           visibleStart += 1;
         }
 
         let visibleEnd = visibleStart;
-        while (visibleEnd < revised.length && !/\\s/.test(revised[visibleEnd])) {
+        while (visibleEnd < revised.length && !/\s/.test(revised[visibleEnd])) {
           visibleEnd += 1;
         }
 
@@ -362,12 +366,12 @@ function renderSentenceWithEdits(revised, blocks) {
 
         // 문장 끝에서 공백이 삭제된 경우에는 앞 단어를 표시한다.
         let previousEnd = Math.max(0, explicitStart);
-        while (previousEnd > 0 && /\\s/.test(revised[previousEnd - 1])) {
+        while (previousEnd > 0 && /\s/.test(revised[previousEnd - 1])) {
           previousEnd -= 1;
         }
 
         let previousStart = previousEnd;
-        while (previousStart > 0 && !/\\s/.test(revised[previousStart - 1])) {
+        while (previousStart > 0 && !/\s/.test(revised[previousStart - 1])) {
           previousStart -= 1;
         }
 
