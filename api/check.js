@@ -271,7 +271,13 @@ export default async function handler(req, res) {
 
     // Bareun이 특정 교정을 블록으로 돌려주지 않더라도
     // 아람글 규칙 엔진의 판정과 근거가 사라지지 않도록 보존한다.
-    const ruleEdits = (ruleResult?.edits || [])
+    // 최종 통합 결과에 실제로 반영된 규칙 교정을 UI fallback용으로 반환한다.
+    // 원본 ruleResult보다 integrated.edits를 우선해야 사전 차단/통합 과정 이후의
+    // 실제 교정 범위와 프런트 표시 정보가 일치한다.
+    const ruleEdits = (Array.isArray(integrated.edits) && integrated.edits.length
+      ? integrated.edits
+      : (ruleResult?.edits || [])
+    )
       .map(edit => ({
         rule_id: edit.rule_id,
         rule: edit.rule,
@@ -281,7 +287,12 @@ export default async function handler(req, res) {
         revised_start: Number.isInteger(edit.start) ? edit.start : null,
         revised_end: Number.isInteger(edit.start) ? edit.start + edit.replacement.length : null
       }))
-      .filter(edit => edit.rule);
+      .filter(edit =>
+        edit.rule &&
+        Number.isInteger(edit.start) &&
+        Number.isInteger(edit.end) &&
+        typeof edit.replacement === 'string'
+      );
 
     const buildVersion =
       process.env.VERCEL_GIT_COMMIT_SHA ||
