@@ -14,7 +14,7 @@ header{border-bottom:1px solid rgba(36,87,197,.10);background:rgba(255,255,255,.
 .brand{display:flex;align-items:center;gap:11px}.mark{width:40px;height:40px;border-radius:12px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:800;font-size:18px}.brand-name{font-size:22px;font-weight:800;letter-spacing:-.04em}.brand-sub{font-size:12px;color:var(--muted);margin-top:2px}
 .badge{font-size:12px;color:var(--primary);background:var(--soft);border:1px solid #d7e4ff;border-radius:999px;padding:7px 10px}
 main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center;margin-bottom:34px}.hero .eyebrow{display:inline-block;color:var(--primary);font-size:13px;font-weight:800;margin-bottom:13px}.hero h1{margin:0;font-size:clamp(36px,6vw,58px);letter-spacing:-.065em;line-height:1.12}.hero p{margin:16px auto 0;max-width:650px;color:var(--muted);font-size:17px;line-height:1.75;letter-spacing:-.02em}
-.card{background:var(--white);border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 55px rgba(27,56,100,.10);overflow:hidden}.tabs{display:flex;gap:8px;padding:16px 20px;border-bottom:1px solid var(--line);background:#fcfdff}.tab{border:1px solid #d5dce7;background:#fff;color:#526073;border-radius:10px;padding:10px 15px;font:inherit;font-size:14px;cursor:pointer}.tab.active{background:var(--soft);border-color:#c9dbff;color:var(--primary);font-weight:800}
+.card{background:var(--white);border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 55px rgba(27,56,100,.10);overflow:hidden}
 .editor{padding:24px}textarea{display:block;width:100%;min-height:260px;resize:vertical;border:1px solid #cfd8e6;border-radius:16px;padding:20px;font:inherit;font-size:18px;line-height:1.85;color:var(--ink);background:#fbfcfe;outline:none}textarea:focus{border-color:#6d9be8;box-shadow:0 0 0 4px rgba(36,87,197,.09)}textarea::placeholder{color:#9aa5b5}.editor-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}.count{font-size:13px;color:var(--muted)}.check{border:0;border-radius:12px;padding:13px 23px;background:var(--primary);color:#fff;font:inherit;font-weight:800;cursor:pointer}.check:hover{background:var(--primary-dark)}.check:disabled{opacity:.65;cursor:wait}
 .result{display:none;border-top:1px solid var(--line);padding:24px;background:#fafcff}.result.show{display:block}.result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.result-title{font-size:17px;font-weight:800}.status{font-size:12px;border-radius:999px;padding:6px 9px;background:#eef2f7;color:#5d6878}.status.correction{color:var(--primary);background:var(--soft)}.status.valid{color:var(--success);background:#eaf8f2}.status.ambiguous{color:var(--warning);background:#fff5df}
 .result-box{padding:20px;border:1px solid var(--line);border-radius:16px;background:#fff;line-height:1.8;color:#475467}.result-label{font-size:12px;font-weight:800;color:#7a8595;margin-bottom:8px}.revised-text{font-size:19px;color:var(--ink);white-space:pre-wrap;word-break:break-word;letter-spacing:-.015em}.result-section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:20px 2px 10px;font-size:14px;font-weight:800;color:var(--ink)}.result-section-title span{font-size:11px;color:var(--muted);font-weight:600}
@@ -39,7 +39,6 @@ main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center
 <main>
 <section class="hero"><div class="eyebrow">ARAMGEUL</div><h1>더 정확하게,<br>더 자연스럽게.</h1><p>한국어 문장을 입력하면 맞춤법·띄어쓰기·표현을 확인하고, 수정된 부분과 검사 설명을 함께 볼 수 있습니다.</p></section>
 <section class="card">
-<div class="tabs" role="tablist" aria-label="검사 결과 필터"><button class="tab active" type="button" data-filter="all" role="tab" aria-selected="true">전체</button><button class="tab" type="button" data-filter="맞춤법" role="tab" aria-selected="false">맞춤법</button><button class="tab" type="button" data-filter="띄어쓰기" role="tab" aria-selected="false">띄어쓰기</button><button class="tab" type="button" data-filter="표현" role="tab" aria-selected="false">표현</button></div>
 <div class="editor"><textarea id="text" maxlength="5000" placeholder="검사할 문장을 입력해 주세요.
 예: 오늘은 날씨가 좋아서 산책을 하러 갔어요."></textarea><div class="editor-bottom"><span class="count"><span id="count">0</span> / 5,000자</span><button class="check" id="check" type="button">검사하기</button></div></div>
 <div class="result" id="result"><div class="result-head"><div class="result-title">검사 결과</div><span class="status" id="status">확인 중</span></div><div id="resultContent"></div></div>
@@ -57,18 +56,6 @@ const checkButton = document.getElementById('check');
 
 text.addEventListener('input', () => {
   count.textContent = text.value.length.toLocaleString('ko-KR');
-});
-
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => {
-      t.classList.remove('active');
-      t.setAttribute('aria-selected', 'false');
-    });
-    tab.classList.add('active');
-    tab.setAttribute('aria-selected', 'true');
-    applyCorrectionFilter(tab.dataset.filter || 'all');
-  });
 });
 
 checkButton.addEventListener('click', async () => {
@@ -223,8 +210,7 @@ function renderResult(data, input) {
         : editType === '붙여쓰기'
           ? '불필요한 띄어쓰기를 붙여 썼습니다.'
           : '문맥과 규칙에 맞게 표현을 바로잡았습니다.');
-      const filterType = editType === '붙여쓰기' ? '띄어쓰기' : editType;
-      return '<div class="correction clickable" data-correction-index="' + index + '" data-correction-type="' + escapeHtml(filterType) + '" tabindex="0" role="button" aria-expanded="false">' +
+      return '<div class="correction clickable" data-correction-index="' + index + '" tabindex="0" role="button" aria-expanded="false">' +
         '<div class="correction-top"><span class="correction-index">교정 ' + (index + 1) + '</span><span class="correction-type">' + escapeHtml(editType) + '</span></div>' +
         '<div class="change">' +
           '<div class="change-part"><div class="result-label">변경 전</div><div class="change-value">' + escapeHtml(block.origin.text) + '</div></div>' +
@@ -262,8 +248,6 @@ function renderResult(data, input) {
   resultContent.innerHTML = html;
   bindCorrectionCards();
   bindSentenceEdits();
-  const activeTab = document.querySelector('.tab.active');
-  applyCorrectionFilter(activeTab ? (activeTab.dataset.filter || 'all') : 'all');
 }
 
 function buildClientRuleFallbackBlocks(source, revised, ruleEdits) {
@@ -532,40 +516,6 @@ function renderSentenceWithEdits(revised, blocks) {
 
   html += escapeHtml(revised.slice(position));
   return html;
-}
-
-function applyCorrectionFilter(filter) {
-  document.querySelectorAll('.correction.clickable').forEach(card => {
-    const type = card.dataset.correctionType || '';
-    const visible = filter === 'all' || type === filter;
-    card.hidden = !visible;
-  });
-
-  document.querySelectorAll('.sentence-edit').forEach(edit => {
-    const index = Number(edit.dataset.correctionIndex);
-    const card = document.querySelector('.correction[data-correction-index="' + index + '"]');
-    const visible = !card || !card.hidden;
-    edit.hidden = !visible;
-  });
-
-  const cards = Array.from(document.querySelectorAll('.correction.clickable'));
-  const visibleCards = cards.filter(card => !card.hidden);
-  const countEl = document.getElementById('correctionCount');
-  if (countEl) countEl.textContent = visibleCards.length + '개';
-
-  let empty = document.getElementById('correctionFilterEmpty');
-  if (!empty && cards.length) {
-    const container = document.querySelector('.corrections');
-    if (container) {
-      empty = document.createElement('div');
-      empty.id = 'correctionFilterEmpty';
-      empty.className = 'result-box';
-      empty.style.marginTop = '0';
-      empty.textContent = '이 분류에는 표시할 교정 항목이 없습니다.';
-      container.appendChild(empty);
-    }
-  }
-  if (empty) empty.hidden = visibleCards.length !== 0;
 }
 
 function bindSentenceEdits() {
