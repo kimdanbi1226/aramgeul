@@ -353,6 +353,62 @@ function renderSentenceWithEdits(revised, blocks) {
   let cursor = 0;
 
   blocks.forEach((block, index) => {
+    const originalText = typeof block.origin?.text === 'string' ? block.origin.text : '';
+    const revisedBlockText = typeof block.revised === 'string' ? block.revised : '';
+
+    // 띄어쓰기/붙여쓰기는 서버 offset을 그대로 사용하지 않는다.
+    // block.revised가 실제 최종 문장에 포함되는 위치를 찾은 뒤,
+    // 원문과 수정문의 최초 차이 지점을 계산해 부호 위치를 정확히 구한다.
+    if (
+      originalText &&
+      revisedBlockText &&
+      originalText.replace(/\s/g, '') === revisedBlockText.replace(/\s/g, '')
+    ) {
+      const originalSpaces = (originalText.match(/\s/g) || []).length;
+      const revisedSpaces = (revisedBlockText.match(/\s/g) || []).length;
+
+      const blockStart = revised.indexOf(revisedBlockText, cursor);
+      if (blockStart !== -1) {
+        let localOriginal = 0;
+        let localRevised = 0;
+
+        while (
+          localOriginal < originalText.length &&
+          localRevised < revisedBlockText.length &&
+          originalText[localOriginal] === revisedBlockText[localRevised]
+        ) {
+          localOriginal++;
+          localRevised++;
+        }
+
+        if (revisedSpaces > originalSpaces) {
+          // 공백이 추가된 경우: 수정문에서 추가된 공백의 위치를 표시한다.
+          const insertionAt = localRevised;
+          ranges.push({
+            start: blockStart + insertionAt,
+            end: blockStart + insertionAt,
+            index,
+            kind: 'space-insert'
+          });
+          cursor = blockStart + revisedBlockText.length;
+          return;
+        }
+
+        if (revisedSpaces < originalSpaces) {
+          // 공백이 삭제된 경우: 삭제된 공백이 있던 위치를 표시한다.
+          const deletionAt = localRevised;
+          ranges.push({
+            start: blockStart + deletionAt,
+            end: blockStart + deletionAt,
+            index,
+            kind: 'space-delete'
+          });
+          cursor = blockStart + revisedBlockText.length;
+          return;
+        }
+      }
+    }
+
     const explicitStart = Number.isInteger(block.revised_start) ? block.revised_start : null;
     const explicitEnd = Number.isInteger(block.revised_end) ? block.revised_end : null;
 
@@ -364,45 +420,9 @@ function renderSentenceWithEdits(revised, blocks) {
       explicitEnd <= revised.length
     ) {
       const explicitText = revised.slice(explicitStart, explicitEnd);
-      const originalText = typeof block.origin?.text === 'string' ? block.origin.text : '';
-      const revisedBlockText = typeof block.revised === 'string' ? block.revised : '';
+      const originTextForDiff = originalText;
+      const revisedTextForDiff = revisedBlockText || explicitText;
 
-      // 공백 개수만 달라진 경우에는 단어 자체를 강조하지 않고
-      // 원고지 교정 부호처럼 "띄어쓰기/붙여쓰기 위치"에 직접 표시한다.
-      if (
-        originalText &&
-        revisedBlockText &&
-        originalText.replace(/\s/g, '') === revisedBlockText.replace(/\s/g, '')
-      ) {
-        const originalSpaces = (originalText.match(/\s/g) || []).length;
-        const revisedSpaces = (revisedBlockText.match(/\s/g) || []).length;
-
-        if (revisedSpaces > originalSpaces) {
-          ranges.push({
-            start: explicitStart,
-            end: explicitEnd,
-            index,
-            kind: 'space-insert'
-          });
-          cursor = Math.max(cursor, explicitEnd);
-          return;
-        }
-
-        if (revisedSpaces < originalSpaces) {
-          ranges.push({
-            start: explicitStart,
-            end: explicitStart,
-            index,
-            kind: 'space-delete'
-          });
-          cursor = Math.max(cursor, explicitStart);
-          return;
-        }
-      }
-
-      // 문자 자체가 바뀐 경우에는 실제 변경 문자만 표시한다.
-      const originTextForDiff = typeof block.origin?.text === 'string' ? block.origin.text : '';
-      const revisedTextForDiff = typeof block.revised === 'string' ? block.revised : explicitText;
       const commonPrefixLimit = Math.min(originTextForDiff.length, revisedTextForDiff.length);
       let commonPrefix = 0;
 
@@ -410,7 +430,7 @@ function renderSentenceWithEdits(revised, blocks) {
         commonPrefix < commonPrefixLimit &&
         originTextForDiff[commonPrefix] === revisedTextForDiff[commonPrefix]
       ) {
-        commonPrefix += 1;
+        commonPrefix++;
       }
 
       let commonSuffix = 0;
@@ -420,7 +440,7 @@ function renderSentenceWithEdits(revised, blocks) {
         originTextForDiff[originTextForDiff.length - 1 - commonSuffix] ===
           revisedTextForDiff[revisedTextForDiff.length - 1 - commonSuffix]
       ) {
-        commonSuffix += 1;
+        commonSuffix++;
       }
 
       const changedStart = explicitStart + commonPrefix;
@@ -436,44 +456,19 @@ function renderSentenceWithEdits(revised, blocks) {
         cursor = Math.max(cursor, changedEnd);
         return;
       }
-
-      // 예외적으로 서버 범위가 비어 있거나 맞지 않을 때는
-      // 기존처럼 주변의 실제 단어를 찾아 표시한다.
-      if (!explicitText.trim()) {
-        let visibleStart = explicitEnd;
-        while (visibleStart < revised.length && /\s/.test(revised[visibleStart])) {
-          visibleStart += 1;
-        }
-
-        let visibleEnd = visibleStart;
-        while (visibleEnd < revised.length && !/\s/.test(revised[visibleEnd])) {
-          visibleEnd += 1;
-        }
-
-        if (visibleStart < visibleEnd) {
-          ranges.push({
-            start: visibleStart,
-            end: visibleEnd,
-            index,
-            kind: 'text'
-          });
-          cursor = Math.max(cursor, visibleEnd);
-          return;
-        }
-      }
     }
 
-    const value = typeof block.revised === 'string' ? block.revised.trim() : '';
+    const value = revisedBlockText.trim();
     if (value) {
-      const start = revised.indexOf(value, cursor);
-      if (start !== -1) {
+      const foundStart = revised.indexOf(value, cursor);
+      if (foundStart !== -1) {
         ranges.push({
-          start,
-          end: start + value.length,
+          start: foundStart,
+          end: foundStart + value.length,
           index,
           kind: 'text'
         });
-        cursor = start + value.length;
+        cursor = foundStart + value.length;
       }
     }
   });
@@ -494,7 +489,7 @@ function renderSentenceWithEdits(revised, blocks) {
       html += '<span class="sentence-edit space-mark space-insert" data-correction-index="' +
         range.index +
         '" tabindex="0" role="button" aria-label="띄어쓰기 추가: 여기에 띄어쓰기를 해야 합니다.">∨</span>';
-      position = range.end;
+      position = range.start;
       return;
     }
 
