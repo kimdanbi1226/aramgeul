@@ -191,6 +191,29 @@ const registeredNameExample = integrateCheckResults('충무공이순신장군을
 assert.equal(registeredNameExample.decision, 'CORRECTION');
 assert.equal(registeredNameExample.revised, '충무공 이순신 장군을 기렸다.');
 
+const registeredDistinguishingExample = integrateCheckResults('새 책상으로 가름하였다.', {
+  ruleResult: {
+    revised: '새 책상으로 갈음하였다.',
+    edits: [
+      {
+        rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+        start: 9,
+        end: 11,
+        replacement: '갈음'
+      }
+    ],
+    sources: [{ source: 'NIKL' }]
+  },
+  dictionaryDecisions: [
+    {
+      rule_id: 'ORTHO-057-DISTINGUISHING-WORDS',
+      status: 'CONTEXT_REQUIRED'
+    }
+  ]
+});
+assert.equal(registeredDistinguishingExample.decision, 'CORRECTION');
+assert.equal(registeredDistinguishingExample.revised, '새 책상으로 갈음하였다.');
+
 
 
 const technicalSupported = integrateCheckResults('결산소득세', {
