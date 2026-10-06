@@ -15,6 +15,14 @@ header{border-bottom:1px solid rgba(36,87,197,.10);background:rgba(255,255,255,.
 .nav{display:flex;gap:26px;align-items:center}.nav a{color:var(--ink);text-decoration:none;font-size:14px;font-weight:600}.editor-actions{display:flex;gap:4px;align-items:center}.tool-button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;font-weight:600;padding:8px 9px;border-radius:7px;cursor:pointer}.tool-button:hover{background:var(--soft);color:var(--ink)}
 main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center;margin-bottom:34px}.hero .eyebrow{display:inline-block;color:var(--primary);font-size:13px;font-weight:800;margin-bottom:13px}.hero h1{margin:0;font-size:clamp(36px,6vw,58px);letter-spacing:-.065em;line-height:1.12}.hero p{margin:16px auto 0;max-width:650px;color:var(--muted);font-size:17px;line-height:1.75;letter-spacing:-.02em}
 .card{background:var(--white);border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 55px rgba(27,56,100,.10);overflow:hidden}
+.criterion-bar{padding:16px 24px;border-bottom:1px solid var(--line);background:#fbfcfe}
+.criterion-label{font-size:12px;font-weight:800;color:var(--ink);margin-bottom:9px}
+.criterion-options{display:flex;gap:6px;align-items:center}
+.criterion-option{border:1px solid transparent;background:transparent;color:var(--muted);font:inherit;font-size:13px;font-weight:700;padding:8px 12px;border-radius:9px;cursor:pointer}
+.criterion-option:hover{background:var(--soft);color:var(--ink)}
+.criterion-option.active{background:var(--primary);color:#fff}
+.criterion-note{margin-top:8px;font-size:11px;line-height:1.5;color:var(--muted)}
+@media(max-width:700px){.criterion-bar{padding:14px 18px}.criterion-options{width:100%;overflow:auto}.criterion-option{white-space:nowrap}}
 .editor{padding:24px}textarea{display:block;width:100%;min-height:260px;resize:vertical;border:1px solid #cfd8e6;border-radius:16px;padding:20px;font:inherit;font-size:18px;line-height:1.85;color:var(--ink);background:#fbfcfe;outline:none}textarea:focus{border-color:#6d9be8;box-shadow:0 0 0 4px rgba(36,87,197,.09)}textarea::placeholder{color:#9aa5b5}.editor-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}.count{font-size:13px;color:var(--muted);margin-left:auto}.check{border:0;border-radius:12px;padding:13px 23px;background:var(--primary);color:#fff;font:inherit;font-weight:800;cursor:pointer}.check:hover{background:var(--primary-dark)}.check:disabled{opacity:.65;cursor:wait}
 .result{display:none;border-top:1px solid var(--line);padding:24px;background:#fafcff}.result.show{display:block}.result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.result-actions{display:flex;gap:4px;align-items:center;margin-bottom:14px}.result-actions .tool-button{font-size:13px}.edit-result{display:none}.result.editing .revised-text{display:none}.result.editing .edit-result{display:block;width:100%;min-height:180px;resize:vertical;border:1px solid var(--line);border-radius:10px;padding:16px;font:inherit;font-size:18px;line-height:1.8;color:var(--ink);outline:none}.result.editing .edit-result:focus{border-color:#8090aa;box-shadow:0 0 0 3px rgba(24,37,68,.08)}.result.editing .result-after-actions{display:flex}.result-after-actions{display:none;justify-content:flex-end;margin-top:10px}.result-after-actions .check{background:var(--primary)}.result-title{font-size:17px;font-weight:800}.status{font-size:12px;border-radius:999px;padding:6px 9px;background:#eef2f7;color:#5d6878}.status.correction{color:var(--primary);background:var(--soft)}.status.valid{color:var(--success);background:#eaf8f2}.status.ambiguous{color:var(--warning);background:#fff5df}
 .result-box{padding:20px;border:1px solid var(--line);border-radius:16px;background:#fff;line-height:1.8;color:#475467}.result-label{font-size:12px;font-weight:800;color:#7a8595;margin-bottom:8px}.revised-text{font-size:19px;color:var(--ink);white-space:pre-wrap;word-break:break-word;letter-spacing:-.015em}.result-section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:20px 2px 10px;font-size:14px;font-weight:800;color:var(--ink)}.result-section-title span{font-size:11px;color:var(--muted);font-weight:600}
@@ -39,6 +47,15 @@ main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center
 <main id="checker">
 <section class="hero"><div class="eyebrow">ARAMGEUL</div><h1>더 정확하게,<br>더 자연스럽게.</h1><p>한국어 문장을 입력하면 맞춤법·띄어쓰기·표현을 확인하고, 수정된 부분과 검사 설명을 함께 볼 수 있습니다.</p></section>
 <section class="card">
+<div class="criterion-bar" aria-label="검사 기준">
+  <div class="criterion-label">검사 기준</div>
+  <div class="criterion-options" role="group" aria-label="검사 기준 선택">
+    <button class="criterion-option active" type="button" aria-pressed="true" data-criterion="basic">기본 검사</button>
+    <button class="criterion-option" type="button" aria-pressed="false" data-criterion="document">문서</button>
+    <button class="criterion-option" type="button" aria-pressed="false" data-criterion="academic">논문·학술</button>
+  </div>
+  <div class="criterion-note" id="criterionNote">맞춤법·띄어쓰기·표현을 기본 기준으로 함께 검사합니다.</div>
+</div>
 <div class="editor"><textarea id="text" maxlength="5000" placeholder="검사할 문장을 입력해 주세요.
 예: 오늘은 날씨가 좋아서 산책을 하러 갔어요."></textarea><div class="editor-bottom"><div class="editor-actions"><button class="tool-button" id="newText" type="button">＋ 새 글 작성</button><button class="tool-button" id="pasteText" type="button">전체 붙여넣기</button><button class="tool-button" id="copyText" type="button">전체 복사</button></div><span class="count"><span id="count">0</span> / 5,000자</span><button class="check" id="check" type="button">검사하기</button></div></div>
 <div class="result" id="result"><div class="result-head"><div class="result-title">검사 결과</div><span class="status" id="status">확인 중</span></div><div class="result-actions"><button class="tool-button" id="resultNewText" type="button">＋ 새 글 작성</button><button class="tool-button" id="editResult" type="button">편집하기</button><button class="tool-button" id="copyResult" type="button">전체 복사</button></div><textarea class="edit-result" id="editResultText" aria-label="검사 결과 편집"></textarea><div class="result-after-actions"><button class="check" id="recheck" type="button">다시 검사</button></div><div id="resultContent"></div></div>
@@ -53,6 +70,24 @@ const result = document.getElementById('result');
 const status = document.getElementById('status');
 const resultContent = document.getElementById('resultContent');
 const checkButton = document.getElementById('check');
+let selectedCriterion = 'basic';
+const criterionNotes = {
+  basic: '맞춤법·띄어쓰기·표현을 기본 기준으로 함께 검사합니다.',
+  document: '공식·업무 문서 기준은 준비 중이며 현재는 기본 검사 기준으로 동작합니다.',
+  academic: '논문·학술 기준은 준비 중이며 현재는 기본 검사 기준으로 동작합니다.'
+};
+document.querySelectorAll('.criterion-option').forEach(button => {
+  button.addEventListener('click', () => {
+    selectedCriterion = button.dataset.criterion || 'basic';
+    document.querySelectorAll('.criterion-option').forEach(option => {
+      const active = option === button;
+      option.classList.toggle('active', active);
+      option.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    document.getElementById('criterionNote').textContent =
+      criterionNotes[selectedCriterion] || criterionNotes.basic;
+  });
+});
 
 text.addEventListener('input', () => {
   count.textContent = text.value.length.toLocaleString('ko-KR');
@@ -84,7 +119,7 @@ checkButton.addEventListener('click', async () => {
     const response = await fetch('/api/check', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({text: value})
+      body: JSON.stringify({text: value, criterion: selectedCriterion})
     });
 
     const data = await response.json().catch(() => ({}));
