@@ -6,21 +6,21 @@
 <title>아람글 | 한국어 맞춤법·띄어쓰기·표현 검사</title>
 <meta name="description" content="아람글은 한국어 맞춤법, 띄어쓰기, 표현을 확인하고 더 정확하고 자연스럽게 쓰도록 돕는 서비스입니다.">
 <style>
-:root{--primary:#2457c5;--primary-dark:#173f98;--soft:#eef4ff;--ink:#172033;--muted:#687386;--line:#dfe5ef;--bg:#f7f9fc;--white:#fff;--success:#16845b;--warning:#a66a00}
+:root{--primary:#182544;--primary-dark:#101a31;--soft:#f1f4f8;--ink:#182544;--muted:#536176;--line:#d6dde8;--bg:#f8f9fc;--white:#fff;--success:#2f8068;--warning:#c98718;--error:#d94a4a;--spacing:#3f6fa8}
 *{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--ink);background:linear-gradient(180deg,#edf4ff 0,#f7f9fc 45%,#fff 100%)}
+body{margin:0;font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--ink);background:var(--bg)}
 header{border-bottom:1px solid rgba(36,87,197,.10);background:rgba(255,255,255,.86);backdrop-filter:blur(12px)}
 .header-inner{max-width:1080px;margin:auto;padding:20px 24px;display:flex;align-items:center;justify-content:space-between}
 .brand{display:flex;align-items:center;gap:11px}.mark{width:40px;height:40px;border-radius:12px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:800;font-size:18px}.brand-name{font-size:22px;font-weight:800;letter-spacing:-.04em}.brand-sub{font-size:12px;color:var(--muted);margin-top:2px}
-.badge{font-size:12px;color:var(--primary);background:var(--soft);border:1px solid #d7e4ff;border-radius:999px;padding:7px 10px}
+.nav{display:flex;gap:26px;align-items:center}.nav a{color:var(--ink);text-decoration:none;font-size:14px;font-weight:600}.editor-actions{display:flex;gap:4px;align-items:center}.tool-button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;font-weight:600;padding:8px 9px;border-radius:7px;cursor:pointer}.tool-button:hover{background:var(--soft);color:var(--ink)}
 main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center;margin-bottom:34px}.hero .eyebrow{display:inline-block;color:var(--primary);font-size:13px;font-weight:800;margin-bottom:13px}.hero h1{margin:0;font-size:clamp(36px,6vw,58px);letter-spacing:-.065em;line-height:1.12}.hero p{margin:16px auto 0;max-width:650px;color:var(--muted);font-size:17px;line-height:1.75;letter-spacing:-.02em}
 .card{background:var(--white);border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 55px rgba(27,56,100,.10);overflow:hidden}
-.editor{padding:24px}textarea{display:block;width:100%;min-height:260px;resize:vertical;border:1px solid #cfd8e6;border-radius:16px;padding:20px;font:inherit;font-size:18px;line-height:1.85;color:var(--ink);background:#fbfcfe;outline:none}textarea:focus{border-color:#6d9be8;box-shadow:0 0 0 4px rgba(36,87,197,.09)}textarea::placeholder{color:#9aa5b5}.editor-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}.count{font-size:13px;color:var(--muted)}.check{border:0;border-radius:12px;padding:13px 23px;background:var(--primary);color:#fff;font:inherit;font-weight:800;cursor:pointer}.check:hover{background:var(--primary-dark)}.check:disabled{opacity:.65;cursor:wait}
+.editor{padding:24px}textarea{display:block;width:100%;min-height:260px;resize:vertical;border:1px solid #cfd8e6;border-radius:16px;padding:20px;font:inherit;font-size:18px;line-height:1.85;color:var(--ink);background:#fbfcfe;outline:none}textarea:focus{border-color:#6d9be8;box-shadow:0 0 0 4px rgba(36,87,197,.09)}textarea::placeholder{color:#9aa5b5}.editor-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}.count{font-size:13px;color:var(--muted);margin-left:auto}.check{border:0;border-radius:12px;padding:13px 23px;background:var(--primary);color:#fff;font:inherit;font-weight:800;cursor:pointer}.check:hover{background:var(--primary-dark)}.check:disabled{opacity:.65;cursor:wait}
 .result{display:none;border-top:1px solid var(--line);padding:24px;background:#fafcff}.result.show{display:block}.result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.result-title{font-size:17px;font-weight:800}.status{font-size:12px;border-radius:999px;padding:6px 9px;background:#eef2f7;color:#5d6878}.status.correction{color:var(--primary);background:var(--soft)}.status.valid{color:var(--success);background:#eaf8f2}.status.ambiguous{color:var(--warning);background:#fff5df}
 .result-box{padding:20px;border:1px solid var(--line);border-radius:16px;background:#fff;line-height:1.8;color:#475467}.result-label{font-size:12px;font-weight:800;color:#7a8595;margin-bottom:8px}.revised-text{font-size:19px;color:var(--ink);white-space:pre-wrap;word-break:break-word;letter-spacing:-.015em}.result-section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:20px 2px 10px;font-size:14px;font-weight:800;color:var(--ink)}.result-section-title span{font-size:11px;color:var(--muted);font-weight:600}
-.sentence-edit{background:var(--soft);color:var(--primary-dark);border-bottom:3px solid #6d8fd6;border-radius:4px;padding:1px 3px;font-weight:800;cursor:pointer;transition:background .15s,box-shadow .15s}
+.sentence-edit{background:#fff0f0;color:var(--error);border-bottom:2px solid #e49a9a;border-radius:4px;padding:1px 3px;font-weight:800;cursor:pointer;transition:background .15s,box-shadow .15s}
 .sentence-edit:hover,.sentence-edit.selected{background:#dfeaff;box-shadow:0 0 0 3px rgba(36,87,197,.12)}
-.space-mark{position:relative;color:var(--primary);font-weight:900;line-height:1;cursor:pointer;vertical-align:baseline;background:transparent;border:0;border-radius:0;padding:0;box-shadow:none;overflow:visible}
+.space-mark{position:relative;color:var(--spacing);font-weight:900;line-height:1;cursor:pointer;vertical-align:baseline;background:transparent;border:0;border-radius:0;padding:0;box-shadow:none;overflow:visible}
 .space-insert{display:inline;position:relative;width:auto;min-width:0;white-space:pre;margin:0;padding:0;font-size:12px;line-height:1}
 .space-insert::before{content:'∨';position:absolute;left:50%;top:0;transform:translate(-50%,-.96em);font-size:12px;line-height:1;pointer-events:none}
 .space-delete{display:inline-block;width:0;margin:0;transform:none;font-size:12px;text-align:center}
@@ -31,19 +31,19 @@ main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center
 .candidates{margin-top:14px;padding:14px;border:1px solid #f0dfb6;border-radius:14px;background:#fffaf0}.candidate{padding:8px 0}.candidate+.candidate{border-top:1px solid #f0e6cf}.candidate strong{font-size:12px;color:#7a5a16}.candidate div{margin-top:3px}
 .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.info{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.info strong{display:block;margin-bottom:6px;font-size:14px}.info span{font-size:13px;color:var(--muted);line-height:1.6}
 .notice{margin:20px 0 0;color:#8994a4;font-size:12px;line-height:1.7;text-align:center}footer{text-align:center;color:#929bab;font-size:12px;padding:0 24px 34px}
-@media(max-width:700px){.header-inner{padding:16px}.badge{display:none}main{padding:42px 16px 65px}.editor,.result{padding:18px}.editor-bottom{align-items:stretch;flex-direction:column}.check{width:100%}.info-grid{grid-template-columns:1fr}.arrow{display:none}.change-part{min-width:100%}}
+@media(max-width:700px){.header-inner{padding:15px 16px}.nav{gap:14px}.nav a{font-size:13px}main{padding:42px 16px 65px}.editor-actions{flex-wrap:wrap}.editor,.result{padding:18px}.editor-bottom{align-items:stretch;flex-direction:column}.check{width:100%}.info-grid{grid-template-columns:1fr}.arrow{display:none}.change-part{min-width:100%}}
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div class="brand"><div class="mark">글</div><div><div class="brand-name">아람글</div><div class="brand-sub">한국어 맞춤법 · 띄어쓰기 · 표현 검사</div></div></div><div class="badge">검사 기능 개발 중</div></div></header>
-<main>
+<header><div class="header-inner"><div class="brand"><div class="mark">글</div><div><div class="brand-name">아람글</div><div class="brand-sub">한국어 맞춤법 · 띄어쓰기 · 표현 검사</div></div></div><nav class="nav" aria-label="주요 메뉴"><a href="#checker">맞춤법 검사</a><a href="#expression">표현 검색</a></nav></div></header>
+<main id="checker">
 <section class="hero"><div class="eyebrow">ARAMGEUL</div><h1>더 정확하게,<br>더 자연스럽게.</h1><p>한국어 문장을 입력하면 맞춤법·띄어쓰기·표현을 확인하고, 수정된 부분과 검사 설명을 함께 볼 수 있습니다.</p></section>
 <section class="card">
 <div class="editor"><textarea id="text" maxlength="5000" placeholder="검사할 문장을 입력해 주세요.
-예: 오늘은 날씨가 좋아서 산책을 하러 갔어요."></textarea><div class="editor-bottom"><span class="count"><span id="count">0</span> / 5,000자</span><button class="check" id="check" type="button">검사하기</button></div></div>
+예: 오늘은 날씨가 좋아서 산책을 하러 갔어요."></textarea><div class="editor-bottom"><div class="editor-actions"><button class="tool-button" id="newText" type="button">＋ 새 글 작성</button><button class="tool-button" id="pasteText" type="button">전체 붙여넣기</button><button class="tool-button" id="copyText" type="button">전체 복사</button></div><span class="count"><span id="count">0</span> / 5,000자</span><button class="check" id="check" type="button">검사하기</button></div></div>
 <div class="result" id="result"><div class="result-head"><div class="result-title">검사 결과</div><span class="status" id="status">확인 중</span></div><div id="resultContent"></div></div>
 </section>
-<div class="info-grid"><div class="info"><strong>맞춤법</strong><span>문장에 사용된 맞춤법과 교정 후보를 확인합니다.</span></div><div class="info"><strong>띄어쓰기</strong><span>단어와 문장 사이의 띄어쓰기를 확인합니다.</span></div><div class="info"><strong>표현</strong><span>표현의 의미와 문체에 따른 차이를 확인합니다.</span></div></div>
+
 <p class="notice">검사 요청은 보안 서버를 거쳐 검사용 API로 전달됩니다. API 인증 정보는 이 화면의 코드에 노출하지 않습니다.</p>
 </main><footer>© 아람글 · 한국어를 더 정확하고 자연스럽게</footer>
 <script>
@@ -58,6 +58,9 @@ text.addEventListener('input', () => {
   count.textContent = text.value.length.toLocaleString('ko-KR');
 });
 
+document.getElementById("newText").addEventListener("click",()=>{if(text.value.trim()&&!confirm("새 글을 작성할까요? 현재 작성한 내용이 사라집니다."))return;text.value="";count.textContent="0";result.classList.remove("show");resultContent.innerHTML="";text.focus()});
+document.getElementById("copyText").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(text.value)}catch(e){alert("복사에 실패했습니다.")}});
+document.getElementById("pasteText").addEventListener("click",async()=>{try{text.value=(await navigator.clipboard.readText()).slice(0,5000);text.dispatchEvent(new Event("input"));text.focus()}catch(e){alert("붙여넣기에 실패했습니다.")}});
 checkButton.addEventListener('click', async () => {
   const value = text.value.trim();
   result.classList.add('show');
