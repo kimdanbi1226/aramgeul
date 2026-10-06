@@ -209,7 +209,7 @@ function renderResult(data, input) {
   html += '<div class="result-label">검사 결과</div>';
   html += '<div class="revised-text" id="revisedSentence">' + renderSentenceWithEdits(revised, blocks) + '</div>';
   html += '</div>';
-  html += '<details class="technical-details"><summary>검사 정보 보기</summary><div class="technical-body">' +
+  const technicalHtml = '<details class="technical-details"><summary>검사 정보 보기</summary><div class="technical-body">' +
     engineStatus +
     dictionaryStatus +
     htmlWarning +
@@ -277,6 +277,8 @@ function renderResult(data, input) {
   } else if (decision === 'VALID') {
     html += '<div class="result-box" style="margin-top:14px">현재 연결된 검사 범위에서는 수정할 항목을 찾지 못했습니다.</div>';
   }
+
+  html += technicalHtml;
 
   if (decision === 'AMBIGUOUS' && Array.isArray(data.candidates) && data.candidates.length) {
     html += '<div class="candidates"><strong>교정 후보를 하나로 확정하지 않았습니다.</strong>';
