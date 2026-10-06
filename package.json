@@ -16,7 +16,8 @@
     "test:dictionary-resilience": "node tests/dictionary-resilience.test.js",
     "test:dictionary-evidence": "node tests/dictionary-evidence.test.js",
     "test:dictionary-decision": "node tests/dictionary-decision.test.js",
-    "test:dictionary-flow": "node tests/dictionary-flow.test.js"
+    "test:dictionary-flow": "node tests/dictionary-flow.test.js",
+    "test:expression-search": "node tests/expression-search.test.js"
   },
   "dependencies": {
     "kiwi-nlp": "0.23.0",
