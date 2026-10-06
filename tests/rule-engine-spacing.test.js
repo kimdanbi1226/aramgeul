@@ -37,6 +37,18 @@ function analyze(text, tokens = []) {
 }
 
 {
+  // 형태소 분석기가 '할수있는' 전체를 하나의 표면형으로 반환해도
+  // 등록된 표면형 fallback이 두 개의 띄어쓰기 경계를 복원해야 한다.
+  const text = '나는 오늘 할수있는 일을 먼저 생각해보자고 말했다.';
+  const result = evaluateSpacing(analyze(text));
+  assert.equal(result.revised, '나는 오늘 할 수 있는 일을 먼저 생각해보자고 말했다.');
+  assert.equal(
+    result.edits.filter(edit => edit.rule_id === 'SPACING-042-DEPENDENT-NOUN').length,
+    2
+  );
+}
+
+{
   const text = '생각해보자';
   const result = evaluateSpacing(analyze(text, [
     token('생각해', 0, 3, ['LEXICAL_VERB'], 'VV', '생각하다'),
