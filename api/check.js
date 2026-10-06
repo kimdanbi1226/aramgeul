@@ -21,6 +21,9 @@ export default async function handler(req, res) {
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     const text = typeof body?.text === 'string' ? body.text.trim() : '';
+    const criterion = ['basic', 'document', 'academic'].includes(body?.criterion)
+      ? body.criterion
+      : 'basic';
 
     if (!text) {
       return res.status(400).json({ error: '검사할 문장을 입력해 주세요.' });
@@ -302,6 +305,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       // 배포된 서버 코드 버전을 확인하기 위한 진단 필드
       build_version: buildVersion,
+      criterion,
 
       // 기존 프론트엔드 호환 필드
       origin: bareunData?.origin || text,
