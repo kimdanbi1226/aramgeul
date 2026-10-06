@@ -39,7 +39,7 @@ main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center
 .candidates{margin-top:14px;padding:14px;border:1px solid #f0dfb6;border-radius:14px;background:#fffaf0}.candidate{padding:8px 0}.candidate+.candidate{border-top:1px solid #f0e6cf}.candidate strong{font-size:12px;color:#7a5a16}.candidate div{margin-top:3px}
 .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.info{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.info strong{display:block;margin-bottom:6px;font-size:14px}.info span{font-size:13px;color:var(--muted);line-height:1.6}
 .notice{margin:20px 0 0;color:#8994a4;font-size:12px;line-height:1.7;text-align:center}footer{text-align:center;color:#929bab;font-size:12px;padding:0 24px 34px}
-@media(max-width:700px){.header-inner{padding:15px 16px}.nav{gap:14px}.nav a{font-size:13px}main{padding:42px 16px 65px}.editor-actions{flex-wrap:wrap}.editor,.result{padding:18px}.editor-bottom{align-items:stretch;flex-direction:column}.check{width:100%}.info-grid{grid-template-columns:1fr}.arrow{display:none}.change-part{min-width:100%}}
+@media(max-width:700px){.header-inner{padding:15px 16px}.nav{gap:14px}.nav a{font-size:13px}main{padding:42px 16px 65px}.editor-actions{flex-wrap:wrap}.editor,.result{padding:18px}.editor-bottom{align-items:stretch;flex-direction:column}.check{width:100%}.info-grid{grid-template-columns:1fr}.arrow{display:none}.change-part{min-width:100%}}.expression-card{margin-top:28px;padding:24px}.expression-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.expression-title{font-size:20px;font-weight:800;letter-spacing:-.03em}.expression-description{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.6}.expression-search{display:flex;gap:8px;margin-top:18px}.expression-search input{flex:1;min-width:0;border:1px solid #cfd8e6;border-radius:12px;padding:13px 14px;font:inherit;font-size:16px;color:var(--ink);background:#fbfcfe;outline:none}.expression-search input:focus{border-color:#6d9be8;box-shadow:0 0 0 4px rgba(36,87,197,.09)}.expression-search button{border:0;border-radius:12px;padding:0 20px;background:var(--primary);color:#fff;font:inherit;font-weight:800;cursor:pointer}.expression-search button:hover{background:var(--primary-dark)}.expression-search button:disabled{opacity:.65;cursor:wait}.expression-hint{margin-top:8px;color:#8994a4;font-size:11px;line-height:1.5}.expression-results{margin-top:18px;display:grid;gap:10px}.expression-empty,.expression-error{padding:16px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--muted);font-size:13px;line-height:1.6}.expression-item{padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff}.expression-item-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.expression-word{font-size:18px;font-weight:800;color:var(--ink)}.expression-badge{font-size:11px;font-weight:800;color:var(--primary);background:var(--soft);border-radius:999px;padding:5px 8px}.expression-meta{margin-top:5px;color:#8994a4;font-size:11px}.expression-definition{margin-top:9px;color:#475467;font-size:13px;line-height:1.65}.expression-change{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch;margin-top:12px}.expression-change-box{padding:10px 12px;border-radius:10px;background:#f7f9fc;border:1px solid #e5e9f0}.expression-change-label{font-size:10px;font-weight:800;color:#7a8595;margin-bottom:4px}.expression-change-value{font-size:14px;font-weight:700;line-height:1.5;word-break:break-word}.expression-arrow{display:flex;align-items:center;color:#98a2b3;font-weight:800}.expression-reason{margin-top:10px;color:#596578;font-size:12px;line-height:1.6}.expression-source{display:inline-block;margin-top:9px;color:var(--primary);font-size:12px;font-weight:700;text-decoration:none}.expression-source:hover{text-decoration:underline}.expression-warning{margin-top:10px;padding:10px 12px;border-radius:10px;background:#fffaf0;border:1px solid #f0dfb6;color:#7a5a16;font-size:11px;line-height:1.5}@media(max-width:700px){.expression-card{padding:18px}.expression-search{flex-direction:column}.expression-search button{min-height:46px}.expression-change{grid-template-columns:1fr}.expression-arrow{justify-content:center}.expression-head{display:block}}
 </style>
 </head>
 <body>
@@ -59,6 +59,21 @@ main{max-width:1080px;margin:auto;padding:64px 24px 90px}.hero{text-align:center
 <div class="editor"><textarea id="text" maxlength="5000" placeholder="검사할 문장을 입력해 주세요.
 예: 오늘은 날씨가 좋아서 산책을 하러 갔어요."></textarea><div class="editor-bottom"><div class="editor-actions"><button class="tool-button" id="newText" type="button">＋ 새 글 작성</button><button class="tool-button" id="pasteText" type="button">전체 붙여넣기</button><button class="tool-button" id="copyText" type="button">전체 복사</button></div><span class="count"><span id="count">0</span> / 5,000자</span><button class="check" id="check" type="button">검사하기</button></div></div>
 <div class="result" id="result"><div class="result-head"><div class="result-title">검사 결과</div><span class="status" id="status">확인 중</span></div><div class="result-actions"><button class="tool-button" id="resultNewText" type="button">＋ 새 글 작성</button><button class="tool-button" id="editResult" type="button" disabled>편집하기</button><button class="tool-button" id="copyResult" type="button" disabled>전체 복사</button></div><textarea class="edit-result" id="editResultText" aria-label="검사 결과 편집"></textarea><div class="result-after-actions"><button class="check" id="recheck" type="button">다시 검사</button></div><div id="resultContent"></div></div>
+</section>
+
+<section class="card expression-card" id="expression" aria-labelledby="expressionTitle">
+  <div class="expression-head">
+    <div>
+      <div class="expression-title" id="expressionTitle">표현 검색</div>
+      <p class="expression-description">헷갈리기 쉬운 표현을 검색하면 아람글에 등록된 규칙과 연결된 사전 정보를 함께 확인할 수 있습니다.</p>
+    </div>
+  </div>
+  <form class="expression-search" id="expressionSearchForm">
+    <input id="expressionQuery" type="search" maxlength="80" autocomplete="off" placeholder="예: 늘이다, 부치다, 왠지, 할 수" aria-label="검색할 표현">
+    <button id="expressionSearchButton" type="submit">검색</button>
+  </form>
+  <div class="expression-hint">검사 결과의 교정 근거와 같은 규칙·사전 계층을 사용합니다. 사전 연결이 없을 때는 아람글에 등록된 표현 데이터만 표시합니다.</div>
+  <div class="expression-results" id="expressionResults" aria-live="polite"></div>
 </section>
 
 <p class="notice">검사 요청은 보안 서버를 거쳐 검사용 API로 전달됩니다. API 인증 정보는 이 화면의 코드에 노출하지 않습니다.</p>
@@ -92,6 +107,104 @@ document.querySelectorAll('.criterion-option').forEach(button => {
 text.addEventListener('input', () => {
   count.textContent = text.value.length.toLocaleString('ko-KR');
 });
+const expressionForm = document.getElementById('expressionSearchForm');
+const expressionQuery = document.getElementById('expressionQuery');
+const expressionSearchButton = document.getElementById('expressionSearchButton');
+const expressionResults = document.getElementById('expressionResults');
+
+function renderExpressionResults(data) {
+  const local = Array.isArray(data?.local) ? data.local : [];
+  const dictionary = Array.isArray(data?.dictionary) ? data.dictionary : [];
+
+  if (!local.length && !dictionary.length) {
+    expressionResults.innerHTML = '<div class="expression-empty">검색 결과가 없습니다. 다른 표현을 입력해 보세요.</div>';
+    return;
+  }
+
+  let html = '';
+
+  local.forEach(item => {
+    html += '<article class="expression-item">';
+    html += '<div class="expression-item-head"><div class="expression-word">' + escapeHtml(item.expected || item.input) + '</div><span class="expression-badge">아람글 규칙</span></div>';
+    html += '<div class="expression-meta">' + escapeHtml(item.title || '') + (item.source_reference ? ' · ' + escapeHtml(item.source_reference) : '') + '</div>';
+
+    if (item.input && item.expected && item.input !== item.expected) {
+      html += '<div class="expression-change">';
+      html += '<div class="expression-change-box"><div class="expression-change-label">검색된 표현</div><div class="expression-change-value">' + escapeHtml(item.input) + '</div></div>';
+      html += '<div class="expression-arrow">→</div>';
+      html += '<div class="expression-change-box"><div class="expression-change-label">권장·관련 표현</div><div class="expression-change-value">' + escapeHtml(item.expected) + '</div></div>';
+      html += '</div>';
+    }
+
+    if (Array.isArray(item.candidates) && item.candidates.length) {
+      html += '<div class="expression-reason"><strong>후보:</strong> ' + item.candidates.map(escapeHtml).join(' · ') + '</div>';
+    }
+    if (item.description) {
+      html += '<div class="expression-definition">' + escapeHtml(item.description) + '</div>';
+    }
+    if (item.reason) {
+      html += '<div class="expression-reason"><strong>판단 참고:</strong> ' + escapeHtml(item.reason) + '</div>';
+    }
+    if (item.source_detail_url) {
+      html += '<a class="expression-source" href="' + escapeHtml(item.source_detail_url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(item.source_detail_label || '관련 국립국어원 설명 보기') + ' ↗</a>';
+    } else if (item.source_url) {
+      html += '<a class="expression-source" href="' + escapeHtml(item.source_url) + '" target="_blank" rel="noopener noreferrer">어문 규범 원문 보기 ↗</a>';
+    }
+    html += '</article>';
+  });
+
+  if (dictionary.length) {
+    html += '<div class="result-section-title" style="margin-top:8px"><span>연결된 사전</span><span>' + dictionary.length + '개</span></div>';
+    dictionary.forEach(entry => {
+      const definition = entry.senses?.find(sense => sense.definition)?.definition || '';
+      html += '<article class="expression-item">';
+      html += '<div class="expression-item-head"><div class="expression-word">' + escapeHtml(entry.word || '') + '</div><span class="expression-badge">' + escapeHtml(entry.source === 'standard' ? '표준국어대사전' : '우리말샘') + '</span></div>';
+      html += '<div class="expression-meta">' + escapeHtml(entry.pos || '') + (entry.categories?.length ? ' · ' + escapeHtml(entry.categories.join(', ')) : '') + '</div>';
+      if (definition) html += '<div class="expression-definition">' + escapeHtml(definition) + '</div>';
+      if (entry.link) html += '<a class="expression-source" href="' + escapeHtml(entry.link) + '" target="_blank" rel="noopener noreferrer">사전 원문 보기 ↗</a>';
+      html += '</article>';
+    });
+  }
+
+  if (data?.warning) {
+    html += '<div class="expression-warning">' + escapeHtml(data.warning) + '</div>';
+  }
+
+  expressionResults.innerHTML = html;
+}
+
+expressionForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const query = expressionQuery.value.trim();
+
+  if (!query) {
+    expressionResults.innerHTML = '<div class="expression-empty">검색할 표현을 입력해 주세요.</div>';
+    expressionQuery.focus();
+    return;
+  }
+
+  expressionSearchButton.disabled = true;
+  expressionSearchButton.textContent = '검색 중...';
+  expressionResults.innerHTML = '<div class="expression-empty">표현과 사전 정보를 찾고 있습니다...</div>';
+
+  try {
+    const response = await fetch('/api/expression-search', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({query})
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || '표현 검색 요청 실패');
+    renderExpressionResults(data);
+  } catch (error) {
+    console.error(error);
+    expressionResults.innerHTML = '<div class="expression-error">표현 검색에 실패했습니다. 잠시 후 다시 시도해 주세요.</div>';
+  } finally {
+    expressionSearchButton.disabled = false;
+    expressionSearchButton.textContent = '검색';
+  }
+});
+
 
 document.getElementById("newText").addEventListener("click",()=>{if(text.value.trim()&&!confirm("새 글을 작성할까요? 현재 작성한 내용이 사라집니다."))return;text.value="";count.textContent="0";result.classList.remove("show","editing");resultContent.innerHTML="";document.getElementById("editResult").disabled=true;document.getElementById("copyResult").disabled=true;text.focus()});
 document.getElementById("copyText").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(text.value)}catch(e){alert("복사에 실패했습니다.")}});
