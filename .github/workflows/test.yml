@@ -36,6 +36,7 @@ jobs:
             test:dictionary-evidence
             test:dictionary-decision
             test:dictionary-flow
+            test:expression-search
           )
           failed=0
           for test_name in "${tests[@]}"; do
