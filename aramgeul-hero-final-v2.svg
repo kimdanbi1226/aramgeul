@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 728" role="img" aria-labelledby="title desc">
+<title id="title">아람글 맞춤법·띄어쓰기·표현 서비스 소개</title>
+<desc id="desc">한국어의 맞춤법과 표현을 정확하게 확인하는 아람글의 브랜드 Hero 그래픽</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffdfa"/><stop offset=".52" stop-color="#f5f8fc"/><stop offset="1" stop-color="#e9f2fc"/></linearGradient>
+  <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#eef5fc"/><stop offset=".55" stop-color="#dceafb"/><stop offset="1" stop-color="#edf5fc"/></linearGradient>
+  <linearGradient id="navyBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#315f9e"/><stop offset=".65" stop-color="#234a84"/><stop offset="1" stop-color="#182544"/></linearGradient>
+  <linearGradient id="blueSoft" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9e9fb"/><stop offset="1" stop-color="#91b9e8"/></linearGradient>
+  <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffc36f"/><stop offset="1" stop-color="#ed8a28"/></linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="15" stdDeviation="18" flood-color="#182544" flood-opacity=".12"/></filter>
+  <filter id="smallShadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#182544" flood-opacity=".14"/></filter>
+  <filter id="blur"><feGaussianBlur stdDeviation="34"/></filter>
+</defs>
+<rect width="2048" height="728" fill="url(#bg)"/>
+<ellipse cx="1450" cy="310" rx="430" ry="230" fill="#dcecff" opacity=".5" filter="url(#blur)"/>
+<path d="M0 505 C240 400 410 620 680 515 C910 426 1030 520 1240 585 C1490 660 1690 545 2048 390 L2048 728 L0 728Z" fill="url(#wave)" opacity=".9"/>
+<path d="M0 590 C260 465 430 660 720 555 C950 472 1100 590 1335 630 C1580 672 1810 560 2048 470" fill="none" stroke="#c7dcf3" stroke-width="20" opacity=".72"/>
+<path d="M0 635 C260 520 450 705 730 600 C960 515 1130 645 1360 670 C1610 700 1810 610 2048 525" fill="none" stroke="#fff" stroke-width="9" opacity=".9"/>
+<path d="M910 360 C1090 160 1350 120 1640 245 C1780 305 1880 395 1970 490" fill="none" stroke="#9ec3ee" stroke-width="3" opacity=".72"/>
+<path d="M900 430 C1090 250 1360 215 1610 330 C1780 408 1870 510 1960 565" fill="none" stroke="#f0a34b" stroke-width="2.5" opacity=".5"/>
+<path d="M1030 510 C1200 330 1430 300 1660 390 C1810 450 1890 530 1995 585" fill="none" stroke="#b9d3f2" stroke-width="2" opacity=".75"/>
+
+<!-- restrained floating points -->
+<g opacity=".9">
+ <circle cx="1030" cy="185" r="19" fill="#2c65a9"/><circle cx="1110" cy="150" r="10" fill="#d9e9fb"/>
+ <circle cx="1260" cy="112" r="16" fill="#fff"/><circle cx="1740" cy="205" r="17" fill="#2b66aa"/>
+ <circle cx="1840" cy="315" r="12" fill="#f4a34c"/><circle cx="1515" cy="555" r="15" fill="#2c6bb4"/>
+ <circle cx="1280" cy="625" r="11" fill="#fff"/><circle cx="1775" cy="590" r="12" fill="#f7b15f"/>
+</g>
+
+<!-- brand copy -->
+<g>
+ <text x="70" y="278" fill="#2f78c7" font-family="Pretendard,Apple SD Gothic Neo,Noto Sans KR,sans-serif" font-size="23" font-weight="800" letter-spacing="6">ARAMGEUL</text>
+ <text x="70" y="348" fill="#182544" font-family="Pretendard,Apple SD Gothic Neo,Noto Sans KR,sans-serif" font-size="48" font-weight="800" letter-spacing="-2.2">한국어의 맞춤법과 표현을 정확하게</text>
+</g>
+
+<!-- search card -->
+<g transform="translate(1070 165) rotate(-4 128 92)" filter="url(#shadow)">
+ <rect width="260" height="184" rx="34" fill="#fff" fill-opacity=".9" stroke="#e8eef7" stroke-width="3"/>
+ <rect x="58" y="42" width="106" height="106" rx="53" fill="url(#navyBlue)"/>
+ <circle cx="108" cy="92" r="30" fill="#fff" opacity=".96"/>
+ <path d="M133 116 L164 147" stroke="#fff" stroke-width="16" stroke-linecap="round"/>
+ <circle cx="188" cy="57" r="14" fill="url(#orange)" filter="url(#smallShadow)"/>
+</g>
+
+<!-- compare/document card -->
+<g transform="translate(1395 135) rotate(4 135 95)" filter="url(#shadow)">
+ <rect width="270" height="190" rx="34" fill="#fff" fill-opacity=".92" stroke="#e8eef7" stroke-width="3"/>
+ <rect x="62" y="45" width="118" height="125" rx="12" fill="#2e6eb7"/>
+ <rect x="78" y="32" width="118" height="125" rx="12" fill="#9fc4ed" opacity=".42"/>
+ <rect x="62" y="45" width="118" height="125" rx="12" fill="#2e6eb7"/>
+ <path d="M86 82 H155 M86 108 H155 M86 134 H139" stroke="#fff" stroke-width="11" stroke-linecap="round"/>
+ <rect x="171" y="90" width="68" height="25" rx="10" fill="url(#orange)" filter="url(#smallShadow)"/>
+</g>
+
+<!-- check card -->
+<g transform="translate(1130 400) rotate(-2 135 100)" filter="url(#shadow)">
+ <rect width="270" height="190" rx="34" fill="#fff" fill-opacity=".91" stroke="#e8eef7" stroke-width="3"/>
+ <rect x="65" y="45" width="112" height="122" rx="13" fill="#3e78bb"/>
+ <path d="M90 82 H151 M90 109 H151 M90 136 H142" stroke="#fff" stroke-width="11" stroke-linecap="round"/>
+ <circle cx="181" cy="143" r="38" fill="url(#navyBlue)" filter="url(#smallShadow)"/>
+ <path d="M164 143 L177 156 L202 127" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+ <circle cx="220" cy="48" r="14" fill="url(#orange)" filter="url(#smallShadow)"/>
+</g>
+
+<!-- expression/light card -->
+<g transform="translate(1500 375) rotate(5 135 100)" filter="url(#shadow)">
+ <rect width="270" height="190" rx="34" fill="#fff" fill-opacity=".91" stroke="#e8eef7" stroke-width="3"/>
+ <rect x="65" y="45" width="116" height="120" rx="13" fill="#7fa9d8" opacity=".72"/>
+ <path d="M91 82 H153 M91 110 H153 M91 138 H145" stroke="#fff" stroke-width="11" stroke-linecap="round"/>
+ <path d="M204 86 C228 86 246 103 246 126 C246 142 237 151 227 158 L224 171 H190 L187 158 C177 151 168 142 168 126 C168 103 184 86 204 86Z" fill="url(#orange)" filter="url(#smallShadow)"/>
+ <path d="M193 131 C193 120 200 114 207 114 C214 114 220 120 220 130 C220 137 216 142 211 145 V155 H202 V145 C196 142 193 137 193 131Z" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+</g>
+
+<!-- small accent dots -->
+<circle cx="1015" cy="350" r="11" fill="url(#orange)"/><circle cx="1460" cy="360" r="8" fill="#2e70bd"/>
+<circle cx="1730" cy="370" r="10" fill="#fff"/><circle cx="1815" cy="520" r="12" fill="#2f6eb3"/>
+</svg>
