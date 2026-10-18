@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>표현 검색 | 아람글</title>
+<meta name="description" content="아람글은 한국어 맞춤법, 띄어쓰기, 표현을 확인하고 더 정확하고 자연스럽게 쓰도록 돕는 서비스입니다.">
+<style>
+:root{--primary:#182544;--primary-dark:#101a31;--soft:#f1f4f8;--ink:#182544;--muted:#536176;--line:#d6dde8;--bg:#f8f9fc;--white:#fff;--success:#2f8068;--warning:#c98718;--error:#d94a4a;--spacing:#3f6fa8}
+*{box-sizing:border-box}
+body{margin:0;font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--ink);background:var(--bg)}
+header{border-bottom:1px solid rgba(36,87,197,.10);background:rgba(255,255,255,.86);backdrop-filter:blur(12px)}
+.header-inner{max-width:1500px;margin:auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px}.brand{gap:10px}.mark{width:38px;height:38px;border-radius:9px;font-size:16px}.brand-name{font-size:21px;font-weight:700}.nav{gap:24px}.nav a{font-size:14px}.card{border-radius:16px;box-shadow:0 8px 28px rgba(24,37,68,.06)}.editor{padding:22px}.editor-bottom{margin-top:12px}.result{padding:22px;background:#fff}.result-head{margin-bottom:8px}.result-actions{border-bottom:1px solid #edf0f5;padding-bottom:10px;margin-bottom:14px}.result-actions .tool-button:first-child{color:var(--ink)}.result-box{padding:18px;border-radius:10px}.result-section-title{margin-top:18px}.corrections{gap:10px}.correction{padding:14px;border-radius:10px}.technical-details{margin-top:12px}@media(max-width:700px){.header-inner{padding:14px 16px}.brand-name{font-size:19px}.nav{gap:12px}.nav a{font-size:12px}.hero{margin-bottom:26px}.hero h1{font-size:34px}.hero p{font-size:15px}.editor{padding:16px}.editor-bottom{gap:8px}.editor-actions{width:100%;gap:2px}.tool-button{padding:7px 8px;font-size:12px}.count{margin-left:0}.result{padding:16px}.result-head{align-items:flex-start}.result-actions{flex-wrap:wrap}.result-actions .tool-button{font-size:12px}.revised-text{font-size:17px}.result-box{padding:15px}.change-part{min-width:100%}}
+.brand-link{display:flex;align-items:center;gap:11px;color:inherit;text-decoration:none}.mark{width:46px;height:40px;display:flex;align-items:center;justify-content:center;flex:0 0 46px}.mark img{display:block;width:46px;height:40px;object-fit:contain}.brand-name{font-size:22px;font-weight:800;letter-spacing:-.04em}.brand-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.nav{display:flex;gap:26px;align-items:center}.nav a{color:var(--ink);text-decoration:none;font-size:14px;font-weight:600}.editor-actions{display:flex;gap:4px;align-items:center}.tool-button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;font-weight:600;padding:8px 9px;border-radius:7px;cursor:pointer}.tool-button:hover{background:var(--soft);color:var(--ink)}
+main{max-width:1500px;margin:auto;padding:96px 24px 90px}.hero{text-align:center;margin-bottom:58px}.hero .eyebrow{display:inline-block;color:var(--primary);font-size:13px;font-weight:800;margin-bottom:13px}.hero h1{margin:0;font-size:clamp(36px,6vw,76px);letter-spacing:-.065em;line-height:1.12}.hero p{margin:22px auto 0;max-width:900px;color:var(--muted);font-size:19px;line-height:1.75;letter-spacing:-.02em}
+.card{background:var(--white);border:1px solid var(--line);border-radius:30px;box-shadow:0 18px 55px rgba(27,56,100,.10);overflow:hidden}
+.criterion-bar{padding:16px 24px;border-bottom:1px solid var(--line);background:#fbfcfe}
+.criterion-label{font-size:12px;font-weight:800;color:var(--ink);margin-bottom:9px}
+.criterion-options{display:flex;gap:6px;align-items:center}
+.criterion-option{border:1px solid transparent;background:transparent;color:var(--muted);font:inherit;font-size:13px;font-weight:700;padding:8px 12px;border-radius:9px;cursor:pointer}
+.criterion-option:hover{background:var(--soft);color:var(--ink)}
+.criterion-option.active{background:var(--primary);color:#fff}
+.criterion-note{margin-top:8px;font-size:11px;line-height:1.5;color:var(--muted)}
+@media(max-width:700px){.criterion-bar{padding:14px 18px}.criterion-options{width:100%;overflow:auto}.criterion-option{white-space:nowrap}}
+.editor{padding:24px}textarea{display:block;width:100%;min-height:260px;resize:vertical;border:1px solid #cfd8e6;border-radius:16px;padding:20px;font:inherit;font-size:18px;line-height:1.85;color:var(--ink);background:#fbfcfe;outline:none}textarea:focus{border-color:#6d9be8;box-shadow:0 0 0 4px rgba(36,87,197,.09)}textarea::placeholder{color:#9aa5b5}.editor-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}.count{font-size:13px;color:var(--muted);margin-left:auto}.check{border:0;border-radius:12px;padding:13px 23px;background:var(--primary);color:#fff;font:inherit;font-weight:800;cursor:pointer}.check:hover{background:var(--primary-dark)}.check:disabled{opacity:.65;cursor:wait}
+.result{display:none;border-top:1px solid var(--line);padding:24px;background:#fafcff}.result.show{display:block}.result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.result-actions{display:flex;gap:4px;align-items:center;margin-bottom:14px}.result-actions .tool-button{font-size:13px}.edit-result{display:none}.result.editing .revised-text{display:none}.result.editing .edit-result{display:block;width:100%;min-height:180px;resize:vertical;border:1px solid var(--line);border-radius:10px;padding:16px;font:inherit;font-size:18px;line-height:1.8;color:var(--ink);outline:none}.result.editing .edit-result:focus{border-color:#8090aa;box-shadow:0 0 0 3px rgba(24,37,68,.08)}.result.editing .result-after-actions{display:flex}.result-after-actions{display:none;justify-content:flex-end;margin-top:10px}.result-after-actions .check{background:var(--primary)}.result-title{font-size:17px;font-weight:800}.status{font-size:12px;border-radius:999px;padding:6px 9px;background:#eef2f7;color:#5d6878}.status.correction{color:var(--primary);background:var(--soft)}.status.valid{color:var(--success);background:#eaf8f2}.status.ambiguous{color:var(--warning);background:#fff5df}
+.result-box{padding:20px;border:1px solid var(--line);border-radius:16px;background:#fff;line-height:1.8;color:#475467}.result-label{font-size:12px;font-weight:800;color:#7a8595;margin-bottom:8px}.revised-text{font-size:19px;color:var(--ink);white-space:pre-wrap;word-break:break-word;letter-spacing:-.015em}.result-section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:20px 2px 10px;font-size:14px;font-weight:800;color:var(--ink)}.result-section-title span{font-size:11px;color:var(--muted);font-weight:600}
+.sentence-edit{background:#fff0f0;color:var(--error);border-bottom:2px solid #e49a9a;border-radius:4px;padding:1px 3px;font-weight:800;cursor:pointer;transition:background .15s,box-shadow .15s}
+.sentence-edit:hover,.sentence-edit.selected{background:#dfeaff;box-shadow:0 0 0 3px rgba(36,87,197,.12)}
+.space-mark{position:relative;color:var(--spacing);font-weight:900;line-height:1;cursor:pointer;vertical-align:baseline;background:transparent;border:0;border-radius:0;padding:0;box-shadow:none;overflow:visible}
+.space-insert{display:inline;position:relative;width:auto;min-width:0;white-space:pre;margin:0;padding:0;font-size:12px;line-height:1}
+.space-insert::before{content:'∨';position:absolute;left:50%;top:0;transform:translate(-50%,-.96em);font-size:12px;line-height:1;pointer-events:none}
+.space-delete{display:inline-block;width:0;margin:0;transform:none;font-size:12px;text-align:center}
+.space-delete::before{content:'⌒';position:absolute;left:0;top:0;transform:translate(-50%,-.58em) scaleX(1.7);transform-origin:center;font-size:12px;line-height:1;pointer-events:none}
+.space-mark:hover,.space-mark.selected{color:var(--primary-dark);text-shadow:none;background:transparent;border:0;box-shadow:none}
+.correction:focus-visible,.sentence-edit:focus-visible{outline:3px solid rgba(36,87,197,.22);outline-offset:2px}
+.corrections{display:grid;gap:12px;margin-top:14px}.correction{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}.correction-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.correction-index{font-size:11px;font-weight:800;color:#7a8595}.correction-type{font-size:11px;font-weight:800;color:var(--primary);background:var(--soft);border-radius:999px;padding:5px 8px}.correction-summary{margin-top:11px;font-size:13px;line-height:1.6;color:#596578}.correction-summary strong{color:var(--ink)}.correction.clickable{cursor:pointer;transition:border-color .15s,box-shadow .15s}.correction.clickable:hover,.correction.clickable.selected{border-color:#b9cff8;box-shadow:0 5px 18px rgba(36,87,197,.08)}.change{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}.change-part{flex:1;min-width:180px}.change-value{padding:10px 12px;border-radius:10px;background:#f7f9fc;border:1px solid #e5e9f0;white-space:pre-wrap;word-break:break-word}.arrow{color:#98a2b3;font-weight:800;padding-top:10px}.help{margin:10px 0 0;color:#596578;font-size:13px;line-height:1.65}.source{margin-top:9px;color:#8994a4;font-size:11px}.diff{font-size:18px;line-height:1.8;white-space:pre-wrap;word-break:break-word}.diff-removed{background:#fdebec;color:#a12b37;text-decoration:line-through;text-decoration-thickness:1px;border-radius:4px;padding:1px 2px}.diff-added{background:#e7f7ef;color:#14704d;border-radius:4px;padding:1px 2px}.detail-toggle{margin-top:10px;border:0;background:transparent;color:var(--primary);font:inherit;font-size:12px;font-weight:800;padding:0;cursor:pointer}.detail-toggle:hover{text-decoration:underline}.detail-toggle:focus-visible{outline:3px solid rgba(36,87,197,.22);outline-offset:3px;border-radius:4px}.detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid #edf0f5}.correction.selected .detail{display:block}.detail-title{font-size:12px;font-weight:800;color:#687386;margin-bottom:5px}.detail-empty{color:#8994a4;font-size:13px}.detail-meta{margin-top:8px;font-size:11px;color:#8994a4}.rule-evidence{margin-top:12px;padding:12px;border:1px solid #dce8fb;border-radius:10px;background:#f8fbff}.rule-title{font-size:14px;font-weight:800;color:var(--ink)}.rule-description{margin-top:5px;font-size:13px;line-height:1.6;color:#596578}.rule-meta{margin-top:7px;font-size:11px;color:#718096}.rule-source{display:inline-block;margin-top:8px;font-size:12px;color:var(--primary);text-decoration:none;font-weight:700}.rule-source:hover{text-decoration:underline}.detail-meta{margin-top:8px;font-size:11px;color:#8994a4}.result-hint{margin-top:8px;color:#8994a4;font-size:12px;line-height:1.6}.technical-details{margin-top:14px;border:1px solid var(--line);border-radius:12px;background:#fbfcfe}.technical-details summary{padding:11px 13px;cursor:pointer;color:#687386;font-size:12px;font-weight:700}.technical-details .technical-body{padding:0 12px 12px}.engine-status{margin-top:10px;padding:10px 12px;border:1px solid #dfe7f4;border-radius:10px;background:#f8faff;color:#596578;font-size:12px;line-height:1.5}.engine-status strong{color:#172033}.technical-details .engine-status:first-child{margin-top:0}.result-warning{margin-top:8px;color:#7a8595;font-size:12px;line-height:1.6}
+.candidates{margin-top:14px;padding:14px;border:1px solid #f0dfb6;border-radius:14px;background:#fffaf0}.candidate{padding:8px 0}.candidate+.candidate{border-top:1px solid #f0e6cf}.candidate strong{font-size:12px;color:#7a5a16}.candidate div{margin-top:3px}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.info{padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}.info strong{display:block;margin-bottom:6px;font-size:14px}.info span{font-size:13px;color:var(--muted);line-height:1.6}
+.notice{margin:20px 0 0;color:#8994a4;font-size:12px;line-height:1.7;text-align:center}footer{text-align:center;color:#929bab;font-size:12px;padding:0 24px 34px}
+@media(max-width:700px){.header-inner{padding:15px 16px}.nav{gap:14px}.nav a{font-size:13px}main{padding:42px 16px 65px}.editor-actions{flex-wrap:wrap}.editor,.result{padding:18px}.editor-bottom{align-items:stretch;flex-direction:column}.check{width:100%}.info-grid{grid-template-columns:1fr}.arrow{display:none}.change-part{min-width:100%}}.expression-card{margin-top:28px;padding:34px}.expression-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.expression-title{font-size:20px;font-weight:800;letter-spacing:-.03em}.expression-description{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.6}.expression-search{display:flex;gap:12px;margin-top:24px}.expression-search input{flex:1;min-width:0;border:1px solid #cfd8e6;border-radius:16px;padding:18px 20px;font:inherit;font-size:18px;color:var(--ink);background:#fbfcfe;outline:none}.expression-search input:focus{border-color:#6d9be8;box-shadow:0 0 0 4px rgba(36,87,197,.09)}.expression-search button{border:0;border-radius:16px;padding:0 28px;background:var(--primary);color:#fff;font:inherit;font-weight:800;cursor:pointer}.expression-search button:hover{background:var(--primary-dark)}.expression-search button:disabled{opacity:.65;cursor:wait}.expression-hint{margin-top:12px;color:#8994a4;font-size:11px;line-height:1.5}.expression-results{margin-top:18px;display:grid;gap:10px}.expression-empty,.expression-error{padding:16px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--muted);font-size:13px;line-height:1.6}.expression-item{padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff}.expression-item-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.expression-word{font-size:18px;font-weight:800;color:var(--ink)}.expression-badge{font-size:11px;font-weight:800;color:var(--primary);background:var(--soft);border-radius:999px;padding:5px 8px}.expression-meta{margin-top:5px;color:#8994a4;font-size:11px}.expression-definition{margin-top:9px;color:#475467;font-size:13px;line-height:1.65}.expression-change{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch;margin-top:12px}.expression-change-box{padding:10px 12px;border-radius:10px;background:#f7f9fc;border:1px solid #e5e9f0}.expression-change-label{font-size:10px;font-weight:800;color:#7a8595;margin-bottom:4px}.expression-change-value{font-size:14px;font-weight:700;line-height:1.5;word-break:break-word}.expression-arrow{display:flex;align-items:center;color:#98a2b3;font-weight:800}.expression-reason{margin-top:10px;color:#596578;font-size:12px;line-height:1.6}.expression-source{display:inline-block;margin-top:9px;color:var(--primary);font-size:12px;font-weight:700;text-decoration:none}.expression-source:hover{text-decoration:underline}.expression-warning{margin-top:10px;padding:10px 12px;border-radius:10px;background:#fffaf0;border:1px solid #f0dfb6;color:#7a5a16;font-size:11px;line-height:1.5}@media(max-width:700px){.expression-card{padding:18px}.expression-search{flex-direction:column}.expression-search button{min-height:46px}.expression-change{grid-template-columns:1fr}.expression-arrow{justify-content:center}.expression-head{display:block}}
+
+/* Home information architecture */
+#home{max-width:1080px;padding-top:0}
+.section-heading{display:flex;align-items:flex-start;gap:12px;margin:0 0 16px}
+.section-icon{width:34px;height:34px;flex:0 0 34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--soft);color:var(--primary);font-size:18px;font-weight:800}
+.section-heading h2{margin:0;font-size:20px;letter-spacing:-.04em}
+.section-heading p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.6}
+.checker-section{margin-top:30px}
+.expression-card{margin-top:30px}
+.expression-search button{display:flex;align-items:center;justify-content:center;gap:7px}
+ .expression-search button::before{content:none}
+.popular-section{margin-top:34px}
+.popular-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.popular-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 17px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);text-decoration:none;transition:border-color .15s,transform .15s,box-shadow .15s}
+.popular-item:hover{border-color:#c2ccda;transform:translateY(-1px);box-shadow:0 6px 18px rgba(24,37,68,.06)}
+.popular-word{font-size:15px;font-weight:800}.popular-arrow{color:#8b97a9;font-size:16px}
+.editor-actions .tool-button{display:inline-flex;align-items:center;gap:5px}
+.tool-icon{display:inline-flex;width:16px;height:17px;align-items:center;justify-content:center;flex:0 0 17px;font-size:15px;line-height:1;color:var(--primary)}
+.tool-icon svg,.search-button-icon,.section-icon svg{display:block;width:17px;height:17px;flex:0 0 17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.expression-search button{min-width:116px;min-height:76px;white-space:nowrap}
+@media(max-width:700px){.section-heading{gap:10px}.section-icon{width:32px;height:32px;flex-basis:32px}.section-heading h2{font-size:18px}.popular-grid{grid-template-columns:1fr 1fr}}
+
+/* Homepage hero — approved final A/C image asset */
+.brand-intro{position:relative;width:100vw;height:430px;margin:0 0 24px calc(50% - 50vw);overflow:hidden;background:#f8f9fc;line-height:0}
+.brand-intro-image{display:block;width:100%;height:100%;object-fit:cover;object-position:center center;margin:0;padding:0;border:0}
+@media(max-width:700px){.brand-intro{width:100%;height:auto;margin:0 0 24px}.brand-intro-image{width:100%;height:auto;object-fit:contain}}\n/* Approved Hero asset: preserve the full source image; keep all typography as live HTML. */\n.brand-intro{position:relative;width:100vw;height:auto;margin:0 0 24px calc(50% - 50vw);overflow:hidden;background:#f8f9fc;line-height:normal;isolation:isolate}\n.brand-intro-image{display:block;width:100%;height:auto;object-fit:contain;object-position:center;margin:0;padding:0;border:0}\n.brand-intro-copy{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3.5% 5%;pointer-events:none}\n.brand-intro-wordmark{font-size:clamp(22px,4.4vw,64px);font-weight:800;letter-spacing:.16em;line-height:1.1;color:#182544;text-shadow:0 1px 0 rgba(255,255,255,.35)}\n.brand-intro-copy p{margin:clamp(8px,1.5vw,22px) 0 0;font-size:clamp(12px,1.8vw,25px);font-weight:650;letter-spacing:-.035em;line-height:1.4;color:#182544;text-shadow:0 1px 0 rgba(255,255,255,.35)}\n@media(max-width:700px){.brand-intro{width:100%;margin:0 0 24px}.brand-intro-copy{padding:3% 4%}.brand-intro-wordmark{font-size:clamp(17px,4.6vw,30px);letter-spacing:.12em}.brand-intro-copy p{font-size:clamp(10px,2.8vw,16px);margin-top:7px}}\n
+/* Hero regression fix: intrinsic image ratio prevents oversized blank panels. */
+.brand-intro{position:relative!important;width:100vw!important;height:auto!important;min-height:0!important;aspect-ratio:2048/728!important;margin:0 0 24px calc(50% - 50vw)!important;overflow:hidden!important;background:#f8f9fc!important;line-height:normal!important}
+.brand-intro-image{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;object-fit:fill!important;object-position:center!important}
+.brand-intro-copy{position:absolute!important;inset:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;padding:3% 5%!important;pointer-events:none!important}
+.brand-intro-wordmark{font-size:clamp(20px,4.2vw,60px)!important;font-weight:800!important;letter-spacing:.14em!important;line-height:1.1!important;color:#182544!important}
+.brand-intro-copy p{margin:clamp(7px,1.4vw,20px) 0 0!important;font-size:clamp(12px,1.7vw,24px)!important;font-weight:650!important;letter-spacing:-.035em!important;line-height:1.4!important;color:#182544!important}
+@media(max-width:700px){.brand-intro{width:100%!important;aspect-ratio:2048/728!important;margin:0 0 24px!important}.brand-intro-wordmark{font-size:clamp(15px,4.5vw,28px)!important;letter-spacing:.1em!important}.brand-intro-copy p{font-size:clamp(9px,2.7vw,15px)!important;margin-top:6px!important}}
+
+
+/* Aramgeul visual system: three typography levels, calm alignment and subtle motion */
+:root{--type-display:clamp(2rem,4.2vw,3.6rem);--type-heading:1.35rem;--type-body:1rem;--type-small:.875rem;--motion-fast:160ms;--motion-normal:240ms}
+body{font-size:var(--type-body);line-height:1.65;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,.hero h1{font-size:var(--type-display);line-height:1.12;letter-spacing:-.055em}
+h2,.section-heading h2,.expression-title{font-size:var(--type-heading);line-height:1.35;letter-spacing:-.035em}
+p,button,input,textarea,.nav a,.popular-word,.correction-summary,.expression-definition{font-size:var(--type-body)}
+.brand-sub,.criterion-note,.count,.help,.source,.notice,.expression-hint,.result-warning{font-size:var(--type-small)}
+/* Keep the Hero copy aligned to the left on the open side of the approved artwork. */
+.brand-intro-copy{align-items:flex-start!important;justify-content:center!important;text-align:left!important;padding:3.5% 0 3.5% 7%!important}
+.brand-intro-wordmark{font-size:clamp(24px,4.2vw,60px)!important;letter-spacing:.11em!important}
+.brand-intro-copy p{max-width:min(45%,560px);font-size:clamp(13px,1.55vw,22px)!important;letter-spacing:-.035em!important}
+.expression-card{border-radius:28px}
+.expression-head,.section-heading{text-align:left}
+.expression-description,.section-heading p{text-align:left;max-width:72ch}
+.card,.info,.correction,.expression-item,.popular-item,.result-box{transition:box-shadow var(--motion-normal) ease,border-color var(--motion-normal) ease,transform var(--motion-normal) ease}
+.card:hover{box-shadow:0 20px 60px rgba(27,56,100,.11)}
+.check,.expression-search button,.criterion-option,.tool-button,.footer-links a,.footer-links button{transition:background var(--motion-fast) ease,color var(--motion-fast) ease,transform var(--motion-fast) ease,box-shadow var(--motion-fast) ease}
+.check:hover,.expression-search button:hover{transform:translateY(-1px)}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid rgba(63,111,168,.35);outline-offset:3px}
+.site-footer{margin-top:60px;padding:0 24px;background:#fff;border-top:1px solid var(--line)}
+.footer-inner{max-width:1080px;margin:0 auto;padding:36px 0 22px}
+.footer-brand{display:inline-flex;flex-direction:column;gap:2px;color:var(--ink);text-decoration:none}
+.footer-brand span{font-size:var(--type-heading);font-weight:800;letter-spacing:-.04em}
+.footer-brand small{font-size:var(--type-small);color:var(--muted)}
+.footer-links{display:flex;flex-wrap:wrap;gap:20px;margin-top:22px}
+.footer-links a,.footer-links button{padding:0;border:0;background:none;color:var(--muted);font:inherit;font-size:var(--type-small);text-decoration:none;cursor:pointer}
+.footer-links a:hover,.footer-links button:hover{color:var(--ink)}
+.footer-description{max-width:760px;margin:20px 0;color:var(--muted);font-size:var(--type-small);line-height:1.8}
+.footer-bottom{display:flex;justify-content:space-between;gap:16px;padding-top:16px;border-top:1px solid #e9edf3;color:#7c8798;font-size:12px}
+.site-toast{position:fixed;z-index:1000;left:50%;bottom:24px;transform:translate(-50%,12px);max-width:calc(100vw - 32px);padding:11px 16px;border-radius:12px;background:#182544;color:#fff;font-size:14px;box-shadow:0 10px 30px rgba(16,26,49,.2);opacity:0;visibility:hidden;transition:opacity var(--motion-normal) ease,transform var(--motion-normal) ease,visibility var(--motion-normal) ease}
+.site-toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+.guide-dialog{width:min(540px,calc(100vw - 32px));max-height:min(80vh,720px);padding:24px;border:1px solid var(--line);border-radius:22px;color:var(--ink);box-shadow:0 24px 80px rgba(16,26,49,.25)}
+.guide-dialog::backdrop{background:rgba(16,26,49,.38);backdrop-filter:blur(3px)}
+.guide-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.guide-dialog-head h2{margin:0;font-size:var(--type-heading)}
+.guide-dialog-head button{width:36px;height:36px;border:0;border-radius:10px;background:var(--soft);color:var(--ink);font-size:24px;cursor:pointer}
+.guide-dialog p,.guide-dialog li{font-size:var(--type-body);line-height:1.75;color:var(--muted)}
+.guide-dialog ul{padding-left:20px}
+.guide-disclaimer{padding:12px;border-radius:12px;background:#f5f7fb}
+.guide-confirm{width:100%;margin-top:8px;padding:12px;border:0;border-radius:12px;background:var(--primary);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.reveal-ready .section-heading,.reveal-ready .expression-card,.reveal-ready .checker-section,.reveal-ready .popular-section{animation:soft-rise .5s both}
+.reveal-ready .checker-section{animation-delay:70ms}.reveal-ready .popular-section{animation-delay:120ms}
+@keyframes soft-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:700px){.brand-intro-copy{padding:3.5% 0 3.5% 5%!important}.brand-intro-wordmark{font-size:clamp(16px,4.5vw,28px)!important}.brand-intro-copy p{max-width:52%;font-size:clamp(9px,2.5vw,15px)!important}.site-footer{padding:0 18px}.footer-inner{padding-top:28px}.footer-bottom{flex-direction:column;gap:4px}.footer-links{gap:16px}.guide-dialog{padding:20px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+.footer-links{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:22px}.footer-links a{color:var(--muted);font-size:14px;text-decoration:none}.footer-links a:hover{color:var(--ink)}.footer-bottom a{color:var(--muted);text-decoration:none}.page-intro{max-width:1500px;margin:0 auto;padding:42px 24px 0}.page-intro h1{font-size:clamp(28px,3.5vw,42px);margin:0 0 8px;letter-spacing:-.045em}.page-intro p{color:var(--muted);margin:0;line-height:1.8}@media(max-width:700px){.nav{gap:12px;flex-wrap:wrap}.nav a{font-size:12px}.page-intro{padding:30px 16px 0}}.home-tool-sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;max-width:1180px;margin:38px auto 0;padding:0 24px 70px}.home-tool-card{display:block;padding:30px;background:#fff;border:1px solid var(--line);border-radius:24px;color:var(--ink);text-decoration:none;transition:transform .2s,box-shadow .2s}.home-tool-card:hover{transform:translateY(-3px);box-shadow:0 18px 45px rgba(24,37,68,.09)}.home-tool-card h2{font-size:24px;margin:0 0 10px}.home-tool-card p{color:var(--muted);line-height:1.8;margin:0}.home-tool-card span{display:inline-block;margin-top:18px;font-size:14px;font-weight:800;color:var(--primary)}main #expression,main #checker,main .popular-section{display:none!important}.brand-intro{margin-bottom:0!important}@media(max-width:700px){.home-tool-sections{grid-template-columns:1fr;padding:0 16px 48px}}#checker,.popular-section,.brand-intro{display:none!important}</style>
+<link rel="icon" type="image/png" href="data:image/png;base64,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" sizes="92x80">
+</head>
+<body>
+<header><div class="header-inner"><a class="brand-link" href="/" aria-label="아람글 홈"><div class="mark"><img src="data:image/png;base64,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" width="46" height="40" alt="아람글 로고"></div><div><div class="brand-name">아람글</div><div class="brand-sub">한국어 맞춤법 · 띄어쓰기 · 표현 검사</div></div></a><nav class="nav" aria-label="주요 메뉴"><a href="/checker.html">맞춤법 검사</a><a href="/expression.html">표현 검색</a><a href="/about.html">아람글 소개</a></nav></div></header>
+<main id="home"><section class="page-intro"><h1>표현 검색</h1><p>헷갈리는 단어나 표현을 검색해 아람글에 등록된 설명과 연결된 사전 정보를 확인하세요.</p></section>
+<section class="brand-intro" aria-label="아람글 소개"><img class="brand-intro-image" src="https://nineworksdatabase.planus253.workers.dev/cdn/uncategorized/20261018-113712-aramgeul-hero-final-v2-651207b6.webp" alt="" aria-hidden="true"><div class="brand-intro-copy"><div class="brand-intro-wordmark">ARAMGEUL</div><p>한국어의 맞춤법과 표현을 정확하게</p></div></section>
+
+<section class="card expression-card" id="expression" aria-labelledby="expressionTitle">
+  <div class="expression-head">
+    <div>
+      <div class="expression-title" id="expressionTitle">표현 검색</div>
+      <p class="expression-description">헷갈리기 쉬운 표현을 검색하면 아람글에 등록된 규칙과 연결된 사전 정보를 함께 확인할 수 있습니다.</p>
+    </div>
+  </div>
+  <form class="expression-search" id="expressionSearchForm">
+    <input id="expressionQuery" type="search" maxlength="80" autocomplete="off" placeholder="예: 늘이다, 부치다, 왠지, 할 수" aria-label="검색할 표현">
+    <button id="expressionSearchButton" type="submit"><svg class="search-button-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>검색</button>
+  </form>
+  <div class="expression-hint">검사 결과의 교정 근거와 같은 규칙·사전 계층을 사용합니다. 사전 연결이 없을 때는 아람글에 등록된 표현 데이터만 표시합니다.</div>
+  <div class="expression-results" id="expressionResults" aria-live="polite"></div>
+</section>
+
+<section class="checker-section" id="checker" aria-labelledby="checkerTitle">
+<div class="section-heading" id="checkerTitle"><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4 10-10"/></svg></span><div><h2>맞춤법 검사</h2><p>문장의 맞춤법·띄어쓰기·표현을 한 번에 확인하고, 수정 이유와 근거까지 살펴보세요.</p></div></div>
+<section class="card">
+<div class="criterion-bar" aria-label="검사 기준">
+  <div class="criterion-label">검사 기준</div>
+  <div class="criterion-options" role="group" aria-label="검사 기준 선택">
+    <button class="criterion-option active" type="button" aria-pressed="true" data-criterion="basic">기본 검사</button>
+    <button class="criterion-option" type="button" aria-pressed="false" data-criterion="document">문서</button>
+    <button class="criterion-option" type="button" aria-pressed="false" data-criterion="academic">논문·학술</button>
+  </div>
+  <div class="criterion-note" id="criterionNote">맞춤법·띄어쓰기·표현을 기본 기준으로 함께 검사합니다.</div>
+</div>
+<div class="editor"><textarea id="text" maxlength="5000" placeholder="검사할 문장을 입력해 주세요.
+예: 오늘은 날씨가 좋아서 산책을 하러 갔어요."></textarea><div class="editor-bottom"><div class="editor-actions"><button class="tool-button" id="newText" type="button"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>새 글 작성</button><button class="tool-button" id="pasteText" type="button"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M8 9h8M8 12h5"/></svg></span>전체 붙여넣기</button><button class="tool-button" id="copyText" type="button"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="11" height="11" rx="2"/><path d="M5 16V6a2 2 0 0 1 2-2h9"/></svg></span>전체 복사</button></div><span class="count"><span id="count">0</span> / 5,000자</span><button class="check" id="check" type="button"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></span>검사하기</button></div></div>
+<div class="result" id="result"><div class="result-head"><div class="result-title">검사 결과</div><span class="status" id="status">확인 중</span></div><div class="result-actions"><button class="tool-button" id="resultNewText" type="button"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>새 글 작성</button><button class="tool-button" id="editResult" type="button" disabled><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m4 17-.7 3.7L7 20l11-11-3-3z"/><path d="m13.5 6.5 3 3"/></svg></span>편집하기</button><button class="tool-button" id="copyResult" type="button" disabled><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="11" height="11" rx="2"/><path d="M5 16V6a2 2 0 0 1 2-2h9"/></svg></span>전체 복사</button></div><textarea class="edit-result" id="editResultText" aria-label="검사 결과 편집"></textarea><div class="result-after-actions"><button class="check" id="recheck" type="button"><span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0 1 4"/><path d="M20 5v6h-6"/></svg></span>다시 검사</button></div><div id="resultContent"></div></div>
+</section>
+
+
+
+
+<section class="popular-section" aria-labelledby="popularTitle">
+  <div class="section-heading">
+    <span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></span>
+    <div>
+      <h2 id="popularTitle">자주 찾아본 표현</h2>
+      <p>아람글에서 자주 확인하는 헷갈리기 쉬운 표현을 빠르게 살펴보세요.</p>
+    </div>
+  </div>
+  <div class="popular-grid">
+    <a href="#expression" class="popular-item" data-expression="늘이다"><span class="popular-word">늘이다</span><span class="popular-arrow" aria-hidden="true">→</span></a>
+    <a href="#expression" class="popular-item" data-expression="부치다"><span class="popular-word">부치다</span><span class="popular-arrow" aria-hidden="true">→</span></a>
+    <a href="#expression" class="popular-item" data-expression="왠지"><span class="popular-word">왠지</span><span class="popular-arrow" aria-hidden="true">→</span></a>
+    <a href="#expression" class="popular-item" data-expression="할 수"><span class="popular-word">할 수</span><span class="popular-arrow" aria-hidden="true">→</span></a>
+  </div>
+</section>
+
+<p class="notice">검사 요청은 보안 서버를 거쳐 검사용 API로 전달됩니다. API 인증 정보는 이 화면의 코드에 노출하지 않습니다.</p>
+</main><section class="home-tool-sections" aria-label="아람글 주요 기능"><a class="home-tool-card" href="/checker.html"><h2>맞춤법 검사</h2><p>문장의 맞춤법과 띄어쓰기, 표현을 확인하고 수정 이유와 근거를 살펴보세요.</p><span>검사하러 가기 →</span></a><a class="home-tool-card" href="/expression.html"><h2>표현 검색</h2><p>헷갈리는 단어와 표현의 차이를 검색하고 관련 설명과 사전 정보를 확인하세요.</p><span>표현 찾아보기 →</span></a><a class="home-tool-card" href="/about.html"><h2>아람글 소개</h2><p>아람글이 지향하는 한국어 글쓰기와 정보 제공 원칙을 알아보세요.</p><span>서비스 소개 →</span></a><a class="home-tool-card" href="/guide.html"><h2>이용 안내</h2><p>처음 방문했다면 기능별 사용 방법과 결과 확인법부터 살펴보세요.</p><span>사용 방법 보기 →</span></a></section><footer class="site-footer"><div class="footer-inner"><a class="footer-brand" href="/" aria-label="아람글 홈"><span>아람글</span><small>한국어를 더 정확하고 자연스럽게</small></a><nav class="footer-links" aria-label="서비스 및 안내"><a href="/checker.html">맞춤법 검사</a><a href="/expression.html">표현 검색</a><a href="/about.html">아람글 소개</a><a href="/guide.html">이용 안내</a><a href="/roadmap.html">서비스 로드맵</a><a href="/terms.html">이용약관</a></nav><p class="footer-description">아람글은 한국어의 맞춤법·띄어쓰기·표현을 확인하고 더 정확한 글쓰기를 돕는 서비스입니다. 자동 검사 결과는 문맥에 따라 달라질 수 있으므로 중요한 글은 근거와 함께 확인해 주세요.</p><div class="footer-bottom"><span>© <span id="footerYear">2026</span> 아람글</span><a href="/terms.html">이용약관</a></div></div></footer>
+<div class="site-toast" id="siteToast" role="status" aria-live="polite" aria-atomic="true"></div>
+<dialog class="guide-dialog" id="guideDialog" aria-labelledby="guideTitle">
+  <div class="guide-dialog-head"><h2 id="guideTitle">아람글 이용 안내</h2><button type="button" id="closeGuide" aria-label="안내 닫기">×</button></div>
+  <p>아람글은 맞춤법·띄어쓰기 검사와 헷갈리기 쉬운 표현 검색을 지원합니다.</p>
+  <ul><li><strong>맞춤법 검사:</strong> 문장을 입력하고 검사 기준을 선택한 뒤 ‘검사하기’를 누르세요.</li><li><strong>수정 근거:</strong> 표시된 수정 항목을 선택하면 관련 설명을 확인할 수 있습니다.</li><li><strong>표현 검색:</strong> 단어나 표현을 검색해 등록된 설명과 사전 정보를 확인하세요.</li></ul>
+  <p class="guide-disclaimer">자동 검사 결과가 모든 문맥을 완벽하게 판단하는 것은 아닙니다. 중요한 문서는 결과와 근거를 함께 확인해 주세요.</p>
+  <button class="guide-confirm" type="button" id="confirmGuide">확인했습니다</button>
+</dialog>
+<script>
+const text = document.getElementById('text');
+const count = document.getElementById('count');
+const result = document.getElementById('result');
+const status = document.getElementById('status');
+const resultContent = document.getElementById('resultContent');
+const checkButton = document.getElementById('check');
+let selectedCriterion = 'basic';
+const criterionNotes = {
+  basic: '맞춤법·띄어쓰기·표현을 기본 기준으로 함께 검사합니다.',
+  document: '공식·업무 문서 기준은 준비 중이며 현재는 기본 검사 기준으로 동작합니다.',
+  academic: '논문·학술 기준은 준비 중이며 현재는 기본 검사 기준으로 동작합니다.'
+};
+document.querySelectorAll('.criterion-option').forEach(button => {
+  button.addEventListener('click', () => {
+    selectedCriterion = button.dataset.criterion || 'basic';
+    document.querySelectorAll('.criterion-option').forEach(option => {
+      const active = option === button;
+      option.classList.toggle('active', active);
+      option.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    document.getElementById('criterionNote').textContent =
+      criterionNotes[selectedCriterion] || criterionNotes.basic;
+  });
+});
+
+text.addEventListener('input', () => {
+  count.textContent = text.value.length.toLocaleString('ko-KR');
+});
+const expressionForm = document.getElementById('expressionSearchForm');
+const expressionQuery = document.getElementById('expressionQuery');
+const expressionSearchButton = document.getElementById('expressionSearchButton');
+const expressionResults = document.getElementById('expressionResults');
+
+function renderExpressionResults(data) {
+  const local = Array.isArray(data?.local) ? data.local : [];
+  const dictionary = Array.isArray(data?.dictionary) ? data.dictionary : [];
+
+  if (!local.length && !dictionary.length) {
+    expressionResults.innerHTML = '<div class="expression-empty">검색 결과가 없습니다. 다른 표현을 입력해 보세요.</div>';
+    return;
+  }
+
+  let html = '';
+
+  local.forEach(item => {
+    html += '<article class="expression-item">';
+    html += '<div class="expression-item-head"><div class="expression-word">' + escapeHtml(item.expected || item.input) + '</div><span class="expression-badge">아람글 규칙</span></div>';
+    html += '<div class="expression-meta">' + escapeHtml(item.title || '') + (item.source_reference ? ' · ' + escapeHtml(item.source_reference) : '') + '</div>';
+
+    if (item.input && item.expected && item.input !== item.expected) {
+      html += '<div class="expression-change">';
+      html += '<div class="expression-change-box"><div class="expression-change-label">검색된 표현</div><div class="expression-change-value">' + escapeHtml(item.input) + '</div></div>';
+      html += '<div class="expression-arrow">→</div>';
+      html += '<div class="expression-change-box"><div class="expression-change-label">권장·관련 표현</div><div class="expression-change-value">' + escapeHtml(item.expected) + '</div></div>';
+      html += '</div>';
+    }
+
+    if (Array.isArray(item.candidates) && item.candidates.length) {
+      html += '<div class="expression-reason"><strong>후보:</strong> ' + item.candidates.map(escapeHtml).join(' · ') + '</div>';
+    }
+    if (item.description) {
+      html += '<div class="expression-definition">' + escapeHtml(item.description) + '</div>';
+    }
+    if (item.reason) {
+      html += '<div class="expression-reason"><strong>판단 참고:</strong> ' + escapeHtml(item.reason) + '</div>';
+    }
+    if (item.source_detail_url) {
+      html += '<a class="expression-source" href="' + escapeHtml(item.source_detail_url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(item.source_detail_label || '관련 국립국어원 설명 보기') + ' ↗</a>';
+    } else if (item.source_url) {
+      html += '<a class="expression-source" href="' + escapeHtml(item.source_url) + '" target="_blank" rel="noopener noreferrer">어문 규범 원문 보기 ↗</a>';
+    }
+    html += '</article>';
+  });
+
+  if (dictionary.length) {
+    html += '<div class="result-section-title" style="margin-top:8px"><span>연결된 사전</span><span>' + dictionary.length + '개</span></div>';
+    dictionary.forEach(entry => {
+      const definition = entry.senses?.find(sense => sense.definition)?.definition || '';
+      html += '<article class="expression-item">';
+      html += '<div class="expression-item-head"><div class="expression-word">' + escapeHtml(entry.word || '') + '</div><span class="expression-badge">' + escapeHtml(entry.source === 'standard' ? '표준국어대사전' : '우리말샘') + '</span></div>';
+      html += '<div class="expression-meta">' + escapeHtml(entry.pos || '') + (entry.categories?.length ? ' · ' + escapeHtml(entry.categories.join(', ')) : '') + '</div>';
+      if (definition) html += '<div class="expression-definition">' + escapeHtml(definition) + '</div>';
+      if (entry.link) html += '<a class="expression-source" href="' + escapeHtml(entry.link) + '" target="_blank" rel="noopener noreferrer">사전 원문 보기 ↗</a>';
+      html += '</article>';
+    });
+  }
+
+  if (data?.warning) {
+    html += '<div class="expression-warning">' + escapeHtml(data.warning) + '</div>';
+  }
+
+  expressionResults.innerHTML = html;
+}
+
+expressionForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const query = expressionQuery.value.trim();
+
+  if (!query) {
+    expressionResults.innerHTML = '<div class="expression-empty">검색할 표현을 입력해 주세요.</div>';
+    expressionQuery.focus();
+    return;
+  }
+
+  expressionSearchButton.disabled = true;
+  expressionSearchButton.textContent = '검색 중...';
+  expressionResults.innerHTML = '<div class="expression-empty">표현과 사전 정보를 찾고 있습니다...</div>';
+
+  try {
+    const response = await fetch('/api/expression-search', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({query})
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || '표현 검색 요청 실패');
+    renderExpressionResults(data);
+  } catch (error) {
+    console.error(error);
+    expressionResults.innerHTML = '<div class="expression-error">표현 검색에 실패했습니다. 잠시 후 다시 시도해 주세요.</div>';
+  } finally {
+    expressionSearchButton.disabled = false;
+    expressionSearchButton.textContent = '검색';
+  }
+});
+
+
+document.getElementById("newText").addEventListener("click",()=>{if(text.value.trim()&&!confirm("새 글을 작성할까요? 현재 작성한 내용이 사라집니다."))return;text.value="";count.textContent="0";result.classList.remove("show","editing");resultContent.innerHTML="";document.getElementById("editResult").disabled=true;document.getElementById("copyResult").disabled=true;text.focus()});
+document.getElementById("copyText").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(text.value)}catch(e){alert("복사에 실패했습니다.")}});
+document.getElementById("pasteText").addEventListener("click",async()=>{try{text.value=(await navigator.clipboard.readText()).slice(0,5000);text.dispatchEvent(new Event("input"));text.focus()}catch(e){alert("붙여넣기에 실패했습니다.")}});
+document.getElementById("resultNewText").addEventListener("click",()=>{if(text.value.trim()&&!confirm("새 글을 작성할까요? 현재 작성한 내용이 사라집니다."))return;text.value="";count.textContent="0";result.classList.remove("show","editing");resultContent.innerHTML="";document.getElementById("editResult").disabled=true;document.getElementById("copyResult").disabled=true;text.focus()});
+document.getElementById("editResult").addEventListener("click",()=>{const box=result.querySelector(".revised-text");document.getElementById("editResultText").value=box?box.textContent:"";result.classList.add("editing");document.getElementById("editResultText").focus()});
+document.getElementById("copyResult").addEventListener("click",async()=>{const box=result.querySelector(".revised-text");const value=result.classList.contains("editing")?document.getElementById("editResultText").value:(box?box.textContent:"");if(!value)return;try{await navigator.clipboard.writeText(value)}catch(e){alert("복사에 실패했습니다.")}});
+document.getElementById("recheck").addEventListener("click",()=>{text.value=document.getElementById("editResultText").value;text.dispatchEvent(new Event("input"));result.classList.remove("editing");checkButton.click()});
+checkButton.addEventListener('click', async () => {
+  const value = text.value.trim();
+  result.classList.add('show');
+
+  if (!value) {
+    setStatus('입력 필요', '');
+    resultContent.innerHTML = '<div class="result-box">검사할 문장을 먼저 입력해 주세요.</div>';
+    return;
+  }
+
+  checkButton.disabled = true;
+  checkButton.textContent = '검사 중...';
+  setStatus('검사 중', '');
+  resultContent.innerHTML = '<div class="result-box">문장을 분석하고 있습니다...</div>';
+
+  try {
+    const response = await fetch('/api/check', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({text: value, criterion: selectedCriterion})
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || 'API 요청 실패');
+    }
+
+    renderResult(data, value);
+  } catch (error) {
+    console.error(error);
+    setStatus('검사 실패', '');
+    resultContent.innerHTML = '<div class="result-box">검사에 실패했습니다.<br>잠시 후 다시 시도해 주세요.</div>';
+  } finally {
+    checkButton.disabled = false;
+    checkButton.textContent = '검사하기';
+  }
+});
+
+function renderResult(data, input) {
+  const decision = data.decision || 'NO_DECISION';
+
+  if (decision === 'CORRECTION') setStatus('교정 확인', 'correction');
+  else if (decision === 'VALID') setStatus('오류 없음', 'valid');
+  else if (decision === 'AMBIGUOUS') setStatus('추가 확인 필요', 'ambiguous');
+  else setStatus('판정 보류', '');
+
+  const revised = data.revised || input;
+  const engines = data.engines || {};
+  const engineNames = [];
+  if (engines.aramgeul_rule) engineNames.push('아람글 규칙 엔진');
+  if (engines.bareun) engineNames.push('Bareun');
+
+  const engineStatus = engineNames.length
+    ? '<div class="engine-status"><strong>검사 엔진</strong> · ' + escapeHtml(engineNames.join(' + ')) +
+      (engines.bareun ? '' : ' · Bareun 미연결') + '</div>'
+    : '<div class="engine-status"><strong>검사 엔진</strong> · 연결된 엔진이 없습니다.</div>';
+
+  const dictionaryEvidence = data.dictionary_evidence || {};
+  const dictionaryDecisions = Array.isArray(data.dictionary_decisions)
+    ? data.dictionary_decisions
+    : [];
+  const dictionaryWarning = data.dictionary_warning
+    ? '<div class="result-warning">' + escapeHtml(data.dictionary_warning) + '</div>'
+    : '';
+  const dictionaryStatus = dictionaryEvidence.enabled
+    ? '<div class="engine-status"><strong>사전 증거 계층</strong> · 활성화 · ' +
+      (dictionaryDecisions.length
+        ? dictionaryDecisions.map(item =>
+            escapeHtml(item.rule_id || '규칙') + ': ' + escapeHtml(item.status || '판정 없음')
+          ).join(' · ')
+        : '해당 규칙의 사전 판정 없음') +
+      '</div>'
+    : '';
+
+  const htmlWarning = data.engine_warning
+    ? '<div class="result-warning">' + escapeHtml(data.engine_warning) + '</div>'
+    : '';
+
+  let blocks = Array.isArray(data.revised_blocks)
+    ? data.revised_blocks.filter(block =>
+        block && typeof block.revised === 'string' &&
+        typeof block.origin?.text === 'string' &&
+        block.revised !== block.origin.text
+      )
+    : [];
+
+  // 서버가 교정문(revised)과 rule_edits는 반환했지만 표시용 revised_blocks를
+  // 만들지 못한 경우에도 프런트가 스스로 표시 블록을 복원한다.
+  // 특히 Bareun 미연결 상태의 띄어쓰기 삭제처럼 최종 문장은 바뀌었지만
+  // 서버 블록이 비어 있는 경우를 여기서 복구한다.
+  if (!blocks.length) {
+    // 최종 통합 교정(edit)이 실제로 존재하는데 서버 표시 블록이 비어 있으면
+    // 통합 결과의 edit를 직접 사용해 표시 블록을 복원한다.
+    // rule_edits는 규칙 엔진 원본, edits는 최종 통합 결과이므로
+    // 둘 중 하나만 남아 있어도 UI가 교정 정보를 잃지 않도록 한다.
+    const fallbackEdits = Array.isArray(data.rule_edits) && data.rule_edits.length
+      ? data.rule_edits
+      : (Array.isArray(data.edits) ? data.edits : []);
+
+    if (fallbackEdits.length) {
+      blocks = buildClientRuleFallbackBlocks(data.origin || input, revised, fallbackEdits);
+    }
+  }
+
+  let html = '<div class="result-box">';
+  html += '<div class="result-label">검사 결과</div>';
+  html += '<div class="revised-text" id="revisedSentence">' + renderSentenceWithEdits(revised, blocks) + '</div>';
+  html += '</div>';
+  const technicalHtml = '<details class="technical-details"><summary>검사 정보 보기</summary><div class="technical-body">' +
+    engineStatus +
+    dictionaryStatus +
+    htmlWarning +
+    dictionaryWarning +
+    '</div></details>';
+  if (blocks.length) {
+    html += '<div class="result-hint">수정된 부분을 누르면 변경 내용과 검사 설명을 확인할 수 있습니다.</div>';
+    html += '<div class="result-section-title"><span>교정 내용</span><span id="correctionCount">' + blocks.length + '개</span></div>';
+    html += '<div class="corrections">';
+
+    html += blocks.map((block, index) => {
+      const helpText = block.help || block.rule?.description || '';
+      const help = helpText
+        ? '<div class="help"><strong>왜?</strong> ' + escapeHtml(helpText) + '</div>'
+        : '<div class="detail-empty">검사 엔진에서 별도 설명을 제공하지 않았습니다.</div>';
+
+      const rule = block.rule
+        ? '<div class="rule-evidence">' +
+            '<div class="detail-title">아람글 규칙</div>' +
+            '<div class="rule-title">' + escapeHtml(block.rule.title || '') + '</div>' +
+            '<div class="rule-description">' + escapeHtml(block.rule.description || '') + '</div>' +
+            '<div class="rule-meta">' +
+              escapeHtml(block.rule.source_name || '') +
+              (block.rule.source_reference ? ' · ' + escapeHtml(block.rule.source_reference) : '') +
+              (block.rule.rule_id ? ' · ' + escapeHtml(block.rule.rule_id) : '') +
+            '</div>' +
+            (block.rule.source_url
+              ? '<a class="rule-source" href="' + escapeHtml(block.rule.source_url) + '" target="_blank" rel="noopener noreferrer">어문 규범 원문 보기 ↗</a>'
+              : '') +
+            (block.rule.source_detail_url
+              ? '<a class="rule-source secondary" href="' + escapeHtml(block.rule.source_detail_url) + '" target="_blank" rel="noopener noreferrer">' +
+                escapeHtml(block.rule.source_detail_label || '관련 국립국어원 설명 보기') + ' ↗</a>'
+              : '') +
+          '</div>'
+        : '';
+      const diff = diffHtml(block.origin.text, block.revised);
+      const editType = getEditType(block);
+      const summaryText = helpText || (editType === '띄어쓰기'
+        ? '단어 사이의 띄어쓰기를 바로잡았습니다.'
+        : editType === '붙여쓰기'
+          ? '불필요한 띄어쓰기를 붙여 썼습니다.'
+          : '문맥과 규칙에 맞게 표현을 바로잡았습니다.');
+      return '<div class="correction clickable" data-correction-index="' + index + '" tabindex="0" role="button" aria-expanded="false">' +
+        '<div class="correction-top"><span class="correction-index">교정 ' + (index + 1) + '</span><span class="correction-type">' + escapeHtml(editType) + '</span></div>' +
+        '<div class="change">' +
+          '<div class="change-part"><div class="result-label">변경 전</div><div class="change-value">' + escapeHtml(block.origin.text) + '</div></div>' +
+          '<div class="arrow">→</div>' +
+          '<div class="change-part"><div class="result-label">변경 후</div><div class="change-value">' + escapeHtml(block.revised) + '</div></div>' +
+        '</div>' +
+        '<div class="correction-summary"><strong>한눈에 보기</strong> · ' + escapeHtml(summaryText) + '</div>' +
+        '<button class="detail-toggle" type="button" aria-expanded="false">자세히 보기</button>' +
+        '<div class="detail">' +
+          '<div class="detail-title">문장 안에서 변경된 부분</div>' +
+          '<div class="diff">' + diff + '</div>' +
+          help +
+          rule +
+          '<div class="detail-meta">' +
+          (block.source === 'aramgeul-rule'
+            ? '검사 엔진: 아람글 규칙 엔진 · 형태소 분석과 등록된 규칙을 근거로 판단했습니다.'
+            : '검사 엔진: Bareun · 아람글 규칙 근거가 확인된 경우 규칙과 공식 출처를 함께 표시합니다.') +
+        '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    html += '</div>';
+  } else if (decision === 'VALID') {
+    html += '<div class="result-box" style="margin-top:14px">현재 연결된 검사 범위에서는 수정할 항목을 찾지 못했습니다.</div>';
+  }
+
+  if (decision === 'AMBIGUOUS' && Array.isArray(data.candidates) && data.candidates.length) {
+    html += '<div class="candidates"><strong>교정 후보를 하나로 확정하지 않았습니다.</strong>';
+    html += data.candidates.map(candidate =>
+      '<div class="candidate"><strong>' + escapeHtml(candidate.source || '검사 계층') + '</strong><div>' +
+      escapeHtml(candidate.revised || '') + '</div></div>'
+    ).join('');
+    html += '</div>';
+  }
+
+  resultContent.innerHTML = html;
+  document.getElementById("editResult").disabled = false;
+  document.getElementById("copyResult").disabled = false;
+  bindCorrectionCards();
+  bindSentenceEdits();
+}
+
+function buildClientRuleFallbackBlocks(source, revised, ruleEdits) {
+  if (
+    typeof source !== 'string' ||
+    typeof revised !== 'string' ||
+    !Array.isArray(ruleEdits)
+  ) {
+    return [];
+  }
+
+  const edits = ruleEdits
+    .filter(edit =>
+      edit &&
+      Number.isInteger(edit.start) &&
+      Number.isInteger(edit.end) &&
+      edit.start >= 0 &&
+      edit.end >= edit.start &&
+      typeof edit.replacement === 'string' &&
+      edit.rule
+    )
+    .sort((a, b) => a.start - b.start);
+
+  return edits.map((edit, index) => {
+    const contextStart = Math.max(
+      0,
+      source.lastIndexOf(' ', Math.max(0, edit.start - 1)) + 1
+    );
+    const nextSpace = source.indexOf(' ', edit.end);
+    const contextEnd = nextSpace >= 0
+      ? nextSpace
+      : Math.min(source.length, edit.end + 8);
+
+    const originText = source.slice(contextStart, contextEnd);
+    const localStart = edit.start - contextStart;
+    const localEnd = edit.end - contextStart;
+    const revisedContext =
+      originText.slice(0, localStart) +
+      edit.replacement +
+      originText.slice(localEnd);
+
+    const revisedStart = Number.isInteger(edit.revised_start)
+      ? edit.revised_start
+      : edit.start + edits
+          .filter(previous => previous.start < edit.start)
+          .reduce(
+            (sum, previous) =>
+              sum + previous.replacement.length - (previous.end - previous.start),
+            0
+          );
+
+    const revisedEnd = Number.isInteger(edit.revised_end)
+      ? edit.revised_end
+      : revisedStart + edit.replacement.length;
+
+    return {
+      id: 'client-rule-' + index + '-' + edit.rule.rule_id,
+      origin: {
+        text: originText,
+        start: contextStart,
+        end: contextEnd
+      },
+      revised: revisedContext,
+      revised_start: revisedStart,
+      revised_end: revisedEnd,
+      rule: edit.rule,
+      rules: [edit.rule],
+      help: edit.rule.description || '',
+      source: 'aramgeul-rule',
+      rule_edit: {
+        start: edit.start,
+        end: edit.end,
+        replacement: edit.replacement
+      },
+      rule_edits: [{
+        start: edit.start,
+        end: edit.end,
+        replacement: edit.replacement
+      }]
+    };
+  });
+}
+
+function getEditType(block) {
+  const original = typeof block?.origin?.text === 'string' ? block.origin.text : '';
+  const changed = typeof block?.revised === 'string' ? block.revised : '';
+
+  if (original && changed && original.replace(/\s/g, '') === changed.replace(/\s/g, '')) {
+    const originalSpaces = (original.match(/\s/g) || []).length;
+    const revisedSpaces = (changed.match(/\s/g) || []).length;
+    if (revisedSpaces > originalSpaces) return '띄어쓰기';
+    if (revisedSpaces < originalSpaces) return '붙여쓰기';
+  }
+
+  const category = block?.rule?.category || '';
+  if (category === 'orthography') return '맞춤법';
+  if (category === 'spacing') return '띄어쓰기';
+  if (category === 'expression') return '표현';
+  return '교정';
+}
+
+function renderSentenceWithEdits(revised, blocks) {
+  if (!blocks.length) return escapeHtml(revised);
+
+  const ranges = [];
+  let cursor = 0;
+
+  blocks.forEach((block, index) => {
+    const originalText = typeof block.origin?.text === 'string' ? block.origin.text : '';
+    const revisedBlockText = typeof block.revised === 'string' ? block.revised : '';
+
+    // 하나의 rule block 안에 같은 유형의 띄어쓰기 교정이 여러 개 있을 수 있다.
+    // 예: '12억3456만7898' -> '12억 3456만 7898'은 같은 규칙으로
+    // 띄어쓰기 위치가 2곳 생긴다. 모든 위치를 개별 부호로 표시한다.
+    if (originalText && revisedBlockText && originalText.replace(/\s/g, '') === revisedBlockText.replace(/\s/g, '')) {
+      const originalSpaces = (originalText.match(/\s/g) || []).length;
+      const revisedSpaces = (revisedBlockText.match(/\s/g) || []).length;
+      const blockStart = revised.indexOf(revisedBlockText, cursor);
+
+      if (blockStart !== -1 && originalSpaces !== revisedSpaces) {
+        let oi = 0;
+        let ri = 0;
+
+        while (oi < originalText.length || ri < revisedBlockText.length) {
+          if (originalText[oi] === revisedBlockText[ri]) {
+            oi++;
+            ri++;
+            continue;
+          }
+
+          if (revisedSpaces > originalSpaces && revisedBlockText[ri] === ' ') {
+            ranges.push({
+              start: blockStart + ri,
+              end: blockStart + ri,
+              index,
+              kind: 'space-insert'
+            });
+            ri++;
+            continue;
+          }
+
+          if (revisedSpaces < originalSpaces && originalText[oi] === ' ') {
+            ranges.push({
+              start: blockStart + ri,
+              end: blockStart + ri,
+              index,
+              kind: 'space-delete'
+            });
+            oi++;
+            continue;
+          }
+
+          // 공백 외 차이가 섞인 예외적인 블록은 일반 교정 경로로 넘긴다.
+          break;
+        }
+
+        cursor = blockStart + revisedBlockText.length;
+        return;
+      }
+    }
+
+    const explicitStart = Number.isInteger(block.revised_start) ? block.revised_start : null;
+    const explicitEnd = Number.isInteger(block.revised_end) ? block.revised_end : null;
+
+    if (
+      explicitStart !== null &&
+      explicitEnd !== null &&
+      explicitStart >= 0 &&
+      explicitEnd >= explicitStart &&
+      explicitEnd <= revised.length
+    ) {
+      const explicitText = revised.slice(explicitStart, explicitEnd);
+      const originTextForDiff = originalText;
+      const revisedTextForDiff = revisedBlockText || explicitText;
+
+      const commonPrefixLimit = Math.min(originTextForDiff.length, revisedTextForDiff.length);
+      let commonPrefix = 0;
+
+      while (
+        commonPrefix < commonPrefixLimit &&
+        originTextForDiff[commonPrefix] === revisedTextForDiff[commonPrefix]
+      ) {
+        commonPrefix++;
+      }
+
+      let commonSuffix = 0;
+      while (
+        commonSuffix < originTextForDiff.length - commonPrefix &&
+        commonSuffix < revisedTextForDiff.length - commonPrefix &&
+        originTextForDiff[originTextForDiff.length - 1 - commonSuffix] ===
+          revisedTextForDiff[revisedTextForDiff.length - 1 - commonSuffix]
+      ) {
+        commonSuffix++;
+      }
+
+      const changedStart = explicitStart + commonPrefix;
+      const changedEnd = explicitEnd - commonSuffix;
+
+      if (explicitText.trim() && changedEnd > changedStart) {
+        ranges.push({
+          start: changedStart,
+          end: changedEnd,
+          index,
+          kind: 'text'
+        });
+        cursor = Math.max(cursor, changedEnd);
+        return;
+      }
+    }
+
+    const value = revisedBlockText.trim();
+    if (value) {
+      const foundStart = revised.indexOf(value, cursor);
+      if (foundStart !== -1) {
+        ranges.push({
+          start: foundStart,
+          end: foundStart + value.length,
+          index,
+          kind: 'text'
+        });
+        cursor = foundStart + value.length;
+      }
+    }
+  });
+
+  ranges.sort((a, b) => a.start - b.start || a.end - b.end);
+
+  if (!ranges.length) return escapeHtml(revised);
+
+  let html = '';
+  let position = 0;
+
+  ranges.forEach(range => {
+    if (range.start < position) return;
+
+    html += escapeHtml(revised.slice(position, range.start));
+
+    if (range.kind === 'space-insert') {
+      html += '<span class="sentence-edit space-mark space-insert" data-correction-index="' +
+        range.index +
+        '" tabindex="0" role="button" aria-label="띄어쓰기 추가: 여기에 띄어쓰기를 해야 합니다;"> </span>';
+      // 실제 공백은 그대로 유지하고, 부호만 공백 위에 겹쳐 표시한다.
+      position = Math.min(range.start + 1, revised.length);
+      return;
+    }
+
+    if (range.kind === 'space-delete') {
+      html += '<span class="sentence-edit space-mark space-delete" data-correction-index="' +
+        range.index +
+        '" tabindex="0" role="button" aria-label="붙여쓰기: 이 위치의 띄어쓰기를 없애야 합니다.">⌒</span>';
+      position = range.start;
+      return;
+    }
+
+    const highlighted = revised.slice(range.start, range.end);
+    const editType = getEditType(blocks[range.index]);
+    const label = highlighted.trim() ? highlighted : editType + ' 수정';
+
+    html += '<span class="sentence-edit" data-correction-index="' + range.index +
+      '" tabindex="0" role="button" aria-label="' + escapeHtml(editType + ': ' + label) + '">' +
+      escapeHtml(highlighted) +
+      '</span>';
+
+    position = range.end;
+  });
+
+  html += escapeHtml(revised.slice(position));
+  return html;
+}
+
+function bindSentenceEdits() {
+  document.querySelectorAll('.sentence-edit').forEach(edit => {
+    const activate = () => {
+      const index = Number(edit.dataset.correctionIndex);
+      selectCorrection(index, true);
+    };
+
+    edit.addEventListener('click', activate);
+    edit.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        activate();
+      }
+    });
+  });
+}
+
+function selectCorrection(index, scrollToCard = false) {
+  document.querySelectorAll('.correction.clickable').forEach(card => {
+    const selected = Number(card.dataset.correctionIndex) === index;
+    card.classList.toggle('selected', selected);
+    card.setAttribute('aria-expanded', selected ? 'true' : 'false');
+    const toggle = card.querySelector('.detail-toggle');
+    if (toggle) {
+      toggle.textContent = selected ? '간단히 보기' : '자세히 보기';
+      toggle.setAttribute('aria-expanded', selected ? 'true' : 'false');
+    }
+  });
+
+  document.querySelectorAll('.sentence-edit').forEach(edit => {
+    edit.classList.toggle(
+      'selected',
+      Number(edit.dataset.correctionIndex) === index
+    );
+  });
+
+  const card = document.querySelector('.correction[data-correction-index="' + index + '"]');
+
+  if (card && scrollToCard) {
+    card.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+  }
+}
+
+function bindCorrectionCards() {
+  document.querySelectorAll('.detail-toggle').forEach(button => {
+    button.addEventListener('click', event => {
+      event.stopPropagation();
+      const card = button.closest('.correction');
+      if (!card) return;
+      const selected = card.classList.contains('selected');
+      if (selected) {
+        card.classList.remove('selected');
+        card.setAttribute('aria-expanded', 'false');
+        button.textContent = '자세히 보기';
+        button.setAttribute('aria-expanded', 'false');
+        document.querySelectorAll('.sentence-edit').forEach(edit => {
+          if (Number(edit.dataset.correctionIndex) === Number(card.dataset.correctionIndex)) {
+            edit.classList.remove('selected');
+          }
+        });
+      } else {
+        selectCorrection(Number(card.dataset.correctionIndex), false);
+      }
+    });
+  });
+
+  document.querySelectorAll('.correction.clickable').forEach(card => {
+    const toggle = () => {
+      const index = Number(card.dataset.correctionIndex);
+      const wasSelected = card.classList.contains('selected');
+
+      if (wasSelected) {
+        card.classList.remove('selected');
+        card.setAttribute('aria-expanded', 'false');
+        document.querySelectorAll('.sentence-edit').forEach(edit => {
+          if (Number(edit.dataset.correctionIndex) === index) {
+            edit.classList.remove('selected');
+          }
+        });
+        return;
+      }
+
+      selectCorrection(index, false);
+    };
+
+    card.addEventListener('click', event => {
+      if (event.target.closest('a') || event.target.closest('.detail-toggle')) return;
+      toggle();
+    });
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggle();
+      }
+    });
+  });
+}
+
+function diffHtml(original, revised) {
+  if (original === revised) return escapeHtml(revised);
+
+  const a = Array.from(original);
+  const b = Array.from(revised);
+  const rows = a.length + 1;
+  const cols = b.length + 1;
+  const dp = Array.from({length: rows}, () => new Array(cols).fill(0));
+
+  for (let i = a.length - 1; i >= 0; i--) {
+    for (let j = b.length - 1; j >= 0; j--) {
+      dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    }
+  }
+
+  const parts = [];
+  let i = 0, j = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) {
+      parts.push({type: 'same', text: a[i]});
+      i++; j++;
+    } else if (dp[i + 1][j] >= dp[i][j + 1]) {
+      parts.push({type: 'removed', text: a[i++]});
+    } else {
+      parts.push({type: 'added', text: b[j++]});
+    }
+  }
+  while (i < a.length) parts.push({type: 'removed', text: a[i++]});
+  while (j < b.length) parts.push({type: 'added', text: b[j++]});
+
+  return parts.map(part => {
+    const value = escapeHtml(part.text);
+    if (part.type === 'removed') return '<span class="diff-removed">' + value + '</span>';
+    if (part.type === 'added') return '<span class="diff-added">' + value + '</span>';
+    return value;
+  }).join('');
+}
+
+function setStatus(label, className) {
+  status.textContent = label;
+  status.className = 'status' + (className ? ' ' + className : '');
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+document.querySelectorAll('.popular-item').forEach(item => {
+  item.addEventListener('click', event => {
+    event.preventDefault();
+    const query = item.dataset.expression || '';
+    const input = document.getElementById('expressionQuery');
+    if (!input) return;
+    input.value = query;
+    document.getElementById('expression').scrollIntoView({behavior:'smooth', block:'start'});
+    input.focus();
+  });
+});
+
+
+/* Small UX helpers: accessible notices, usage guide and restrained entrance motion. */
+(function(){
+ const toast=document.getElementById('siteToast');
+ let toastTimer;
+ window.aramgeulToast=function(message){
+   if(!toast)return;
+   toast.textContent=message;
+   toast.classList.add('show');
+   clearTimeout(toastTimer);
+   toastTimer=setTimeout(()=>toast.classList.remove('show'),2600);
+ };
+ const dialog=document.getElementById('guideDialog');
+ const open=document.getElementById('footerGuide');
+ const close=()=>{if(dialog&&dialog.open)dialog.close()};
+ if(open&&dialog)open.addEventListener('click',()=>dialog.showModal());
+ ['closeGuide','confirmGuide'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('click',close)});
+ if(dialog)dialog.addEventListener('click',event=>{if(event.target===dialog)close()});
+ const year=document.getElementById('footerYear');if(year)year.textContent=new Date().getFullYear();
+ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+   requestAnimationFrame(()=>document.body.classList.add('reveal-ready'));
+ }
+})();
+</script>
+</body>
+</html>
