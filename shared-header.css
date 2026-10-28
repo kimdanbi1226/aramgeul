@@ -1,0 +1,65 @@
+/* Aramgeul shared site header — single source of truth */
+body > header {
+ position:sticky!important;top:0!important;z-index:1000!important;
+ width:100%!important;background:rgba(255,255,255,.96)!important;
+ border-bottom:1px solid rgba(36,87,197,.10)!important;
+ -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+body > header,body > header * {
+ font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif!important;
+}
+body > header > .header-inner {
+ width:calc(100% - 64px)!important;max-width:1160px!important;
+ min-height:80px!important;margin:0 auto!important;padding:12px 0!important;
+ display:flex!important;align-items:center!important;justify-content:space-between!important;
+ gap:24px!important;box-sizing:border-box!important;
+}
+body > header .brand-link {
+ display:inline-flex!important;align-items:center!important;gap:10px!important;
+ min-width:0!important;font-size:inherit!important;font-weight:400!important;
+ letter-spacing:normal!important;color:#182544!important;text-decoration:none!important;
+ opacity:1!important;filter:none!important;
+}
+body > header .brand-link .mark {
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ flex:none!important;width:46px!important;height:40px!important;
+}
+body > header .brand-link .mark img {
+ display:block!important;width:46px!important;height:40px!important;
+ object-fit:contain!important;
+}
+body > header .brand-link > div:last-child {
+ display:flex!important;flex-direction:column!important;justify-content:center!important;
+ gap:2px!important;min-width:0!important;
+}
+body > header .brand-link .brand-name {
+ display:block!important;margin:0!important;padding:0!important;
+ font-size:21px!important;font-weight:800!important;font-style:normal!important;
+ letter-spacing:-.04em!important;line-height:1.25!important;
+ color:#182544!important;-webkit-text-fill-color:#182544!important;
+ text-shadow:none!important;opacity:1!important;
+}
+body > header .brand-link .brand-sub {
+ display:block!important;margin:0!important;padding:0!important;
+ font-size:12px!important;font-weight:400!important;font-style:normal!important;
+ letter-spacing:0!important;line-height:1.4!important;
+ color:#5b6880!important;-webkit-text-fill-color:#5b6880!important;
+ text-shadow:none!important;opacity:1!important;filter:none!important;
+ font-synthesis:none!important;
+}
+body > header .nav {
+ display:flex!important;align-items:center!important;gap:22px!important;
+ flex-wrap:wrap!important;
+}
+body > header .nav a {
+ font-size:14px!important;font-weight:600!important;letter-spacing:0!important;
+ line-height:1.4!important;text-decoration:none!important;color:#182544!important;
+}
+body > header .nav a[aria-current="page"] {font-weight:700!important}
+@media(max-width:700px){
+ body > header > .header-inner {
+  width:calc(100% - 36px)!important;min-height:0!important;
+  padding:14px 0!important;
+ }
+ body > header .nav a{font-size:13px!important}
+}
