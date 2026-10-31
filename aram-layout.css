@@ -22,7 +22,7 @@ body > footer.site-footer > .footer-inner {
 body > main h1:not(.brand-intro-wordmark),body > .page-intro h1 {
  font-size:clamp(28px,3.3vw,42px)!important;line-height:1.25!important;letter-spacing:-.04em!important;
 }
-body > main h2 {font-size:clamp(14.7px,1.54vw,19.6px)!important;line-height:1.35!important;letter-spacing:-.035em!important}
+body > main h2 {font-size:clamp(10.5px,1.1vw,14px)!important;line-height:1.35!important;letter-spacing:-.035em!important}
 body > main h3 {font-size:clamp(17px,1.65vw,21px)!important;line-height:1.4!important}
 body > main .hero p,body > main .page-hero p,body > .page-intro p {
  font-size:clamp(15px,1.5vw,17px)!important;line-height:1.75!important;
@@ -33,7 +33,7 @@ body > main .section-heading p,body > main .page-panel p,body > main .page-panel
 @media(max-width:700px){
  :root {--aram-gutter:16px}
  body > main h1:not(.brand-intro-wordmark),body > .page-intro h1 {font-size:clamp(26px,7vw,34px)!important}
- body > main h2 {font-size:clamp(14px,3.85vw,16.8px)!important}
+ body > main h2 {font-size:clamp(10px,2.75vw,12px)!important}
  body > main h3 {font-size:18px!important}
  body > main .section-heading p,body > main .page-panel p,body > main .page-panel li {font-size:14px!important}
 }
