@@ -63,3 +63,34 @@ body > header .nav a[aria-current="page"] {font-weight:700!important}
  }
  body > header .nav a{font-size:13px!important}
 }
+
+
+/* Centered logo and navigation — consistent on every page */
+body > header > .header-inner {
+ display:flex!important;flex-direction:column!important;
+ align-items:center!important;justify-content:center!important;
+ gap:6px!important;min-height:0!important;padding:14px 0 13px!important;
+}
+body > header .brand-link {
+ display:flex!important;justify-content:center!important;align-items:center!important;
+ margin:0 auto!important;padding:0!important;gap:0!important;
+}
+body > header .brand-link .mark {
+ width:140px!important;height:110px!important;display:flex!important;
+ justify-content:center!important;align-items:center!important;
+}
+body > header .brand-link .mark img {
+ width:140px!important;height:110px!important;object-fit:contain!important;
+}
+body > header .nav {
+ width:100%!important;display:flex!important;justify-content:center!important;
+ align-items:center!important;gap:30px!important;margin:0!important;
+}
+@media(max-width:700px) {
+ body > header > .header-inner {gap:4px!important;padding:10px 0 11px!important}
+ body > header .brand-link .mark,body > header .brand-link .mark img {
+  width:110px!important;height:86px!important;
+ }
+ body > header .nav {gap:18px!important;flex-wrap:nowrap!important}
+ body > header .nav a {font-size:12px!important;white-space:nowrap!important}
+}
