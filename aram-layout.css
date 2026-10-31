@@ -1,0 +1,39 @@
+/* Shared content grid and typography — 2026-10-31 */
+:root { --aram-content-width:1080px; --aram-gutter:24px; }
+body > header > .header-inner {max-width:var(--aram-content-width)!important;width:calc(100% - 2 * var(--aram-gutter))!important}
+body > main,body > main#home,body > main.page-main {
+ width:calc(100% - 2 * var(--aram-gutter))!important;
+ max-width:var(--aram-content-width)!important;
+ margin-left:auto!important;margin-right:auto!important;
+ box-sizing:border-box!important;
+ padding-left:0!important;padding-right:0!important;
+}
+body > .page-intro,body > .home-tool-sections {
+ width:calc(100% - 2 * var(--aram-gutter))!important;
+ max-width:var(--aram-content-width)!important;
+ margin-left:auto!important;margin-right:auto!important;
+ padding-left:0!important;padding-right:0!important;
+ box-sizing:border-box!important;
+}
+body > footer.site-footer {box-sizing:border-box!important;padding-left:var(--aram-gutter)!important;padding-right:var(--aram-gutter)!important}
+body > footer.site-footer > .footer-inner {
+ width:100%!important;max-width:var(--aram-content-width)!important;margin-left:auto!important;margin-right:auto!important;
+}
+body > main h1:not(.brand-intro-wordmark),body > .page-intro h1 {
+ font-size:clamp(28px,3.3vw,42px)!important;line-height:1.25!important;letter-spacing:-.04em!important;
+}
+body > main h2 {font-size:clamp(21px,2.2vw,28px)!important;line-height:1.35!important;letter-spacing:-.035em!important}
+body > main h3 {font-size:clamp(17px,1.65vw,21px)!important;line-height:1.4!important}
+body > main .hero p,body > main .page-hero p,body > .page-intro p {
+ font-size:clamp(15px,1.5vw,17px)!important;line-height:1.75!important;
+}
+body > main .section-heading p,body > main .page-panel p,body > main .page-panel li {
+ font-size:15px!important;line-height:1.75!important;
+}
+@media(max-width:700px){
+ :root {--aram-gutter:16px}
+ body > main h1:not(.brand-intro-wordmark),body > .page-intro h1 {font-size:clamp(26px,7vw,34px)!important}
+ body > main h2 {font-size:clamp(20px,5.5vw,24px)!important}
+ body > main h3 {font-size:18px!important}
+ body > main .section-heading p,body > main .page-panel p,body > main .page-panel li {font-size:14px!important}
+}
