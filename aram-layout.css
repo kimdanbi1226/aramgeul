@@ -1,15 +1,15 @@
 /* Shared content grid and typography — 2026-10-31 */
 :root { --aram-content-width:1080px; --aram-gutter:24px; }
-body > header > .header-inner {max-width:var(--aram-content-width)!important;width:calc(100% - 2 * var(--aram-gutter))!important}
+body > header > .header-inner {max-width:var(--aram-content-width)!important;width:calc(100% - var(--aram-gutter) - var(--aram-gutter))!important}
 body > main,body > main#home,body > main.page-main {
- width:calc(100% - 2 * var(--aram-gutter))!important;
+ width:calc(100% - var(--aram-gutter) - var(--aram-gutter))!important;
  max-width:var(--aram-content-width)!important;
  margin-left:auto!important;margin-right:auto!important;
  box-sizing:border-box!important;
  padding-left:0!important;padding-right:0!important;
 }
 body > .page-intro,body > .home-tool-sections {
- width:calc(100% - 2 * var(--aram-gutter))!important;
+ width:calc(100% - var(--aram-gutter) - var(--aram-gutter))!important;
  max-width:var(--aram-content-width)!important;
  margin-left:auto!important;margin-right:auto!important;
  padding-left:0!important;padding-right:0!important;
@@ -36,4 +36,15 @@ body > main .section-heading p,body > main .page-panel p,body > main .page-panel
  body > main h2 {font-size:clamp(10px,2.75vw,12px)!important}
  body > main h3 {font-size:18px!important}
  body > main .section-heading p,body > main .page-panel p,body > main .page-panel li {font-size:14px!important}
+}
+
+/* Consistent restrained interaction across pages */
+:where(button,a,input,textarea){-webkit-tap-highlight-color:transparent}
+:where(button,a):focus-visible{outline:2px solid #3f6fa8;outline-offset:3px}
+@media(prefers-reduced-motion:no-preference){
+ :where(button,a){transition:color 180ms ease,background-color 180ms ease,border-color 180ms ease,box-shadow 180ms ease}
+ :where(.card,.page-panel,.expression-card){transition:box-shadow 220ms ease,border-color 220ms ease}
+}
+@media(prefers-reduced-motion:reduce){
+ :where(button,a,.card,.page-panel,.expression-card){transition:none!important}
 }
